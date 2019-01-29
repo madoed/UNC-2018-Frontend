@@ -56,7 +56,7 @@ const appRoutes: Routes = [
       FormsModule,
       MatSidenavModule,
       RouterModule.forRoot(appRoutes),
-      AgmCoreModule.forRoot({apiKey: 'AIzaSyBqCp_BXLRgAnd2kyL5204icIj3YVy4Gis'})
+      AgmCoreModule.forRoot({apiKey: 'key'})
   ],
   providers: [CardService, MapService],
   bootstrap: [AppComponent]
