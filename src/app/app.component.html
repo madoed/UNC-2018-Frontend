@@ -2,45 +2,15 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
 
-  <div style="margin-top: 5px !important;float: left;">
-    <router-outlet></router-outlet>
-  </div>
+<nav class="mat-toolbar">
+  <a routerLink="/">Home</a>
+  <a routerLink="/user/admin">User admin</a>
+</nav>
 
-<mat-toolbar id="appToolbar" color="black">
-  <h1 class="component-title">
-    <a ><span>Meet up</span></a>
-  </h1>
-  <span class="toolbar-filler"></span>
-  <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
-
-  <button mat-raised-button color="accent"  id="button-logout" md-button><a>Login</a></button>
-</mat-toolbar>
-
-<div  style="margin-top: 75px !important;">
-  <ul class='social'>
-    <li>
-      <a class=" fa fa-home" href="/mypage">
-        <span>My page</span>
-      </a>
-    </li>
-
-    <li>
-      <a class="fa fa-envelope" href="/map">
-        <span>My chat</span>
-      </a>
-    </li>
-
-    <li>
-      <a class="fa fa-bell" href="#">
-        <span>My meetings</span>
-      </a>
-    </li>
-
-    <li>
-      <a class="fa fa-credit-card" href="/card-list">
-        <span>My bills</span>
-      </a>
-    </li>
-  </ul>
+<div style="margin-top: 5px !important;float: left;">
+  <router-outlet></router-outlet>
 </div>
 
+<a routerLink="/login">Log in</a>
+<a (click)="logout()">Log out</a>
+<a routerLink="/register">Register</a>

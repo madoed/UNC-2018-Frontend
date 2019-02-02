@@ -1,64 +1,41 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule, Routes} from '@angular/router';
-import {CardService} from './service/card/card.service';
-import {CardListComponent} from './card/card-list/card-list.component';
-import {MatButtonModule, MatCardModule, MatInputModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { CardEditComponent } from './card/card-edit/card-edit.component';
-import { CardPayComponent } from './card/card-pay/card-pay.component';
-import { MapComponent } from './map/map.component';
-import {AgmCoreModule} from '@agm/core';
-import {MapService} from './service/map/map.service';
+import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from '@app/auth';
+import { CoreModule } from '@app/core';
+import { SharedModule } from '@app/shared';
 
-const appRoutes: Routes = [
-    { path: '', redirectTo: '/card-list', pathMatch: 'full' },
-    {
-        path: 'card-list',
-        component: CardListComponent
-    },
-    {
-        path: 'card-add',
-        component: CardEditComponent
-    },
-    {
-        path: 'pay/:id',
-        component: CardPayComponent
-    },
-    {
-        path: 'map',
-        component: MapComponent
-    }
-];
+import { UserDataService, UserMockInterceptor }  from '@app/mock';
 
 @NgModule({
   declarations: [
-    AppComponent,
-      CardListComponent,
-      CardEditComponent,
-      CardPayComponent,
-      MapComponent
+    AppComponent
   ],
   imports: [
+    AppRoutingModule,
+    AuthModule,
     BrowserModule,
-      HttpClientModule,
-      BrowserAnimationsModule,
-      MatButtonModule,
-      MatCardModule,
-      MatInputModule,
-      MatListModule,
-      MatToolbarModule,
-      ReactiveFormsModule,
-      FormsModule,
-      MatSidenavModule,
-      RouterModule.forRoot(appRoutes),
-      AgmCoreModule.forRoot({apiKey: 'key'})
+    CoreModule,
+    SharedModule,
+
+    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
+    // and returns simulated server responses.
+    // Remove it when a real server is ready to receive requests.
+    /*HttpClientInMemoryWebApiModule.forRoot(
+      UserDataService, { dataEncapsulation: false }
+    )*/
   ],
-  providers: [CardService, MapService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UserMockInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
