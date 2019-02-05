@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ApiService } from './api.service';
@@ -12,8 +11,7 @@ export class UserService {
   private USERS_API = environment.api_url + 'users';
 
   constructor (
-    private apiService: ApiService,
-    private http: HttpClient
+    private apiService: ApiService
   ) {}
 
   add(user: User): Observable<User> {
@@ -21,7 +19,7 @@ export class UserService {
   }
 
   authenticate(username: string, password: string): Observable<any> {
-      return  this.http.post(this.USERS_API + '/authenticate', { username, password });
+      return  this.apiService.post(this.USERS_API + '/authenticate', { username, password });
   }
 
   delete(id: number) {
@@ -33,7 +31,7 @@ export class UserService {
   }
 
   getAll (): Observable<User[]> {
-    return this.http.get<User[]>(this.USERS_API);
+    return this.apiService.get(this.USERS_API);
   }
 
   update(user: User): Observable<User> {

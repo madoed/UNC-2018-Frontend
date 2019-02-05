@@ -1,8 +1,4 @@
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-
-
-<nav class="mat-toolbar">
+<!--<nav class="mat-toolbar">
   <a routerLink="/">Home</a>
   <a routerLink="/user/admin">User admin</a>
 </nav>
@@ -13,4 +9,56 @@
 
 <a routerLink="/login">Log in</a>
 <a (click)="logout()">Log out</a>
-<a routerLink="/register">Register</a>
+<a routerLink="/register">Register</a>-->
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+
+
+<div style="margin-top: 5px !important;float: left;">
+  <router-outlet></router-outlet>
+</div>
+
+<mat-toolbar id="appToolbar" color="black">
+  <h1 class="component-title">
+    <a routerLink="/"><span>Meet up</span></a>
+  </h1>
+  <span class="toolbar-filler"></span>
+  <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
+
+  <button mat-raised-button color="accent"  id="button-logout" md-button><a routerLink="/login">Login</a></button>
+</mat-toolbar>
+
+<div  style="margin-top: 75px !important;">
+  <ul class='social'>
+    <li>
+      <a class=" fa fa-home" href="#">
+        <span>My page</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-envelope" href="#">
+        <span>My chat</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-bell" href="#">
+        <span>My meetings</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-credit-card" href="#">
+        <span>My bills</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-map-marker" routerLink="/map">
+        <span>My maps</span>
+      </a>
+    </li>
+  </ul>
+</div>

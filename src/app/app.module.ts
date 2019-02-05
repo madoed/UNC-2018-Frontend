@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
@@ -9,7 +8,7 @@ import { AuthModule } from '@app/auth';
 import { CoreModule } from '@app/core';
 import { SharedModule } from '@app/shared';
 
-import { UserDataService, UserMockInterceptor }  from '@app/mock';
+import { MapMockInterceptor, UserMockInterceptor }  from '@app/mock';
 
 @NgModule({
   declarations: [
@@ -33,6 +32,11 @@ import { UserDataService, UserMockInterceptor }  from '@app/mock';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UserMockInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MapMockInterceptor,
       multi: true
     }
   ],

@@ -1,6 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ApiService, JwtService, UserService } from './services';
+import { ApiService, JwtService, MapService, UserService } from './services';
 import { HttpTokenInterceptor } from './interceptors';
 
 @NgModule({
@@ -10,6 +10,7 @@ import { HttpTokenInterceptor } from './interceptors';
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
     ApiService,
     JwtService,
+    MapService,
     UserService
   ]
 })
