@@ -21,15 +21,15 @@
 
 <mat-toolbar id="appToolbar" color="black">
   <h1 class="component-title">
-    <a routerLink="/"><span>Meet up</span></a>
+    <a ><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
   </h1>
   <span class="toolbar-filler"></span>
   <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
 
-  <button mat-raised-button color="accent"  id="button-logout" md-button><a routerLink="/login">Login</a></button>
+  <button mat-raised-button color="accent"  id="button-logout" md-button routerLink="/login"><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Login</h1></button>
 </mat-toolbar>
 
-<div  style="margin-top: 75px !important;">
+<div  style="margin-top: 75px !important; margin-left: -40px">
   <ul class='social'>
     <li>
       <a class=" fa fa-home" href="#">
