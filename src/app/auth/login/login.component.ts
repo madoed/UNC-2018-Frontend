@@ -3,9 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@app/core';
 
-@Component({ templateUrl: 'login.component.html' })
+@Component({
+  selector: 'app-login',
+  templateUrl: 'login.component.html',
+  styleUrls: ['./login.component.css']
+})
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
@@ -49,7 +53,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    console.log('Error: ' + error);
+                    console.log(error);
                     this.error = error;
                     this.loading = false;
                 });

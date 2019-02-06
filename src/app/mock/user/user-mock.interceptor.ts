@@ -14,19 +14,25 @@ export class UserMockInterceptor implements HttpInterceptor {
           id: 1,
           username: 'admin',
           password: 'admin',
-          firstName: '',
-          lastName: '',
-          email: 'admin@gmail.com',
-          role: Role.Admin
+          role: Role.Admin,
+          firstName: 'Super',
+          lastName: 'User',
+          email: 'admin@example.com',
+          avatarUrl: '',
+          aboutMe: '',
+          friends: []
         },
         {
           id: 11,
           username: '1',
           password: '1',
+          role: Role.User,
           firstName: 'John',
           lastName: 'Doe',
-          email: 'john.doe@gmail.com',
-          role: Role.User
+          email: 'john.doe@example.com',
+          avatarUrl: 'https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg',
+          aboutMe: 'I am a test user',
+          friends: []
         }
       ];
 
@@ -40,22 +46,27 @@ export class UserMockInterceptor implements HttpInterceptor {
 
           // authenticate - public
           if (request.url.endsWith('users/authenticate') && request.method === 'POST') {
-              const user = users.find(x => x.username === request.body.username && x.password === request.body.password);
+              const body = Object.assign({}, JSON.parse(request.body));
+              const user = users.find(x => x.username === body.username && x.password === body.password);
               if (!user) return error('Username or password is incorrect');
-              return ok({user, token: 'test-jwt-token'});
+              return ok({
+                user,
+                token: 'test-jwt-token',
+                expiresIn: 3600
+              });
           }
 
-          // get user by id - admin or user (user can only access their own record)
+          // get user by id
           if (request.url.match(/\/users\/\d+$/) && request.method === 'GET') {
-              if (!isLoggedIn) return unauthorised();
+              //if (!isLoggedIn) return unauthorised();
 
               // get id from request url
               let urlParts = request.url.split('/');
               let id = parseInt(urlParts[urlParts.length - 1]);
 
               // only allow normal users access to their own record
-              const currentUser = users.find(x => x.role === role);
-              if (id !== currentUser.id && role !== Role.Admin) return unauthorised();
+              /*const currentUser = users.find(x => x.role === role);
+              if (id !== currentUser.id && role !== Role.Admin) return unauthorised();*/
 
               const user = users.find(x => x.id === id);
               return ok(user);

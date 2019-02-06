@@ -1,33 +1,20 @@
-<!--<nav class="mat-toolbar">
-  <a routerLink="/">Home</a>
-  <a routerLink="/user/admin">User admin</a>
-</nav>
-
-<div style="margin-top: 5px !important;float: left;">
-  <router-outlet></router-outlet>
-</div>
-
-<a routerLink="/login">Log in</a>
-<a (click)="logout()">Log out</a>
-<a routerLink="/register">Register</a>-->
-
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
+<!--<app-layout-header></app-layout-header>-->
+<mat-toolbar id="appToolbar" color="black">
+  <h1 class="component-title">
+    <a href="/"><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
+  </h1>
+  <span class="toolbar-filler"></span>
+    <button mat-raised-button color="accent"  id="button-login" md-button (click)="toLoginPage()" *ngIf="!isAuthenticated">Log In</button>
+
+    <button mat-raised-button color="accent"  id="button-logout" md-button (click)="logout()" *ngIf="isAuthenticated">Log Out</button>
+</mat-toolbar>
 
 <div style="margin-top: 5px !important;float: left;">
   <router-outlet></router-outlet>
 </div>
-
-<mat-toolbar id="appToolbar" color="black">
-  <h1 class="component-title">
-    <a ><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
-  </h1>
-  <span class="toolbar-filler"></span>
-  <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
-
-  <button mat-raised-button color="accent"  id="button-logout" md-button routerLink="/login"><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Login</h1></button>
-</mat-toolbar>
 
 <div  style="margin-top: 75px !important; margin-left: -40px">
   <ul class='social'>

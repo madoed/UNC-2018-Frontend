@@ -9,7 +9,7 @@ import { MapComponent } from './map.component';
 @NgModule({
   declarations: [MapComponent],
   imports: [
-    AgmCoreModule.forRoot({apiKey: 'AIzaSyDcf8HCvabHVhKM5nEV1b9wlqfLlQ0XeVU'}),
+    AgmCoreModule.forRoot({apiKey: 'key'}),
     MapRoutingModule,
     SharedModule
   ]
