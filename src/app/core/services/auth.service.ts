@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable ,  BehaviorSubject, ReplaySubject } from 'rxjs';
 
-import { JwtService, UserService, User } from '@app/core';
+import { JwtService } from './jwt.service';
+import { UserService } from './user.service';
+import { User } from '../models';
 import { map ,  distinctUntilChanged } from 'rxjs/operators';
 
 
@@ -9,24 +11,28 @@ import { map ,  distinctUntilChanged } from 'rxjs/operators';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User>({} as User);
   public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
-  public isAuthenticated = false;
+
+  private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
+public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
   constructor (
     private jwtService: JwtService,
     private userService: UserService
-  ) {}
+  ) {
+    this.isAuthenticatedSubject.next(false);
+  }
 
-  private setAuth(user: User, token: string) {
-    this.jwtService.saveToken(token);
+  private setAuth(user: User, token: string, expiresIn: number) {
+    this.jwtService.saveToken(token, expiresIn);
     this.currentUserSubject.next(user);
-    this.isAuthenticated = true;
+    this.isAuthenticatedSubject.next(true);
     console.log('logged in as ' + user.username);
   }
 
   logout() {
     this.jwtService.destroyToken();
     this.currentUserSubject.next({} as User);
-    this.isAuthenticated = false;
+    this.isAuthenticatedSubject.next(false);
     console.log('logged out');
   }
 
@@ -34,11 +40,11 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Observable<User> {
     return this.userService.authenticate(username, password)
         .pipe(map(response => {
             if (response && response.token && response.user) {
-              this.setAuth(response.user, response.token);
+              this.setAuth(response.user, response.token, response.expiresIn);
             }
             return response.user;
         }));

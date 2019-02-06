@@ -4,9 +4,11 @@ export interface User {
     id: number;
     username: string;
     password: string;
+    role: Role;
     firstName: string;
     lastName: string;
     email: string;
-    role: Role;
-    //token: string = '';
+    avatarUrl: string;
+    aboutMe: string;
+    friends: User[];
 }

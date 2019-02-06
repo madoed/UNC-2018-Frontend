@@ -6,13 +6,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from '@app/auth';
 import { CoreModule } from '@app/core';
-import { SharedModule } from '@app/shared';
+import { HeaderComponent, SharedModule } from '@app/shared';
 
 import { MapMockInterceptor, UserMockInterceptor }  from '@app/mock';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent
   ],
   imports: [
     AppRoutingModule,

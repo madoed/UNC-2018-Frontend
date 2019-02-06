@@ -1,16 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService, User } from '@app/core';
+import { AuthService } from '@app/core';
+import { User } from '@app/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-layout-header',
+  templateUrl: './header.component.html'
 })
-export class AppComponent {
-  title = 'auth';
-
+export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router

@@ -3,9 +3,13 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@app/core';
 
-@Component({templateUrl: 'register.component.html'})
+@Component({
+  selector: 'app-register',
+  styleUrls: ['./register.component.css'],
+  templateUrl: 'register.component.html'
+})
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     loading = false;

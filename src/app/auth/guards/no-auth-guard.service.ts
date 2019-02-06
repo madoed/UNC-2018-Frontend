@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@app/core';
+import { map , take } from 'rxjs/operators';
 
 @Injectable()
 export class NoAuthGuard implements CanActivate {
@@ -15,7 +16,8 @@ export class NoAuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ) {
 
-    return !this.authService.isAuthenticated;
+      console.log(this.authService.getCurrentUser());
+      return this.authService.isAuthenticated.pipe(take(1), map(isAuth => !isAuth));
 
   }
 }
