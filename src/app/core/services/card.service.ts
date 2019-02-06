@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { environment } from '@env';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CardService {
     public CARD_API = environment.api_url + '/card';
 

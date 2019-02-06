@@ -8,7 +8,8 @@ import { AuthModule } from '@app/auth';
 import { CoreModule } from '@app/core';
 import { HeaderComponent, SharedModule } from '@app/shared';
 
-import { MapMockInterceptor, UserMockInterceptor }  from '@app/mock';
+import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MapMockInterceptor, UserMockInterceptor }  from '@app/mock';
     BrowserModule,
     CoreModule,
     SharedModule,
+    BrowserAnimationsModule
 
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.

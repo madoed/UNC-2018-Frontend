@@ -1,0 +1,61 @@
+
+div {
+    margin:0 0 0.75em 0;
+    color: black;
+}
+
+p {
+    color: black;
+}
+
+input[type="radio"] {
+    display:none;
+}
+input[type="radio"] + label {
+    color: #292321;
+    font-family:Arial, sans-serif;
+    font-size:14px;
+}
+input[type="radio"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-1px 4px 0 0;
+    vertical-align:middle;
+    cursor:pointer;
+    border-radius:  50%;
+}
+
+input[type="radio"] + label span {
+    background-color:#292321;
+}
+
+input[type="radio"]:checked + label span{
+    background-color: darkgrey;
+}
+
+input[type="radio"] + label span,
+input[type="radio"]:checked + label span {
+    transition:background-color 0.4s linear;
+}
+
+input[type="radio"] + label span,
+input[type="radio"]:checked + label span {
+    transition:background-color 0.4s linear;
+}
+
+
+.mat-card {
+    background-color: white !important;
+    color: black;
+}
+
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 150%;
+    width: 310px;
+}
+
+.giphy {
+    margin: 10px;
+}
