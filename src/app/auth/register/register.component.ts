@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthService } from '@app/core';
@@ -27,7 +27,12 @@ export class RegisterComponent implements OnInit {
             lastName: ['', Validators.required],
             username: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(1)]]
+            avatarUrl: [''],
+            aboutMe: [''],
+            password: ['', [Validators.required, Validators.minLength(1)]],
+            confirmPassword: ['', Validators.required]
+        }, {
+          validator: RegisterComponent.MatchPassword
         });
     }
 
@@ -54,5 +59,15 @@ export class RegisterComponent implements OnInit {
                     console.log(error);
                     this.loading = false;
                 });
+    }
+
+    private static MatchPassword(AC: AbstractControl) {
+       let password = AC.get('password').value; // to get value in input tag
+       let confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
+        if(password != confirmPassword) {
+            AC.get('confirmPassword').setErrors( {MatchPassword: true} )
+        } else {
+            return null
+        }
     }
 }

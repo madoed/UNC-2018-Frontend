@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from '@app/auth';
+import { Role } from '@app/core';
+
 const routes: Routes = [
   //{ path: '**', redirectTo: '' },
   { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule' },
@@ -9,7 +12,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes)],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

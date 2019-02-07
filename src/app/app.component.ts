@@ -20,6 +20,7 @@ export class AppComponent {
   isAuthenticated: boolean;
 
   ngOnInit() {
+    this.authService.populate();
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;

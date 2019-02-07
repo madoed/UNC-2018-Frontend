@@ -1,0 +1,13 @@
+<div class="content">
+  <h3>Full user list:</h3>
+  <a routerLink="/user/admin/add/">Add a user</a>
+  <ul>
+    <li *ngFor="let user of users"
+      [class.selected]="user === selectedUser"
+      (click)="onSelect(user)">
+      <a routerLink="/user/admin/edit/{{user.id}}">
+        id: {{user.id}} username: {{user.username}}
+      </a>
+    </li>
+  </ul>
+</div>

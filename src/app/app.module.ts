@@ -20,26 +20,11 @@ import { MapMockInterceptor, UserMockInterceptor }  from '@app/mock';
     AuthModule,
     BrowserModule,
     CoreModule,
-    SharedModule,
-
-    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
-    // and returns simulated server responses.
-    // Remove it when a real server is ready to receive requests.
-    /*HttpClientInMemoryWebApiModule.forRoot(
-      UserDataService, { dataEncapsulation: false }
-    )*/
+    SharedModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: UserMockInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MapMockInterceptor,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
