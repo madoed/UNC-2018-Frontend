@@ -28,7 +28,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     HttpClientModule,
@@ -55,7 +54,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   declarations: [],
   exports: [
-    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     HttpClientModule,
