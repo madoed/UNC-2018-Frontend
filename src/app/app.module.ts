@@ -32,16 +32,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     )*/
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: UserMockInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MapMockInterceptor,
-      multi: true
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { User, UserService } from '@app/core';
 
 @Component({
-  selector: 'app-user-admin',
-  templateUrl: './user-admin.component.html',
-  styleUrls: ['./user-admin.component.css']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class UserAdminComponent implements OnInit {
+export class UserListComponent implements OnInit {
   selectedUser: User;
   users: Array<User>;
 
@@ -18,8 +18,7 @@ export class UserAdminComponent implements OnInit {
   }
 
   private getUsers(): void {
-      this.userService.getAll()
-      .subscribe(users => this.users = users);
+      this.userService.getAll().subscribe(users => this.users = users);
     }
 
   onSelect(user: User): void {

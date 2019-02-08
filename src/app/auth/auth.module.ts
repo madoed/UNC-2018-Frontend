@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { AuthRoutingModule } from './auth-routing.module';
-import { AuthGuard, NoAuthGuard } from './guards';
+import { AuthGuard, NoAuthGuard, RoleGuard } from './guards';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { SharedModule } from '@app/shared';
@@ -14,7 +14,8 @@ import { SharedModule } from '@app/shared';
   ],
   providers: [
     AuthGuard,
-    NoAuthGuard
+    NoAuthGuard,
+    RoleGuard
   ]
 })
 export class AuthModule { }

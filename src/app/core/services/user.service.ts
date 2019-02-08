@@ -6,8 +6,11 @@ import { environment } from '@env';
 import { User } from '../models';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
+  //private AUTH_API = environment.api_url + 'auth';
   private USERS_API = environment.api_url + 'users';
 
   constructor (
@@ -16,10 +19,6 @@ export class UserService {
 
   add(user: User): Observable<User> {
       return this.apiService.post(this.USERS_API, user);
-  }
-
-  authenticate(username: string, password: string): Observable<any> {
-      return  this.apiService.post(this.USERS_API + '/authenticate', { username, password });
   }
 
   delete(id: number) {
