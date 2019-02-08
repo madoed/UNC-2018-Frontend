@@ -9,6 +9,8 @@ import { CoreModule } from '@app/core';
 import { HeaderComponent, SharedModule } from '@app/shared';
 
 import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserModule} from '@angular/platform-browser';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
       AppRoutingModule,
       AuthModule,
       CoreModule,
-      SharedModule
+      SharedModule,
+      BrowserAnimationsModule,
+      BrowserModule
 
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
@@ -31,7 +35,7 @@ import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }
+      /*{ provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }*/
   ],
   bootstrap: [AppComponent]
 })

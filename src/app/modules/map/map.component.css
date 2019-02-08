@@ -9,7 +9,7 @@ agm-map{
     float: left;
     border-style: solid;
     border-color: black;
-    margin-left: 200px;
+    margin-left: 0px;
 
 }
 
@@ -17,7 +17,7 @@ agm-map{
     height: 400px;
     width: 350px;
     margin-top: 50px;
-    margin-left: 850px;
+    margin-left: 650px;
     padding: 0;
 
 }
