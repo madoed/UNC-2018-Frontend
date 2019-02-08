@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as moment from "moment";
+import * as moment from 'moment';
 
 
 @Injectable()
 export class JwtService {
   getExpiration() {
-      const expiration = localStorage.getItem("expires_at");
+      const expiration = localStorage.getItem('expires_at');
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
   }
@@ -19,7 +19,7 @@ export class JwtService {
 }
 
   saveToken(token: String, expiresIn: number) {
-    const expiresAt = moment().add(expiresIn,'second');
+    const expiresAt = moment().add(expiresIn, 'second');
     window.localStorage['token'] = token;
     window.localStorage['expires_at'] = JSON.stringify(expiresAt.valueOf());
   }
