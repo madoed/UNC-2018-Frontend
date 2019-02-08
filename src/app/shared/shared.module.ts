@@ -20,7 +20,9 @@ import {
   MatSidenavModule,
   MatSlideToggleModule,
   ErrorStateMatcher,
-  ShowOnDirtyErrorStateMatcher
+  ShowOnDirtyErrorStateMatcher,
+  MatGridListModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -45,6 +47,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatListModule,
     MatSidenavModule,
     ReactiveFormsModule,
+    MatGridListModule,
+    MatIconModule,
+    MatSnackBarModule,
+    HttpClientModule,
     RouterModule
   ],
   declarations: [],
@@ -68,6 +74,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatListModule,
     MatSidenavModule,
     ReactiveFormsModule,
+    MatGridListModule,
+    MatInputModule,
+    MatButtonModule,
+    MatListModule,
+    MatIconModule,
+    MatSnackBarModule,
+    HttpClientModule,
     RouterModule
   ],
   providers: [

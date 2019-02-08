@@ -1,0 +1,40 @@
+<div style="margin-left: 200px; height: 400px">
+<div style="width: 500px; min-height: 300px; " class="message-col">
+  <mat-card-header background-color="accent">
+    <h1 class = "myFont">Chat1</h1>
+    <mat-card-actions>
+
+    </mat-card-actions>
+  </mat-card-header>
+
+  <mat-list id="msg-container" class="message-container"  >
+    <mat-list-item *ngFor="let message of filteredMessages"
+                   class="message-item" [style.margin-right]="message.sender === username ? '5px':'auto'"
+                   [style.margin-left]="message.sender === username ? 'auto':'5px'"
+                   [style.background]="message.sender === username ? 'white':'rgba(150,150,150, 0.3)'">
+      <mat-icon mat-list-icon>chat</mat-icon>
+      <h4 mat-line><b>{{message.sender === username ? 'You': message.sender}}</b>: {{message.content}}</h4>
+    </mat-list-item>
+  </mat-list>
+</div>
+
+
+  <div class="footer">
+    <div class="send-button">
+      <div class="send" (click)="sendMessage()">
+        <i class="fa fa-check" aria-hidden="true"></i>
+      </div>
+      <input  id="input" type="text"  [(ngModel)]="newMessage"
+              (keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>
+    </div>
+  </div>
+
+  <!--<div style="width:100%; margin-top:50px; height: 40px; background-color: black">-->
+    <!--<mat-input-container style="width: 85%;">-->
+      <!--<input matInput placeholder="New message" class="message-input"-->
+             <!--[(ngModel)]="newMessage"-->
+             <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
+    <!--</mat-input-container>-->
+    <!--<button mat-raised-button [disabled]="channel === null || channel === undefined" style="width: 13%;" (click)="sendMessage()">Send</button>-->
+  <!--</div>-->
+</div>
