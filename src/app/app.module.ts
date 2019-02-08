@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
@@ -9,7 +9,7 @@ import { CoreModule } from '@app/core';
 import { HeaderComponent, SharedModule } from '@app/shared';
 
 import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -17,12 +17,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HeaderComponent
   ],
   imports: [
-    AppRoutingModule,
-    AuthModule,
-    BrowserModule,
-    CoreModule,
-    SharedModule,
-    BrowserAnimationsModule
+      AppRoutingModule,
+      AuthModule,
+      CoreModule,
+      SharedModule
 
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.

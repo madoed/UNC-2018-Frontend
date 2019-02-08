@@ -6,8 +6,7 @@ import { SharedModule } from '../../../shared/index';
 import {CardRoutingModule} from '../card-routing.module';
 import {CardListComponent} from './card-list.component';
 import {CardEditComponent} from '@app/modules/card/card-edit/card-edit.component';
-import {MatButtonModule, MatCardModule, MatInputModule, MatListModule} from '@angular/material';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 import {CardPayComponent} from '@app/modules/card/card-pay/card-pay.component';
 
 
@@ -19,12 +18,12 @@ import {CardPayComponent} from '@app/modules/card/card-pay/card-pay.component';
     imports: [
         CardRoutingModule,
         SharedModule,
-        MatButtonModule,
+        /*MatButtonModule,
         MatCardModule,
         MatInputModule,
         MatListModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule*/
     ]
 })
 export class CardListModule { }

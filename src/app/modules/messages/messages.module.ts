@@ -18,14 +18,14 @@ import {RouterModule} from '@angular/router';
 @NgModule({
     imports: [
         SharedModule,
-        MatGridListModule,
+        /*MatGridListModule,
         MatInputModule,
         MatButtonModule,
         MatListModule,
         MatIconModule,
         MatSnackBarModule,
         MatCardModule,
-        NgxAutoScrollModule
+        NgxAutoScrollModule*/
     ],
     declarations: [MessagesComponent]
 })
