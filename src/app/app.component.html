@@ -1,51 +1,83 @@
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+<div class="container">
+  <!--Toolbar-->
+  <mat-toolbar color="secondary" class="header">
+    <mat-toolbar-row>
+      <!--<button mat-icon-button *ngIf="!isAuthenticated" (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>-->
 
-<!--<app-layout-header></app-layout-header>-->
-<mat-toolbar id="appToolbar" color="black">
-  <h1 class="component-title">
-    <a routerLink="/"><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
-  </h1>
-  <span class="toolbar-filler"></span>
-  <button mat-raised-button color="accent"  id="button-login" md-button (click)="toLoginPage()" *ngIf="!isAuthenticated">Log In</button>
+      <h1 routerLink="/" class="logo">Meet Up</h1>
+      <span class="toolbar-filler"></span>
 
-  <button mat-raised-button color="accent"  id="button-logout" md-button (click)="logout()" *ngIf="isAuthenticated">Log Out</button>
-</mat-toolbar>
+      <button mat-raised-button md-button (click)="toLoginPage()" *ngIf="!isAuthenticated">Log In</button>
+      <!--<button mat-raised-button md-button (click)="logout()" *ngIf="isAuthenticated">Log Out</button>-->
+      <button mat-icon-button *ngIf="isAuthenticated" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <span>Settings</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
-<div style="margin-left: 250px !important;margin-top: 5px !important;float: left;">
-  <router-outlet></router-outlet>
-</div>
+  <mat-sidenav-container class="sidenav-container">
+    <!--Sidenav-->
+    <mat-sidenav #snav *ngIf="isAuthenticated" opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
 
-<div *ngIf="isAuthenticated" style="margin-top: 75px !important; margin-left: -40px">
-  <ul class='social'>
-    <li>
-      <a class=" fa fa-home" routerLink="#">
-        <span>My page</span>
-      </a>
-    </li>
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar class="background-image: url('{{currentUser.avatarUrl}}');"></div>
+          <mat-card-title>{{currentUser.firstName}} {{currentUser.lastName}}</mat-card-title>
+          <mat-card-subtitle>@{{currentUser.username}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+      </mat-card>
 
-    <li>
-      <a class="fa fa-envelope" href="/chat">
-        <span>My chat</span>
-      </a>
-    </li>
+      <mat-nav-list>
+        <mat-list-item routerLink="/user/ + {{currentUser.id}}">
+            <i class="material-icons">home</i>
+            <a class="sidenav-item">My page</a>
+        </mat-list-item>
 
-    <li>
-      <a class="fa fa-bell" routerLink="#">
-        <span>My meetings</span>
-      </a>
-    </li>
+        <mat-list-item routerLink="/chat">
+            <i class="material-icons">chat</i>
+            <a class="sidenav-item">My chats</a>
+        </mat-list-item>
 
-    <li>
-      <a class="fa fa-credit-card" href="/card-list">
-        <span>My bills</span>
-      </a>
-    </li>
+        <mat-list-item routerLink=".">
+            <i class="material-icons">group</i>
+            <a class="sidenav-item">My meetings</a>
+        </mat-list-item>
 
-    <li>
-      <a class="fa fa-map-marker" routerLink="/map">
-        <span>My maps</span>
-      </a>
-    </li>
-  </ul>
+        <mat-list-item routerLink=".">
+            <i class="material-icons">attach_money</i>
+            <a class="sidenav-item">My bills</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink="/card-list">
+            <i class="material-icons">credit_card</i>
+            <a class="sidenav-item">My cards</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink="/map">
+            <i class="material-icons">place</i>
+            <a class="sidenav-item">My maps</a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!--Page content-->
+    <mat-sidenav-content style="background-color:white !important">
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

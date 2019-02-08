@@ -27,7 +27,7 @@ export class UserMockInterceptor implements HttpInterceptor {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@example.com',
-        avatarUrl: 'https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg',
+        avatarUrl: 'https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png',
         aboutMe: 'I am a test user',
         friends: []
       }

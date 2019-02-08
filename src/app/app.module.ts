@@ -1,4 +1,3 @@
-
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
@@ -6,17 +5,16 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from '@app/auth';
 import { CoreModule } from '@app/core';
-import { HeaderComponent, SharedModule } from '@app/shared';
+import { SharedModule } from '@app/shared';
 
 import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {BrowserModule} from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent
+    AppComponent
   ],
   imports: [
       AppRoutingModule,
@@ -25,13 +23,6 @@ import {BrowserModule} from '@angular/platform-browser';
       SharedModule,
       BrowserAnimationsModule,
       BrowserModule
-
-    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
-    // and returns simulated server responses.
-    // Remove it when a real server is ready to receive requests.
-    /*HttpClientInMemoryWebApiModule.forRoot(
-      UserDataService, { dataEncapsulation: false }
-    )*/
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },

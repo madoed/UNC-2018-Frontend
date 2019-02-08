@@ -1,9 +1,0 @@
-<mat-toolbar id="appToolbar" color="black">
-  <h1 class="component-title">
-    <a routerLink="/"><span>MeetUp</span></a>
-  </h1>
-  <span class="toolbar-filler"></span>
-    <button mat-raised-button color="accent"  id="button-login" md-button (click)="toLoginPage()" *ngIf="!isAuthenticated">Log In</button>
-
-    <button mat-raised-button color="accent"  id="button-logout" md-button (click)="logout()" *ngIf="isAuthenticated">Log Out</button>
-</mat-toolbar>
