@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '@app/core';
 import {ChatService} from '@app/core/services/chat.service';
+import {Observable, Subject} from 'rxjs';
+import {Chat} from '@app/core/models/chat.model';
 
 @Component({
   selector: 'app-chat',
@@ -9,7 +11,7 @@ import {ChatService} from '@app/core/services/chat.service';
 })
 export class ChatComponent implements OnInit {
 
-    chats: Array<any>;
+    chats: Array<Chat>;
 
     constructor(private chatService: ChatService, private authService: AuthService) {
     }
@@ -18,6 +20,10 @@ export class ChatComponent implements OnInit {
         this.chatService.getAll().subscribe(data => {
             this.chats = data;
         });
+    }
+
+    startChat(chat: Chat) {
+        this.chatService.setChannel(chat);
     }
 }
 

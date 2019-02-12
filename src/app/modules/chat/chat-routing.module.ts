@@ -6,6 +6,7 @@ import {NgModule} from '@angular/core';
 import {ChatComponent} from '@app/modules/chat/chat.component';
 import {Message} from 'stompjs';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
+import {ChatAddComponent} from '@app/modules/chat/chat-add/chat-add.component';
 
 const routes: Routes = [
     {
@@ -16,9 +17,15 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
     },
     {
-        path: ':id',
+        path: 'start/:id',
         component: MessagesComponent,
 
+        // этот параметр говорит, что только авторизованные пользователи видят эту страницу
+        //canActivate: [AuthGuard]
+    },
+    {
+        path: 'add',
+        component: ChatAddComponent,
         // этот параметр говорит, что только авторизованные пользователи видят эту страницу
         //canActivate: [AuthGuard]
     }

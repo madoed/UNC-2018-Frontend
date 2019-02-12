@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {ApiService} from '@app/core';
+import {Message} from '@app/core/models/message.model';
+import {Chat} from '@app/core/models/chat.model';
 
 @Injectable({
     providedIn: 'root'
@@ -22,8 +24,8 @@ export class MessageService {
 //        this.msgs.next(this.messages);
 //    }
 
-    filterMessages(channel: string): Array<Message> {
-        return this.messages.filter(message => channel === message.channel)
+    filterMessages(channel: Chat): Array<Message> {
+        return this.messages.filter(message => channel === message.from_chat)
             .sort((m1, m2) => {
                 if (m1.timestamp > m2.timestamp) {
                     return 1;
@@ -32,25 +34,20 @@ export class MessageService {
                 return -1;
             });
     }
-
+/*
     sendReadReceipt(channelId: string, username: string) {
         this.apiService.post('http://127.0.0.1:8000' + '/messages/', {
             channel: channelId,
             username: username
         });
-    }
+    }*/
 
-    getMessages(id: string): Observable<any> {
+    getMessages(id: number): Observable<Message[]> {
         return this.apiService.get('http://127.0.0.1:8000' + '/messages/' + id);
     }
 
-    //get all messages from chat
-    get(id: string): Observable<any> {
-        return this.apiService.get('http://127.0.0.1:8000' + '/messages' + id);
-    }
-
-    save(mes: any): Observable<any> {
-        let result: Observable<Object>;
+    save(mes: Message): Observable<Message> {
+        let result: Observable<Message>;
         result = this.apiService.post('http://127.0.0.1:8000/messages', mes);
         return result;
     }

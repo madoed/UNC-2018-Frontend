@@ -1,19 +1,19 @@
-.chat-container{
-    height: 80vh;
-    width: 100vw;
+#wrapper{
+    display:flex;
+    justify-content:space-between;
 }
-.chat{
-    text-align: left;
-    margin: 0 auto;
-    width: 50%;
-    height: 100%;
-    border: 1px solid grey;
+
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 100px;
+    width: 600px;
 }
+
 
 .footer{
     margin-top:30px;
     height: 30px;
-    position: absolute;
+
     width: 50vw;
 }
 .send-button{
@@ -34,14 +34,6 @@ input{
     margin-left: 5px;
 }
 
-
-
-
-
-
-
-
-
 .message-col {
     vertical-align: top;
 }
@@ -61,8 +53,10 @@ input{
 
 .message-container {
     overflow-y: auto;
-    height: 300px;
-    border-color: black; border-style: solid
+    height: 220px;
+    border-color: black;
+    background-color: white;
+    border-style: solid
 }
 
 .message-input {
@@ -73,6 +67,7 @@ input{
 
 .myFont{
     font-family: Pompadur,'Comic Sans MS', cursive;
+    color: #ffffff;
 }
 
 .myButton{
@@ -83,3 +78,7 @@ input{
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
+
+
+
+

@@ -1,4 +1,23 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 div {
     margin:0 0 0.75em 0;
     color: black;
@@ -46,8 +65,7 @@ input[type="radio"]:checked + label span {
 
 
 .mat-card {
-    background-color: white !important;
-    color: black;
+
 }
 
 .container {
@@ -72,3 +90,13 @@ input[type="radio"]:checked + label span {
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
+
+
+
+
+
+
+
+
+
+
