@@ -22,7 +22,8 @@ import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
   MatGridListModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTabsModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -49,6 +50,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatGridListModule,
     MatIconModule,
     MatSnackBarModule,
+    MatTabsModule,
     HttpClientModule,
     RouterModule
   ],
@@ -78,6 +80,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatListModule,
     MatIconModule,
     MatSnackBarModule,
+    MatTabsModule,
     HttpClientModule,
     RouterModule
   ],
