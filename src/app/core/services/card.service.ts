@@ -8,18 +8,18 @@ import { environment } from '@env';
     providedIn: 'root'
 })
 export class CardService {
-    public CARD_API = 'http://127.0.0.1:8000'  + '/card';
+    public CARD_API = 'http://127.0.0.1:8000';
 
     constructor(
       private apiService: ApiService
     ) {}
 
-    getAll(): Observable<any> {
-        return this.apiService.get(this.CARD_API);
+    getAll(id: Number): Observable<any> {
+        return this.apiService.get(this.CARD_API + '/card-list/' + id);
     }
 
-    get(id: string): Observable<any> {
-        return this.apiService.get(this.CARD_API + '/' + id);
+    get(cardId: Number): Observable<any> {
+        return this.apiService.get(this.CARD_API + '/card/' + cardId);
     }
 
     save(card: any): Observable<any> {

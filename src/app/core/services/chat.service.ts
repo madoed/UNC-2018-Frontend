@@ -10,7 +10,7 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class ChatService {
-    public CHAT_API = 'http://127.0.0.1:8000' + '/chat';
+    public CHAT_API = 'http://127.0.0.1:8000' + '/chats';
     // private channel_name: string;
     // private channel_id: number;
     private channel: Chat;
@@ -48,8 +48,9 @@ export class ChatService {
         return this.channel_name;
     }
 */
-    getChannel(): Chat {
-        return this.channel;
-    }
+    getChannel(chat: Number): Observable<any> {
+    console.log(chat);
+    return this.apiService.get('http://127.0.0.1:8000/chat/' + chat);
+  }
 
 }

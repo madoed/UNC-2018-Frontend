@@ -1,6 +1,30 @@
-#wrapper{
-    display:flex;
-    justify-content:space-between;
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+.myTable {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+
+.mat-row.hovered {
+    background: #ababab;
+}
+
+.mat-row.highlighted {
+    background: #999;
 }
 
 .container {
@@ -9,12 +33,15 @@
     width: 600px;
 }
 
+.myFont{
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}
 
 .footer{
     margin-top:30px;
     height: 30px;
 
-
+    width: 50vw;
 }
 .send-button{
     margin: 0 auto;
@@ -65,10 +92,6 @@ input{
     color: #202080;
 }
 
-.myFont{
-    font-family: Pompadur,'Comic Sans MS', cursive;
-    color: #ffffff;
-}
 
 .myButton{
     width: 500px;
@@ -78,7 +101,5 @@ input{
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
-
-
 
 

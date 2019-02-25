@@ -8,3 +8,7 @@
 .myFont{
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
+
+.toolbar-filler {
+    flex: 1 1 auto;
+}
