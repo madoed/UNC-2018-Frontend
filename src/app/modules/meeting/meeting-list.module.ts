@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {SharedModule} from '@app/shared';
+import { UiModule } from '@app/ui';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
 import {MeetingListComponent} from '@app/modules/meeting/meeting-list.component';
 import {MeetingRoutingModule} from '@app/modules/meeting/meeting-routing.module';
@@ -13,7 +13,7 @@ import {MatTableModule} from '@angular/material';
 
 @NgModule({
   imports: [
-    SharedModule,
+    UiModule,
     MeetingRoutingModule
   ],
   providers: [],

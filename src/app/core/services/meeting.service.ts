@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
-import {ApiService, AuthService, User} from '@app/core';
-import {Meeting} from '@app/core/models/meeting.model';
+import { Injectable, OnInit } from '@angular/core';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
+import {User} from '../models/user.model';
+import {Meeting} from '../models/meeting.model';
 import {Observable} from 'rxjs';
-import {Participant} from '@app/core/models/participant.model';
-import {Chat} from '@app/core/models/chat.model';
+import {Participant} from '../models/participant.model';
+import {Chat} from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +15,17 @@ export class MeetingService {
   // private channel_name: string;
   // private channel_id: number;
   private meeting: Meeting;
+  private currentUser: User;
 
   constructor(private apiService: ApiService, private authService: AuthService) { }
 
+  ngOnInit() {
+    this.authService.user.subscribe(data => this.currentUser = data); 
+  }
+
   getAll(): Observable<Participant[]> {
     // return this.apiService.get(this.MEETING_API + '/1');
-    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.authService.getCurrentUser().id);
+    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.currentUser.id);
   }
 
   setMeeting(meeting: Meeting) {

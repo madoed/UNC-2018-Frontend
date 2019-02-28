@@ -2,12 +2,12 @@
 import {NgModule} from '@angular/core';
 import {CardEditComponent} from '@app/modules/card/card-edit/card-edit.component';
 import {CardRoutingModule} from '@app/modules/card/card-routing.module';
-import {SharedModule} from '@app/shared';
+import { UiModule } from '@app/ui';
 @NgModule({
     declarations: [CardEditComponent],
     imports: [
         CardRoutingModule,
-        SharedModule,
+        UiModule,
         /*MatButtonModule,
         MatCardModule,
         MatInputModule,

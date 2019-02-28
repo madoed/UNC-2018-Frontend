@@ -3,15 +3,14 @@ import { Observable } from 'rxjs';
 
 import { ApiService } from './api.service';
 import { environment } from '@env';
-import { User } from '../models';
+import { User, UserDetails } from '../models';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  //private AUTH_API = environment.api_url + 'auth';
-  private USERS_API = environment.api_url + 'users';
+  private USERS_API = environment.api_url + '/users';
 
   constructor (
     private apiService: ApiService
@@ -31,6 +30,10 @@ export class UserService {
 
   getAll (): Observable<User[]> {
     return this.apiService.get(this.USERS_API);
+  }
+
+  getOrCreate(userDetails: UserDetails): Observable<User> {
+    return this.apiService.post(this.USERS_API, userDetails);
   }
 
   update(user: User): Observable<User> {

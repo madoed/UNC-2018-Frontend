@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import {
   MatButtonModule,
   MatMenuModule,
@@ -26,19 +24,16 @@ import {
   MatExpansionModule, 
   MatTabsModule, 
   MatTableModule, 
-  MatCheckbox, 
   MatCheckboxModule,
   MatPaginatorModule
 } from '@angular/material';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatMenuModule,
     MatToolbarModule,
@@ -53,15 +48,12 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     MatOptionModule,
     MatListModule,
     MatSidenavModule,
-    ReactiveFormsModule,
+    MatSlideToggleModule,
     MatGridListModule,
-    MatIconModule,
     MatSnackBarModule,
-    MatTabsModule,
-    HttpClientModule,
-    RouterModule,
-    MatExpansionModule,
-    MatTableModule,
+    MatExpansionModule, 
+    MatTabsModule, 
+    MatTableModule, 
     MatCheckboxModule,
     MatPaginatorModule,
     AngularDateTimePickerModule
@@ -70,7 +62,7 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
   exports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatMenuModule,
     MatToolbarModule,
@@ -85,23 +77,18 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     MatOptionModule,
     MatListModule,
     MatSidenavModule,
-    ReactiveFormsModule,
+    MatSlideToggleModule,
     MatGridListModule,
-    MatInputModule,
-    MatButtonModule,
-    MatListModule,
-    MatIconModule,
     MatSnackBarModule,
-    MatTabsModule,
-    HttpClientModule,
-    RouterModule,
-    MatTableModule,
+    MatExpansionModule, 
+    MatTabsModule, 
+    MatTableModule, 
     MatCheckboxModule,
     MatPaginatorModule,
-    MatExpansionModule
+    AngularDateTimePickerModule
   ],
   providers: [
-    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }
   ]
 })
-export class SharedModule {}
+export class UiModule {}

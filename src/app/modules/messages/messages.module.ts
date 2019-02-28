@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {SharedModule} from '@app/shared';
+import { UiModule } from '@app/ui';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
 import {NgxAutoScrollModule} from 'ngx-auto-scroll';
 import {
@@ -17,7 +17,7 @@ import {RouterModule} from '@angular/router';
 
 @NgModule({
     imports: [
-        SharedModule,
+        UiModule,
         /*MatGridListModule,
         MatInputModule,
         MatButtonModule,

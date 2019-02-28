@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { AgmCoreModule } from '@agm/core';
 import { MapRoutingModule } from './map-routing.module';
-import { SharedModule } from '@app/shared';
+import { UiModule } from '@app/ui';
 
 import { MapComponent } from './map.component';
 
@@ -11,7 +11,7 @@ import { MapComponent } from './map.component';
   imports: [
     AgmCoreModule.forRoot({apiKey: 'key'}),
     MapRoutingModule,
-    SharedModule
+    UiModule
   ]
 })
 export class MapModule { }

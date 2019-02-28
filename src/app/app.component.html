@@ -6,7 +6,7 @@
       <h1 routerLink="/" class="logo">Meet Up</h1>
       <span class="toolbar-filler"></span>
 
-      <button mat-icon-button *ngIf="isAuthenticated" [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
@@ -14,7 +14,7 @@
           <span>Settings</span>
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
+        <button mat-menu-item (click)="authService.logout()">
           <span>Logout</span>
         </button>
       </mat-menu>
@@ -23,10 +23,12 @@
 
   <mat-sidenav-container class="sidenav-container">
     <!--Sidenav-->
-    <mat-sidenav #snav *ngIf="isAuthenticated" opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
+    <mat-sidenav #snav opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
 
       <mat-nav-list>
-        <mat-list-item [routerLink]="['/user', currentUser.id]">
+        <!--<mat-list-item [routerLink]="['/user', currentUser.id]">
+        -->
+        <mat-list-item routerLink=".">
             <i class="material-icons">home</i>
             <a class="sidenav-item">My page</a>
         </mat-list-item>

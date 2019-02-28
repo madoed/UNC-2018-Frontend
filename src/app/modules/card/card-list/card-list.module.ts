@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { AgmCoreModule } from '@agm/core';
-import { SharedModule } from '../../../shared/index';
+import { UiModule } from '@app/ui';
 
 import {CardRoutingModule} from '../card-routing.module';
 import {CardListComponent} from './card-list.component';
@@ -17,7 +17,7 @@ import {CardPayComponent} from '@app/modules/card/card-pay/card-pay.component';
     CardPayComponent],
     imports: [
         CardRoutingModule,
-        SharedModule,
+        UiModule,
         /*MatButtonModule,
         MatCardModule,
         MatInputModule,

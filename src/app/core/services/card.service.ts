@@ -8,7 +8,7 @@ import { environment } from '@env';
     providedIn: 'root'
 })
 export class CardService {
-    public CARD_API = 'http://127.0.0.1:8000';
+    public CARD_API = environment.api_url;
 
     constructor(
       private apiService: ApiService
