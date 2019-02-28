@@ -23,12 +23,13 @@ import {
   ShowOnDirtyErrorStateMatcher,
   MatGridListModule,
   MatSnackBarModule,
-  MatExpansionModule,
-  MatTabsModule,
-  MatTableModule,
-  MatCheckbox,
+  MatExpansionModule, 
+  MatTabsModule, 
+  MatTableModule, 
+  MatCheckbox, 
   MatCheckboxModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTabsModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

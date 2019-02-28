@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MapService} from '@app/core';
+import {MapService} from '../service/map/map.service';
+import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 
 
 @Component({
