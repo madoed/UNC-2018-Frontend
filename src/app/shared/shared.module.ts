@@ -23,9 +23,16 @@ import {
   ShowOnDirtyErrorStateMatcher,
   MatGridListModule,
   MatSnackBarModule,
+  MatExpansionModule, 
+  MatTabsModule, 
+  MatTableModule, 
+  MatCheckbox, 
+  MatCheckboxModule,
+  MatPaginatorModule,
   MatTabsModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 
 @NgModule({
   imports: [
@@ -52,7 +59,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatSnackBarModule,
     MatTabsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    MatExpansionModule,
+    MatTabsModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    AngularDateTimePickerModule
   ],
   declarations: [],
   exports: [
@@ -82,7 +95,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatSnackBarModule,
     MatTabsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    MatTabsModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatExpansionModule
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}

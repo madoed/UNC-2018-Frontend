@@ -1,23 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 div {
     margin:0 0 0.75em 0;
     color: black;
@@ -89,6 +70,10 @@ input[type="radio"]:checked + label span {
     background-color: white;
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
+.toolbar-filler {
+    flex: 1 1 auto;
 }
 
 

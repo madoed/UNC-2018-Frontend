@@ -36,7 +36,7 @@ button {
 }
 
 .sidenav {
-  width: 300px;
+  width: 200px;
   align-items: center;
   justify-content: center;
 }
@@ -53,5 +53,5 @@ button {
   margin-left: 10px !important;
   margin-top: 72px !important;
   float: left;
-  width: 100%;
+  width: 90%;
 }

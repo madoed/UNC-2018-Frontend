@@ -1,0 +1,42 @@
+table {
+    width: 100%;
+}
+
+div {
+    margin:0 0 0.75em 0;
+    color: black;
+}
+
+
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 100px;
+
+}
+
+.myFont{
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
+.myButton{
+    width: 500px;
+    border-style: solid;
+    border-color: black;
+    background-color: white;
+    color: black;
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
+.toolbar-filler {
+    flex: 1 1 auto;
+}
+
+.mat-card padding {
+    background: #983479;
+}
+
+.meeting-title{
+    background-color: white;
+    color: black;
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}

@@ -1,0 +1,60 @@
+<div class="container">
+
+  <mat-card>
+    <mat-card-header background-color="accent">
+      <h1 class = "myFont" >Meetings</h1>
+      <span class="toolbar-filler"></span>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" [routerLink]="['/meeting/add']" style="margin-right: 20px"><mat-icon>add_circle_outline</mat-icon></button>
+      </mat-card-actions>
+    </mat-card-header>
+    <mat-card-content >
+        <div class="basic-container">
+            <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
+                <mat-grid-tile *ngFor="let meeting of meetings">
+                    <mat-card [style.width]="'100%'" (click)="openMeeting(meeting.participantOfMeeting)" style="background-color: white !important; cursor: pointer;">
+                        <!--<div fxLayout="row">-->
+                            <!--<div fxFlex="5">-->
+
+                            <!--</div>-->
+
+                            <!--<div fxFlex fxFlexAlign="center">-->
+                                <!--<a  fxLayout="row" class="meeting-title" (click)="openMeeting(meeting.participantOfMeeting)">-->
+                                    <!--{{meeting.participantOfMeeting.name}}-->
+                                <!--</a>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div  fxLayout="row" align="center">
+                            <h3 class="meeting-title">  {{meeting.participantOfMeeting.name}}</h3>
+                            <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span> {{meeting.participantOfMeeting.dateOfMeeting}}
+                                <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место
+                                <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">Status: </span>{{meeting.participantOfMeeting.status}}
+                                <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
+                            </h3>
+                        </div>
+                    </mat-card>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+
+
+
+
+      <!--<mat-list>-->
+        <!--<mat-list-item *ngFor="let meeting of meetings" >-->
+
+          <!--<mat-card>-->
+            <!--<mat-card-header>-->
+                <!--<a mat-raised-button (click)="openMeeting(meeting.participantOfMeeting)" class="myButton" > {{meeting.participantOfMeeting.name}}</a>-->
+            <!--</mat-card-header>-->
+          <!--</mat-card>-->
+
+        <!--</mat-list-item>-->
+      <!--</mat-list>-->
+    </mat-card-content>
+
+
+  </mat-card>
+</div>
