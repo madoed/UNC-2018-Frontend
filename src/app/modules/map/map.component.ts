@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD:src/app/map/map.component.ts
+
+import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MapService} from '@app/core';
 import {MapService} from '../service/map/map.service';
 import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-=======
-import { MapService } from '@app/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
->>>>>>> b74b8b5e2540f79276853b25087ad8c9f887333d:src/app/modules/map/map.component.ts
+
 
 @Component({
   selector: 'app-map',

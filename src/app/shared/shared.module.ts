@@ -31,6 +31,7 @@ import {
   MatPaginatorModule,
   MatTabsModule
 } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 
