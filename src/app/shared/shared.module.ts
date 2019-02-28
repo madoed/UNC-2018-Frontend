@@ -28,8 +28,7 @@ import {
   MatTableModule, 
   MatCheckbox, 
   MatCheckboxModule,
-  MatPaginatorModule,
-  MatTabsModule
+  MatPaginatorModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,7 +61,6 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     HttpClientModule,
     RouterModule,
     MatExpansionModule,
-    MatTabsModule,
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
@@ -97,7 +95,6 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     MatTabsModule,
     HttpClientModule,
     RouterModule,
-    MatTabsModule,
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
