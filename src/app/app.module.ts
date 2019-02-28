@@ -14,6 +14,7 @@ import { CardPayComponent } from './card/card-pay/card-pay.component';
 import { MapComponent } from './map/map.component';
 import {AgmCoreModule} from '@agm/core';
 import {MapService} from './service/map/map.service';
+import { ChatComponent } from './chat/chat.component';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/card-list', pathMatch: 'full' },
@@ -32,6 +33,10 @@ const appRoutes: Routes = [
     {
         path: 'map',
         component: MapComponent
+    },
+    {
+        path: 'socket',
+        component: ChatComponent
     }
 ];
 
@@ -41,7 +46,8 @@ const appRoutes: Routes = [
       CardListComponent,
       CardEditComponent,
       CardPayComponent,
-      MapComponent
+      MapComponent,
+      ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +62,7 @@ const appRoutes: Routes = [
       FormsModule,
       MatSidenavModule,
       RouterModule.forRoot(appRoutes),
-      AgmCoreModule.forRoot({apiKey: 'key'})
+      AgmCoreModule.forRoot({apiKey: 'AIzaSyCkJWTDYq8r38CZGt0CmoXxBRLUR5jkrd4'})
   ],
   providers: [CardService, MapService],
   bootstrap: [AppComponent]

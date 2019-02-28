@@ -8,12 +8,12 @@
 
 <mat-toolbar id="appToolbar" color="black">
   <h1 class="component-title">
-    <a ><span>Meet up</span></a>
+    <a ><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
   </h1>
   <span class="toolbar-filler"></span>
   <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
 
-  <button mat-raised-button color="accent"  id="button-logout" md-button><a>Login</a></button>
+  <button mat-raised-button color="accent"  id="button-logout" md-button><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Login</h1></button>
 </mat-toolbar>
 
 <div  style="margin-top: 75px !important;">
@@ -25,13 +25,13 @@
     </li>
 
     <li>
-      <a class="fa fa-envelope" href="/map">
+      <a class="fa fa-envelope" href="/socket">
         <span>My chat</span>
       </a>
     </li>
 
     <li>
-      <a class="fa fa-bell" href="#">
+      <a class="fa fa-bell" href="/map">
         <span>My meetings</span>
       </a>
     </li>
