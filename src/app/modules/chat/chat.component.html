@@ -1,0 +1,91 @@
+<div class="container">
+
+  <mat-card>
+    <mat-card-header background-color="accent">
+      <h1 class = "myFont" >Chats</h1>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" [routerLink]="['/chat/add']" style="margin-left: 350px;"><mat-icon>add_circle_outline</mat-icon></button>
+      </mat-card-actions>
+    </mat-card-header>
+    <mat-card-content >
+
+      <mat-list>
+        <mat-list-item *ngFor="let chat of chats">
+
+          <h3 mat-line>
+            <a mat-raised-button  [routerLink]="['/chat/start', chat.id]" class="myButton" (click)="startChat(chat)"> {{chat.chatName}}</a>
+          </h3>
+
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+
+
+  </mat-card>
+</div>
+
+
+
+<!--<mat-sidenav-container class="container">-->
+  <!--<mat-sidenav mode="side" opened>-->
+    <!--<mat-card>-->
+      <!--<mat-tab-group>-->
+        <!--<mat-tab>-->
+          <!--<ng-template mat-tab-label>-->
+            <!--<mat-icon matListIcon>forum</mat-icon>-->
+          <!--</ng-template>-->
+          <!--<mat-list class="conversations">-->
+            <!--<mat-list-item *ngFor="let chat of chats"  (click)="startChat(chat.id, chat.chatName,chat)">-->
+              <!--<mat-icon matListIcon>forum</mat-icon>-->
+              <!--<p>{{chat.chatName}}</p>-->
+            <!--</mat-list-item>-->
+          <!--</mat-list>-->
+        <!--</mat-tab>-->
+      <!--</mat-tab-group>-->
+    <!--</mat-card>-->
+  <!--</mat-sidenav>-->
+
+  <!--<mat-sidenav position="end" mode="side" opened *ngIf="selectedConversation">-->
+    <!--<mat-card>-->
+      <!--&lt;!&ndash;&lt;!&ndash;<mat-list class="members">&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash;<mat-list-item *ngFor="let member of selectedConversation.members | keys">&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash;<p>{{member.value.user.name}}</p>&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash;</mat-list-item>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;</mat-list>&ndash;&gt;-->
+    <!--</mat-card>-->
+
+  <!--</mat-sidenav>-->
+  <!--<section class="empty-conversation" *ngIf="!selectedConversation">-->
+    <!--<h1 class="mat-display-1">Select a conversation from the left to start chatting</h1>-->
+  <!--</section>-->
+  <!--<section *ngIf="selectedConversation">-->
+    <!--<div class="mat-typography conversation-header">-->
+      <!--<h2>-->
+        <!--<mat-icon>forum</mat-icon>-->
+        <!--{{selectedConversation.chatName}}</h2>-->
+      <!--&lt;!&ndash;<p>&ndash;&gt;-->
+        <!--&lt;!&ndash;<mat-icon>account_circle</mat-icon>&ndash;&gt;-->
+        <!--&lt;!&ndash;{{(selectedConversation.members | keys).length}} Members</p>&ndash;&gt;-->
+    <!--</div>-->
+
+    <!--<mat-divider></mat-divider>-->
+    <!--<mat-list dense class="conversation-history mat-typography">-->
+      <!--&lt;!&ndash;<mat-list-item *ngFor="let event of events; index as i" [dir]="event.from === selectedConversation.me.id ? 'rtl' : 'ltr'">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img *ngIf="event.type == 'text'" matListAvatar matTooltip="{{selectedConversation.members[event.from].user.name}}" src="https://randomuser.me/api/portraits/thumb/lego/{{i}}.jpg"&ndash;&gt;-->
+        <!--&lt;!&ndash;/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<p *ngIf="event.type == 'text'" [dir]="'ltr'">{{event.body.text}}</p>&ndash;&gt;-->
+        <!--&lt;!&ndash;<p *ngIf="event.type == 'member:joined'" class="text-center">&ndash;&gt;-->
+          <!--&lt;!&ndash;<b>{{selectedConversation.members[event.from].user.name}}</b> has joined the conversation</p>&ndash;&gt;-->
+      <!--&lt;!&ndash;</mat-list-item>&ndash;&gt;-->
+    <!--</mat-list>-->
+
+    <!--<div class="conversation-input">-->
+      <!--<mat-divider></mat-divider>-->
+      <!--<mat-form-field class="full-width">-->
+        <!--<input matInput placeholder="Start chatting..." name="text" [(ngModel)]="newMessage">-->
+        <!--<mat-icon matSuffix (click)="sendMessage()">send</mat-icon>-->
+      <!--</mat-form-field>-->
+    <!--</div>-->
+  <!--</section>-->
+<!--</mat-sidenav-container>-->
+

@@ -1,0 +1,19 @@
+.container {
+    font-family:  Helvetica, sans-serif;
+    margin-left: 300px;
+    width: 310px;
+}
+
+.container-small {
+    font-family:  Helvetica, sans-serif;
+    margin: 50px auto;
+    width: 300px;
+    border-style: solid;
+    border-color: white;
+    background-color: #b4b4b4;
+    color: black;
+}
+
+.holder{
+    color: #ffffff;
+}

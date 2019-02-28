@@ -1,0 +1,102 @@
+<div class="card-container">
+  <mat-card style="align-items: center; height: 200px;">
+    <div id="avatar"><img src="{{user.avatarUrl}}" alt="User Avatar" height="100" width="100"></div>
+    <mat-card-header>
+      <mat-card-title>{{user.firstName}} {{user.lastName}} @{{user.username}}</mat-card-title>
+      <mat-card-subtitle *ngIf="user.online">online</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-actions>
+      <button mat-button *ngIf="user.id !== currentUser.id">
+        <i class="material-icons">mail</i> Send a message
+      </button>
+      <button mat-button *ngIf="user.id === currentUser.id">
+        <i class="material-icons">edit</i> Edit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card style="margin-left: 5px; width: 81%;">
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="Info">
+          <div class="small-box">
+            <mat-list>
+              <mat-list-item>
+                <h3 mat-subheader>About Me:</h3>   {{ user.aboutMe }}
+              </mat-list-item>
+              <mat-list-item>
+                <h3 mat-subheader>Email:</h3>      {{ user.email }}
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </mat-tab>
+        <mat-tab label="Friends">
+          <div class="small-box">
+             <div *ngFor="let friend of user.friends">
+               <mat-card class="friend-container">
+                 <img src="{{user.avatarUrl}}" alt="User Avatar" height="70" width="70">
+                 <mat-card-header>
+                   <mat-card-title>
+                     {{friend.firstName}} {{friend.lastName}}
+                     <br>
+                     <a [routerLink]="['/user', friend.id]" style="color: gray">
+                       @{{friend.username}}
+                     </a>
+                   </mat-card-title>
+                   <mat-card-subtitle *ngIf="friend.online">online</mat-card-subtitle>
+                 </mat-card-header>
+               </mat-card>
+             </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+
+<!--<div id="w" class="content">
+    <div id="content" class="clearfix">
+      <div id="avatar"><img src="{{user.avatarUrl}}" alt="default avatar" height="100" width="100"></div>
+      <h2>{{user.firstName}} {{user.lasttName}} @{{user.username}}</h2>
+
+      <nav id="profiletabs">
+        <ul class="clearfix">
+          <li><a class="sel">About Me</a></li>
+          <li><a>Friends</a></li>
+          <li><a>Settings</a></li>
+        </ul>
+      </nav>
+
+      <section id="bio">
+        {{user.aboutMe}}
+      </section>
+
+      <section id="friends" class="hidden">
+        <p>Friends list:</p>
+
+        <ul id="friendslist" class="clearfix">
+          <li><a href="#"><img src="images/avatar.png" width="22" height="22"> Username</a></li>
+          <li><a href="#"><img src="images/avatar.png" width="22" height="22"> SomeGuy123</a></li>
+          <li><a href="#"><img src="images/avatar.png" width="22" height="22"> PurpleGiraffe</a></li>
+        </ul>
+      </section>
+
+      <section id="settings" class="hidden">
+        <p>Edit your user settings:</p>
+
+        <p class="setting"><span>E-mail Address <img src="images/edit.png" alt="*Edit*"></span> lolno@gmail.com</p>
+
+        <p class="setting"><span>Language <img src="images/edit.png" alt="*Edit*"></span> English(US)</p>
+
+        <p class="setting"><span>Profile Status <img src="images/edit.png" alt="*Edit*"></span> Public</p>
+
+        <p class="setting"><span>Update Frequency <img src="images/edit.png" alt="*Edit*"></span> Weekly</p>
+
+        <p class="setting"><span>Connected Accounts <img src="images/edit.png" alt="*Edit*"></span> None</p>
+      </section>
+    </div>
+  </div>-->

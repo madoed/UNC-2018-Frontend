@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
@@ -43,4 +44,72 @@
     </li>
   </ul>
 </div>
+=======
+<div class="container">
+  <!--Toolbar-->
+  <mat-toolbar color="secondary" class="header">
+    <mat-toolbar-row>
+      <h1 routerLink="/" class="logo">Meet Up</h1>
+      <span class="toolbar-filler"></span>
 
+      <button mat-icon-button *ngIf="isAuthenticated" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <span>Settings</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <!--Sidenav-->
+    <mat-sidenav #snav *ngIf="isAuthenticated" opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
+
+      <mat-nav-list>
+        <mat-list-item [routerLink]="['/user', currentUser.id]">
+            <i class="material-icons">home</i>
+            <a class="sidenav-item">My page</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink="/chat">
+            <i class="material-icons">chat</i>
+            <a class="sidenav-item">My chats</a>
+        </mat-list-item>
+>>>>>>> b74b8b5e2540f79276853b25087ad8c9f887333d
+
+        <mat-list-item routerLink=".">
+            <i class="material-icons">group</i>
+            <a class="sidenav-item">My meetings</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink=".">
+            <i class="material-icons">attach_money</i>
+            <a class="sidenav-item">My bills</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink="/card-list">
+            <i class="material-icons">credit_card</i>
+            <a class="sidenav-item">My cards</a>
+        </mat-list-item>
+
+        <mat-list-item routerLink="/map">
+            <i class="material-icons">place</i>
+            <a class="sidenav-item">My maps</a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!--Page content-->
+    <mat-sidenav-content style="background-color:white !important">
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

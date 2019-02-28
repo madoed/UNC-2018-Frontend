@@ -1,0 +1,22 @@
+.small-box, .large-box {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin: 5px;
+  padding: 10px;
+}
+
+.large-box {
+  height: 300px;
+  width: 300px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.friend-container {
+  margin: 10px;
+  align-content: center;
+}

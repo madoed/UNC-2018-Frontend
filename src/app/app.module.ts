@@ -1,7 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+<<<<<<< HEAD
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
@@ -48,11 +49,29 @@ const appRoutes: Routes = [
       CardPayComponent,
       MapComponent,
       ChatComponent
+=======
+import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from '@app/auth';
+import { CoreModule } from '@app/core';
+import { SharedModule } from '@app/shared';
+
+import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+
+
+@NgModule({
+  declarations: [
+    AppComponent
+>>>>>>> b74b8b5e2540f79276853b25087ad8c9f887333d
   ],
   imports: [
-    BrowserModule,
-      HttpClientModule,
+      AppRoutingModule,
+      AuthModule,
+      CoreModule,
+      SharedModule,
       BrowserAnimationsModule,
+<<<<<<< HEAD
       MatButtonModule,
       MatCardModule,
       MatInputModule,
@@ -63,8 +82,14 @@ const appRoutes: Routes = [
       MatSidenavModule,
       RouterModule.forRoot(appRoutes),
       AgmCoreModule.forRoot({apiKey: 'AIzaSyCkJWTDYq8r38CZGt0CmoXxBRLUR5jkrd4'})
+=======
+      BrowserModule
   ],
-  providers: [CardService, MapService],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },
+      /*{ provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }*/
+>>>>>>> b74b8b5e2540f79276853b25087ad8c9f887333d
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
