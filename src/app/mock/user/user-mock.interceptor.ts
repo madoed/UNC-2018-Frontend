@@ -18,7 +18,8 @@ export class UserMockInterceptor implements HttpInterceptor {
         email: 'admin@example.com',
         avatarUrl: '',
         aboutMe: '',
-        friends: []
+        friends: [],
+        online: true
       },
       {
         id: 11,
@@ -29,11 +30,27 @@ export class UserMockInterceptor implements HttpInterceptor {
         email: 'john.doe@example.com',
         avatarUrl: 'https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png',
         aboutMe: 'I am a test user',
-        friends: []
+        friends: [],
+        online: true
+      },
+      {
+        id: -1,
+        username: 'alice',
+        password: 'qwerty',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        email: 'alice.smith@example.com',
+        avatarUrl: 'https://cdn1.iconfinder.com/data/icons/user-pictures/101/malecostume-512.png',
+        aboutMe: 'Hi, my name is Alice',
+        friends: [],
+        online: false
       }
     ];
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+      this.users[1].friends.push(this.users[2]);
+      //this.users[1].friends.push(this.users[1]);
+
       this.users = JSON.parse(localStorage.getItem('users')) || this.users;
       let currentUser: User = JSON.parse(localStorage.getItem('currentUser'));;
       const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImV4cCI6MzYwMCwicm9sZSI6ImFkbWluIn0.5BWuIPcbCjVhfbrtxa2Jp9c8LvcFW23enSmd_I9y9Bc';
@@ -47,7 +64,7 @@ export class UserMockInterceptor implements HttpInterceptor {
       // wrap in delayed observable to simulate server api call
       return of(null).pipe(mergeMap(() => {// get current user
           // get current user
-          if (request.url.endsWith('/auth') && request.method === 'GET') {
+          if (request.url.endsWith('/current') && request.method === 'GET') {
               return ok({
                 user: currentUser,
                 token: adminToken
@@ -55,7 +72,7 @@ export class UserMockInterceptor implements HttpInterceptor {
           }
 
           // login
-          if (request.url.endsWith('auth/login') && request.method === 'POST') {
+          if (request.url.endsWith('login') && request.method === 'POST') {
               const body = Object.assign({}, JSON.parse(request.body));
               const user = this.users.find(x => x.username === body.username && x.password === body.password);
               if (!user) return error('Username or password is incorrect');
@@ -67,7 +84,7 @@ export class UserMockInterceptor implements HttpInterceptor {
           }
 
           // logout
-          if (request.url.match('auth/logout') && request.method === 'POST') {
+          if (request.url.match('logout') && request.method === 'POST') {
             localStorage.removeItem('currentUser');
             return of(new HttpResponse({ status: 200 }));
           }

@@ -1,14 +1,57 @@
+<<<<<<< HEAD
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+
+
+  <div style="margin-top: 5px !important;float: left;">
+    <router-outlet></router-outlet>
+  </div>
+
+<mat-toolbar id="appToolbar" color="black">
+  <h1 class="component-title">
+    <a ><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Meet up</h1></a>
+  </h1>
+  <span class="toolbar-filler"></span>
+  <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
+
+  <button mat-raised-button color="accent"  id="button-logout" md-button><h1 style="font-family: Pompadur,'Comic Sans MS', cursive;">Login</h1></button>
+</mat-toolbar>
+
+<div  style="margin-top: 75px !important;">
+  <ul class='social'>
+    <li>
+      <a class=" fa fa-home" href="/mypage">
+        <span>My page</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-envelope" href="/socket">
+        <span>My chat</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-bell" href="/map">
+        <span>My meetings</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="fa fa-credit-card" href="/card-list">
+        <span>My bills</span>
+      </a>
+    </li>
+  </ul>
+</div>
+=======
 <div class="container">
   <!--Toolbar-->
   <mat-toolbar color="secondary" class="header">
     <mat-toolbar-row>
-      <!--<button mat-icon-button *ngIf="!isAuthenticated" (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>-->
-
       <h1 routerLink="/" class="logo">Meet Up</h1>
       <span class="toolbar-filler"></span>
 
-      <button mat-raised-button md-button (click)="toLoginPage()" *ngIf="!isAuthenticated">Log In</button>
-      <!--<button mat-raised-button md-button (click)="logout()" *ngIf="isAuthenticated">Log Out</button>-->
       <button mat-icon-button *ngIf="isAuthenticated" [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
@@ -28,20 +71,8 @@
     <!--Sidenav-->
     <mat-sidenav #snav *ngIf="isAuthenticated" opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
 
-      <mat-card>
-        <mat-card-header>
-          <div mat-card-avatar class="background-image: url('{{currentUser.avatarUrl}}');"></div>
-          <mat-card-title>{{currentUser.firstName}} {{currentUser.lastName}}</mat-card-title>
-          <mat-card-subtitle>@{{currentUser.username}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-        </mat-card-content>
-        <mat-card-actions>
-        </mat-card-actions>
-      </mat-card>
-
       <mat-nav-list>
-        <mat-list-item routerLink="/user/ + {{currentUser.id}}">
+        <mat-list-item [routerLink]="['/user', currentUser.id]">
             <i class="material-icons">home</i>
             <a class="sidenav-item">My page</a>
         </mat-list-item>
@@ -50,6 +81,7 @@
             <i class="material-icons">chat</i>
             <a class="sidenav-item">My chats</a>
         </mat-list-item>
+>>>>>>> b74b8b5e2540f79276853b25087ad8c9f887333d
 
         <mat-list-item routerLink="/meeting-list">
             <i class="material-icons">group</i>
