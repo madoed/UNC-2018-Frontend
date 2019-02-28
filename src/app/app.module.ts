@@ -1,13 +1,10 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthModule } from '@app/auth';
 import { CoreModule } from '@app/core';
-import { SharedModule } from '@app/shared';
+import { UiModule } from '@app/ui';
 
-import { MapMockInterceptor, UserMockInterceptor } from '@app/mock';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -17,17 +14,13 @@ import { BrowserModule } from '@angular/platform-browser';
     AppComponent
   ],
   imports: [
-      AppRoutingModule,
-      AuthModule,
       CoreModule,
-      SharedModule,
+      BrowserModule,
       BrowserAnimationsModule,
-      BrowserModule
+      UiModule,
+      AppRoutingModule,
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: UserMockInterceptor, multi: true },
-      /*{ provide: HTTP_INTERCEPTORS, useClass: MapMockInterceptor, multi: true }*/
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

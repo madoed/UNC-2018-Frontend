@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {SharedModule} from '@app/shared';
+import { UiModule } from '@app/ui';
 
 import {ChatComponent} from '@app/modules/chat/chat.component';
 import {ChatRoutingModule} from '@app/modules/chat/chat-routing.module';
@@ -9,7 +9,7 @@ import {ChatAddComponent} from '@app/modules/chat/chat-add/chat-add.component';
 
 @NgModule({
     imports: [
-        SharedModule,
+        UiModule,
         ChatRoutingModule,
         /*FormsModule,
         MatGridListModule,

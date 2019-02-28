@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {ApiService} from '@app/core';
-import {Message} from '@app/core/models/message.model';
-import {Chat} from '@app/core/models/chat.model';
+import {ApiService} from './api.service';
+import {Message} from '../models/message.model';
+import {Chat} from '../models/chat.model';
 
 @Injectable({
     providedIn: 'root'

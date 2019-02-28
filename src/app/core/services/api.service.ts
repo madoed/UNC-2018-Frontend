@@ -12,6 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   private formatErrors(error: any) {
+    console.log(error);
     return  throwError(error.error);
   }
 

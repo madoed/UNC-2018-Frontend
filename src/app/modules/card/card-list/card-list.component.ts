@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService, CardService} from '@app/core';
+import {AuthService, CardService, User} from '@app/core';
 
 @Component({
   selector: 'app-card-list',
@@ -13,7 +13,7 @@ export class CardListComponent implements OnInit {
     constructor(private cardService: CardService, private authService: AuthService) { }
 
     ngOnInit() {
-        this.cardService.getAll(this.authService.getCurrentUser().id).subscribe(data => {
+        this.cardService.getAll(this.authService.user.id).subscribe(data => {
             this.cards = data;
         });
     }

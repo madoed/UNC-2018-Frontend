@@ -1,11 +1,21 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { AuthGuard } from './services/auth.guard';
+import { AuthService } from './services/auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors';
 
 @NgModule({
-  imports: [],
-  exports: [],
+  imports: [
+    HttpClientModule,
+    RouterModule,
+  ],
+  exports: [
+  ],
   providers: [
+    AuthService,
+    AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
   ]
 })

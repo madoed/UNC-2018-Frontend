@@ -1,26 +1,36 @@
-import { Injectable, Injector } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-import { JwtService } from '../services';
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { from, Observable } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private jwtService: JwtService) {}
+
+  constructor(private auth: AuthService) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const headersConfig = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
+    /*const tokenPromise: Promise<string> = this.auth.getToken();
+    const tokenObservable: Observable<string> = from(tokenPromise);
 
-    const token = this.jwtService.getToken();
+    return tokenObservable.pipe(
+      map(authToken => {
+        req = req.clone({setHeaders: {
+          'Authorization': 'Bearer ' + authToken,
+          'Content-type': 'application/json'
+        }});
+      }),
+      concatMap(request => {
+        return next.handle(req);
+      }));*/
 
-    if (token) {
-      headersConfig['Authorization'] = `Bearer ${token}`;
-    }
-
-    const request = req.clone({ setHeaders: headersConfig });
-    return next.handle(request);
+      const headersConfig = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      };
+  
+      const request = req.clone({ setHeaders: headersConfig });
+      return next.handle(request);
   }
 }

@@ -13,7 +13,7 @@ declare function require(path: string);
 export class ChatAddComponent implements OnInit {
     users: Array<any>;
     imageSrc = require('./user.png');
-    fixedUserId = this.authService.getCurrentUser().id;
+    fixedUserId;
     fixedUser: User;
     newChat = {chatName: '', subscribers: []};
     empty = true;
@@ -21,6 +21,7 @@ export class ChatAddComponent implements OnInit {
     constructor(private authService: AuthService, private userService: UserService, private chatService: ChatService) { }
 
     ngOnInit() {
+      this.fixedUserId  = this.authService.user.id;
       this.chatService.getFriends().subscribe(data => {
           this.users = data;
           console.log(data);

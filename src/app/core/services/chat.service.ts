@@ -1,26 +1,30 @@
 import { Injectable } from '@angular/core';
 import {environment} from '@env';
-import {ApiService, AuthService, User} from '@app/core';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
+import {User} from '../models/user.model';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {Chat} from '@app/core/models/chat.model';
-import {Message} from '@app/core/models/message.model';
+import {Chat} from '../models/chat.model';
+import {Message} from '../models/message.model';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-    public CHAT_API = 'http://127.0.0.1:8000' + '/chats';
+    public CHAT_API = environment.api_url + '/chats';
     // private channel_name: string;
     // private channel_id: number;
     private channel: Chat;
 
     constructor(
-        private apiService: ApiService, private authService: AuthService ) {}
+        private apiService: ApiService,
+        private authService: AuthService 
+    ) {}
 
     getAll(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get(this.CHAT_API + '/' + this.authService.getCurrentUser().id);
+        return this.apiService.get(this.CHAT_API + '/' + this.authService.user.id);
     }
 
     setChannel(channel: Chat) {
@@ -32,7 +36,7 @@ export class ChatService {
 
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.getCurrentUser().id);
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
     }
 
     createChat(card: any) {

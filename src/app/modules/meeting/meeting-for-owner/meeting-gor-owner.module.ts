@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CardEditComponent} from '@app/modules/card/card-edit/card-edit.component';
 import {CardRoutingModule} from '@app/modules/card/card-routing.module';
-import {SharedModule} from '@app/shared';
+import {UiModule} from '@app/ui';
 import {MeetingRoutingModule} from '@app/modules/meeting/meeting-routing.module';
 import { MeetingForOwnerComponent} from '@app/modules/meeting/meeting-for-owner/meeting-for-owner.component';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
@@ -16,7 +16,7 @@ import {MessagesModule} from '@app/modules/messages/messages.module';
   declarations: [MeetingForOwnerComponent],
   imports: [
     MeetingRoutingModule,
-    SharedModule,
+    UiModule,
     MatTableModule
   ]
 })

@@ -5,27 +5,18 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { UserListComponent } from './user-list/user-list.component';
 
-import { RoleGuard } from '@app/auth';
-import { Role } from '@app/core';
-
 const routes: Routes = [
     {
       path: '',
-      component: UserListComponent,
-      canActivate: [RoleGuard],
-      data: { roles: [Role.Admin] }
+      component: UserListComponent
      },
     {
       path: 'add',
-      component: AddUserComponent,
-      canActivate: [RoleGuard],
-      data: { roles: [Role.Admin] }
+      component: AddUserComponent
     },
     {
       path: 'edit',
-      component: EditUserComponent,
-      canActivate: [RoleGuard],
-      data: { roles: [Role.Admin] }
+      component: EditUserComponent
     }
 ];
 
