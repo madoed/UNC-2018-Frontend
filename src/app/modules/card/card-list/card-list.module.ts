@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 
-import { AgmCoreModule } from '@agm/core';
 import { UiModule } from '@app/ui';
 
 import {CardRoutingModule} from '../card-routing.module';

@@ -69,7 +69,7 @@ export class MessagesComponent implements OnInit {
             if (chat) {
               this.chatService.setChannel(chat);
               this.channel = chat;
-              //this.user = await this.authService.user;
+              this.user = this.authService.user;
               this.setUpChat();
             } else {
               console.log(`Card with id '${id}' not found, returning to list`);
@@ -98,7 +98,7 @@ export class MessagesComponent implements OnInit {
 
       //this.channel = this.chatService.getChannel();
       console.log(this.channel);
-      this.authService.user.subscribe(data => this.user = data);
+      this.user = this.authService.user;
       let ws = new SockJS(this.serverUrl);
       this.stompClient = Stomp.over(ws);
       let that = this;

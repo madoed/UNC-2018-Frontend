@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {environment} from '@env';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
@@ -16,21 +16,15 @@ export class ChatService {
     // private channel_name: string;
     // private channel_id: number;
     private channel: Chat;
-    private currentUser: User;
 
     constructor(
         private apiService: ApiService,
         private authService: AuthService 
     ) {}
 
-    ngOnInit() {
-        //this.currentUser = await this.authService.user;
-        this.authService.user.subscribe(data => this.currentUser = data);
-    }
-
     getAll(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get(this.CHAT_API + '/' + this.currentUser.id);
+        return this.apiService.get(this.CHAT_API + '/' + this.authService.user.id);
     }
 
     setChannel(channel: Chat) {
@@ -42,7 +36,7 @@ export class ChatService {
 
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.currentUser.id);
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
     }
 
     createChat(card: any) {

@@ -12,8 +12,6 @@ import { HttpTokenInterceptor } from './interceptors';
     RouterModule,
   ],
   exports: [
-    HttpClientModule,
-    RouterModule,
   ],
   providers: [
     AuthService,

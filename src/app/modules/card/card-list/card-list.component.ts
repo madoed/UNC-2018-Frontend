@@ -9,13 +9,11 @@ import {AuthService, CardService, User} from '@app/core';
 export class CardListComponent implements OnInit {
 
     cards: Array<any>;
-    private currentUser: User;
 
     constructor(private cardService: CardService, private authService: AuthService) { }
 
     ngOnInit() {
-        this.authService.user.subscribe(data => this.currentUser = data);
-        this.cardService.getAll(this.currentUser.id).subscribe(data => {
+        this.cardService.getAll(this.authService.user.id).subscribe(data => {
             this.cards = data;
         });
     }

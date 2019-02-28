@@ -4,11 +4,10 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from '../models/user.model';
 import { UserDetails } from '../models';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-    user: Observable<User>;
+    user: User;
 
     constructor(
       private userService: UserService,
@@ -25,7 +24,7 @@ export class AuthService {
             lastName: "Smith",
             email: "alice@example.com"
           };
-          this.user = this.userService.getOrCreate(payload);
+          this.userService.getOrCreate(payload).subscribe(data => this.user = data);
         }
     }
 

@@ -15,17 +15,12 @@ export class MeetingService {
   // private channel_name: string;
   // private channel_id: number;
   private meeting: Meeting;
-  private currentUser: User;
 
   constructor(private apiService: ApiService, private authService: AuthService) { }
 
-  ngOnInit() {
-    this.authService.user.subscribe(data => this.currentUser = data); 
-  }
-
   getAll(): Observable<Participant[]> {
     // return this.apiService.get(this.MEETING_API + '/1');
-    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.currentUser.id);
+    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.authService.user.id);
   }
 
   setMeeting(meeting: Meeting) {
