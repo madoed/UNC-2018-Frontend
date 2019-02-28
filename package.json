@@ -50,6 +50,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/jquery": "^3.3.29",
     "@types/node": "~8.9.4",
+    "@types/sockjs": "^0.3.31",
     "@types/sockjs-client": "^1.1.0",
     "@types/stompjs": "^2.3.4",
     "codelyzer": "~4.5.0",

@@ -26,11 +26,13 @@ export class MeetingListComponent implements OnInit {
   ngOnInit() {
     this.meetingService.getAll().subscribe(data => {
       this.meetings = data;
+      console.log(data);
     });
   }
 
   openMeeting(meeting: Meeting) {
     //-1 is  this.authService.getCurrentUser().id
+    console.log(meeting);
     this.meetingService.getMeeting(meeting.id).subscribe((meet: Meeting) => {
       if (meet) {
         this.meeting = meet;
@@ -39,7 +41,7 @@ export class MeetingListComponent implements OnInit {
           this.router.navigate(['/meeting-list/meeting-main', meeting.id]);
         }
       } else {
-        console.log(`Meeting with id '${meeting.id}' not found, returning to list`);
+        console.log(`another boss`);
       }
     });
   }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '@app/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MapService} from '@app/core';
+
 
 @Component({
   selector: 'app-map',
