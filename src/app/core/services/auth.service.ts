@@ -7,6 +7,7 @@ import { UserDetails } from '../models';
 
 @Injectable()
 export class AuthService {
+    userDetails: UserDetails;
     user: User;
 
     constructor(
@@ -14,17 +15,17 @@ export class AuthService {
       //private keycloakService: KeycloakService
     ) {}
 
-    init() {
+    async init() {
         if (this.isLoggedIn()) {
-          //const userDetails: KeycloakProfile = await this.keycloakService.loadUserProfile();
-          const payload: UserDetails = {
-            id: "",
+          //this.userDetails = await this.keycloakService.loadUserProfile();
+          this.userDetails = {
+            id: "57301afa-2110-41f9-8cd7-09d0dccefb7a",
             username: "alice",
             firstName: "Alice",
             lastName: "Smith",
             email: "alice@example.com"
           };
-          this.userService.getOrCreate(payload).subscribe(data => this.user = data);
+          this.user = await this.getCurrentUser();
         }
     }
 
@@ -40,5 +41,13 @@ export class AuthService {
     getToken(): Promise<string> {
       return null;
       //return this.keycloakService.getToken();
+    }
+
+    getCurrentUser(): Promise<User> {
+      return new Promise<User>((resolve, reject) => {
+        this.userService.getOrCreate(this.userDetails).subscribe(success => {
+          resolve(success);
+        });
+      });
     }
   }
