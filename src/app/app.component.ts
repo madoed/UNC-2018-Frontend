@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '@app/core';
+import { AuthService, User } from '@app/core';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.authService.init();
+  async ngOnInit() {
+    await this.authService.init();
   }
 }

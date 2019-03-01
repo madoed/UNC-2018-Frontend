@@ -26,9 +26,7 @@
     <mat-sidenav #snav opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
 
       <mat-nav-list>
-        <!--<mat-list-item [routerLink]="['/user', currentUser.id]">
-        -->
-        <mat-list-item routerLink=".">
+        <mat-list-item [routerLink]="['/user', authService.user.id]">
             <i class="material-icons">home</i>
             <a class="sidenav-item">My page</a>
         </mat-list-item>
