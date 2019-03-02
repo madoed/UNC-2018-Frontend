@@ -12,7 +12,7 @@
         <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
                 <mat-grid-tile *ngFor="let meeting of meetings">
-                    <mat-card [style.width]="'100%'" (click)="openMeeting(meeting.participantOfMeeting)" style="background-color: white !important; cursor: pointer;">
+                    <mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="background-color: white !important; cursor: pointer;">
                         <!--<div fxLayout="row">-->
                             <!--<div fxFlex="5">-->
 
@@ -28,7 +28,8 @@
 
                         <div  fxLayout="row" align="center">
                             <h3 class="meeting-title">  {{meeting.participantOfMeeting.name}}</h3>
-                            <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span> {{meeting.participantOfMeeting.dateOfMeeting}}
+                            <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
+                                {{parse(meeting.participantOfMeeting.dateOfMeeting.toString())}}
                                 <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место
                                 <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">Status: </span>{{meeting.participantOfMeeting.status}}
                                 <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->

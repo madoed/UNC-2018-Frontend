@@ -28,6 +28,8 @@ import {
   MatPaginatorModule
 } from '@angular/material';
 import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
+import {AccordionModule, CalendarModule, PickListModule} from 'primeng/primeng';
+import {MenuItem} from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -56,7 +58,10 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     MatTableModule, 
     MatCheckboxModule,
     MatPaginatorModule,
-    AngularDateTimePickerModule
+    AngularDateTimePickerModule,
+    AccordionModule,
+    CalendarModule,
+    PickListModule
   ],
   declarations: [],
   exports: [
@@ -85,7 +90,10 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
     MatTableModule, 
     MatCheckboxModule,
     MatPaginatorModule,
-    AngularDateTimePickerModule
+    AngularDateTimePickerModule,
+    AccordionModule,
+    CalendarModule,
+    PickListModule
   ],
   providers: [
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }

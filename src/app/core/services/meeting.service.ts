@@ -6,6 +6,8 @@ import {Meeting} from '../models/meeting.model';
 import {Observable} from 'rxjs';
 import {Participant} from '../models/participant.model';
 import {Chat} from '../models/chat.model';
+import {Item} from '@app/core/models/item.model';
+import {ItemAmount} from '@app/core/models/itemamount.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class MeetingService {
   // private channel_name: string;
   // private channel_id: number;
   private meeting: Meeting;
+  private participant: Participant;
 
   constructor(private apiService: ApiService, private authService: AuthService) { }
 
@@ -27,6 +30,9 @@ export class MeetingService {
     this.meeting = meeting;
   }
 
+  setParticipant(participant: Participant) {
+    this.participant = participant;
+  }
 
   getMeeting(meeting: Number): Observable<any> {
     console.log(meeting);
@@ -46,4 +52,19 @@ export class MeetingService {
     // return this.apiService.get(this.CHAT_API + '/1');
     return this.apiService.get('http://127.0.0.1:8000/participants/' + this.meeting.id);
   }
+
+    getByParticipant(id: Number): Observable<any> {
+        return this.apiService.get('http://127.0.0.1:8000/participant/' + id);
+    }
+
+    getAllItems(): Observable<Item[]> {
+        return this.apiService.get('http://127.0.0.1:8000/bill-items/-9');
+        //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
+    }
+
+    getParticipantItems(): Observable<ItemAmount[]> {
+    console.log(this.participant.id);
+        return this.apiService.get('http://127.0.0.1:8000/participant-items/' + this.participant.id);
+        //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
+    }
 }

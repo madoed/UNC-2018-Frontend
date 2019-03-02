@@ -7,7 +7,7 @@ export interface Meeting {
   meetingDescription?:  string;
   place: Location;
   boss: User;
-  dateOfMeeting: Date;
+  dateOfMeeting: number;
   status: string;
   meetingChat: Chat;
   name: string;

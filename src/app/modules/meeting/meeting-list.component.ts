@@ -14,6 +14,7 @@ import {Participant} from '@app/core/models/participant.model';
 })
 export class MeetingListComponent implements OnInit {
 
+  private date = new Date();
   panelOpenState = false;
   meetings: Array<Participant>;
   meeting: Meeting;
@@ -30,10 +31,22 @@ export class MeetingListComponent implements OnInit {
     });
   }
 
-  openMeeting(meeting: Meeting) {
+    parse(value: any): String | null {
+        if ((typeof value === 'string')) {
+            const str = value.split('-');
+            const year = Number(str[0]);
+            const month = Number(str[1]) - 1;
+            const date = Number(str[2].charAt(0) + str[2].charAt(1)) + 1;
+            return new Date(year, month, date).toString().substr(0, 15 );
+        }
+        const timestamp = typeof value === 'number' ? value : Date.parse(value);
+        return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
+    }
+
+  openMeeting(meeting: Participant) {
     //-1 is  this.authService.getCurrentUser().id
     console.log(meeting);
-    this.meetingService.getMeeting(meeting.id).subscribe((meet: Meeting) => {
+    this.meetingService.getMeeting(meeting.participantOfMeeting.id).subscribe((meet: Meeting) => {
       if (meet) {
         this.meeting = meet;
         this.meetingService.setMeeting(this.meeting);

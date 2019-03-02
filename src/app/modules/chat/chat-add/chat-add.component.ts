@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService, User, UserService} from '@app/core';
 import {ChatService} from '@app/core/services/chat.service';
 import {Chat} from '@app/core/models/chat.model';
+import {Router} from '@angular/router';
 declare function require(path: string);
 
 @Component({
@@ -18,7 +19,10 @@ export class ChatAddComponent implements OnInit {
     newChat = {chatName: '', subscribers: []};
     empty = true;
 
-    constructor(private authService: AuthService, private userService: UserService, private chatService: ChatService) { }
+    constructor(private authService: AuthService,
+                private userService: UserService,
+                private chatService: ChatService,
+                private router: Router) { }
 
     ngOnInit() {
       this.fixedUserId  = this.authService.user.id;
@@ -41,10 +45,17 @@ export class ChatAddComponent implements OnInit {
         this.empty = false;
     }
 
+    gotoList() {
+        this.router.navigate(['/chat']);
+    }
+
     save() {
+        this.newChat.subscribers.push({'id': this.authService.user.id});
         //this.newChat.subscribers.push({'id': this.authService.getCurrentUser().id});
-        this.chatService.createChat(this.newChat);
-        console.log(this.newChat);
+        this.chatService.createChat(this.newChat).subscribe(result => {
+            this.gotoList();
+        }, error => console.error(error));
+
     }
 
 }

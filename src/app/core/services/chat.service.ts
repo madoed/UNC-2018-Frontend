@@ -39,9 +39,8 @@ export class ChatService {
         return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
     }
 
-    createChat(card: any) {
-        this.apiService.post('http://127.0.0.1:8000/chat', card) .subscribe(
-            result => console.log("5. createService: " + result));
+    createChat(card: any): Observable<any> {
+        return this.apiService.post('http://127.0.0.1:8000/chat', card);
     }
 
     /*getChannelId(): number {
