@@ -6,4 +6,5 @@ export interface Bill {
     billOfMeeting: Meeting[];
     dateOfBill: number;
     billStatus: string;
+    checkCommonAmount: number;
 }

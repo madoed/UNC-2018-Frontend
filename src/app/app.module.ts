@@ -7,6 +7,7 @@ import { UiModule } from '@app/ui';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
       BrowserModule,
       BrowserAnimationsModule,
       UiModule,
+      HttpClientModule,
       AppRoutingModule,
   ],
   providers: [],

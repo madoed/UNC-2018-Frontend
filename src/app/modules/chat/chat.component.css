@@ -65,11 +65,7 @@ input[type="radio"]:checked + label span {
 
 .myButton{
     width: 500px;
-    border-style: solid;
-    border-color: black;
-    background-color: white;
-    color: black;
-    font-family: Pompadur,'Comic Sans MS', cursive;
+    border-style: ridge;
 }
 
 .toolbar-filler {

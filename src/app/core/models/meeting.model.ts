@@ -11,4 +11,5 @@ export interface Meeting {
   status: string;
   meetingChat: Chat;
   name: string;
+  amountOfParticipants: number;
 }

@@ -14,6 +14,9 @@ import {Subscription} from 'rxjs';
 import {Chat} from '@app/core/models/chat.model';
 import {Item} from '@app/core/models/item.model';
 import {ItemAmount} from '@app/core/models/itemamount.model';
+import {Message} from 'primeng/api';
+import {MessageService as mes} from 'primeng/api';
+import {HttpErrorResponse} from '@angular/common/http';
 
 
 
@@ -37,14 +40,28 @@ export interface UserData {
 @Component({
   selector: 'app-meeting-for-owner',
   templateUrl: './meeting-for-owner.component.html',
-  styleUrls: ['./meeting-for-owner.component.css']
+  styleUrls: ['./meeting-for-owner.component.css'],
+  providers: [mes]
 
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+    displayDialogDescription: boolean = false;
+    editDescription: boolean = false;
+    displayDialog: boolean;
+    car: Item = {} as Item;
+    selectedCar: Item;
+    newCar: boolean;
+    cols: any[];
+    billItems: Item[];
+
     sourceCars: Item[];
-    sourceCarsInfo: Item[];
     targetCars: Item[];
     myList: ItemAmount[];
+
+    private your_list;
+    private show_bill;
+    private edit_bill;
+    private changed_bill;
 
   private participant = {} as Participant;
   private meeting = {} as Meeting;
@@ -79,15 +96,15 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
             const str = value.split('-');
             const year = Number(str[0]);
             const month = Number(str[1]) - 1;
-            const date = Number(str[2].charAt(0) + str[2].charAt(1))+1;
+            const date = Number(str[2].charAt(0) + str[2].charAt(1)) + 1;
             return new Date(year, month, date);
         }
         const timestamp = typeof value === 'number' ? value : Date.parse(value);
         return isNaN(timestamp) ? null : new Date(timestamp);
     }
 
-  constructor(private meetingService: MeetingService,
-
+  constructor(private messService: mes,
+              private meetingService: MeetingService,
               public route: ActivatedRoute,
               authService: AuthService,
               public router: Router,
@@ -113,8 +130,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                   this.myList = items;
                   this.myList.forEach(item => this.targetCars.push(item.billItemAmount));
                   this.targetCars = this.targetCars.sort((a, b): number => {
-                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
                       return 0; });
                   console.log(items);
               });
@@ -123,26 +140,44 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       this.meetingService.setMeeting(meeting);
 
                       this.meetingService.getAllItems().subscribe(items => {
-                          this.sourceCars = items;
+                          this.billItems = items;
+                          this.sourceCars = [];
+                          this.billItems.forEach(item => {
+                              let tmpItem = {} as Item;
+                              tmpItem.id = item.id;
+                              tmpItem.itemCurrentAmount = 0;
+                              tmpItem.itemAmount = item.itemCurrentAmount;
+                              tmpItem.itemTitle = item.itemTitle;
+                              tmpItem.price = item.price;
+                              tmpItem.itemBill = item.itemBill;
+                              if(item.itemCurrentAmount > 0) {
+                                  this.sourceCars.push(tmpItem);
+                              }
+                          });
+
+                          // this.sourceCars.forEach(item => {
+                          //     item.itemAmount = item.itemCurrentAmount;
+                          //     item.itemCurrentAmount = 0;
+                          // });
                           this.sourceCars = this.sourceCars.sort((a, b): number => {
-                              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-                              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
+                              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
                               return 0; });
-                          this.sourceCars.forEach(item => {
-                              item.itemAmount = item.itemCurrentAmount;
-                              item.itemCurrentAmount = 0;
-                          })
-                          //this.sourceCarsInfo = items;
+                          // this.sourceCarsInfo = items;
                           console.log(items);
                       });
                       this.meeting = meeting;
-                      let today = new Date();
-                      let month = today.getMonth();
-                      let year = today.getFullYear();
+                      const today = new Date();
+                      const month = today.getMonth();
+                      const year = today.getFullYear();
                       this.minDate = new Date();
                       this.minDate.setMonth(month);
                       this.minDate.setFullYear(year);
-                      //this.date = new Date().to;
+                      let re = /\\n/gi;
+                      this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,' ');
+                      re = /\"/gi;
+                      this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,'');
+                      // this.date = new Date().to;
                       this.date = this.parse(this.meeting.dateOfMeeting.toString());
                       this.meetingService.getParticipants().subscribe(data => {
                           this.participants = data;
@@ -166,13 +201,24 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
   ngOnInit() {
 
-    //this.chatService.setChannel(this.meeting.meetingChat);
+      this.your_list = false;
+      this.edit_bill = false;
+      this.show_bill = true;
+      this.changed_bill = false;
 
-    //this.route.params(this.meeting.meetingChat.id);
+      this.cols = [
+          { field: 'itemTitle', header: 'item' },
+          { field: 'price', header: 'price' },
+          { field: 'itemAmount', header: 'amount' },
+          { field: 'itemCurrentAmount', header: 'left' },
+      ];
+    // this.chatService.setChannel(this.meeting.meetingChat);
+
+    // this.route.params(this.meeting.meetingChat.id);
 
 
 
-    //this.route.params = this.chatService.getChannel(-7);
+    // this.route.params = this.chatService.getChannel(-7);
 
     // this.meeting = this.meetingService.getCurrentMeeting();
     // this.date = this.meeting.dateOfMeeting;
@@ -183,20 +229,17 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
   }
 
-/**
- * Set the paginator and sort after the view init since this component will
- * be able to query its view for the initialized paginator and sort.
- */
 ngAfterViewInit() {
   this.dataSource.paginator = this.paginator;
   this.dataSource.sort = this.sort;
 }
 
 
-  changeDate(){
-    let newDate = new Date();
+  changeDate() {
+    const newDate = new Date();
     console.log(this.date);
     this.meetingService.setDate(this.date, this.meeting.id);
+    this.messService.add({severity:'success', summary: 'Success Message', detail:'Date changed'});
  }
 
   isAllSelected() {
@@ -243,76 +286,318 @@ ngAfterViewInit() {
   }
 
   addToMyCheck() {
-      let item = this.targetCars.pop();
-      if (this.targetCars.find(it => it.id === item.id)) {
-          //item.itemCurrentAmount++;
-          this.targetCars.find(it => it.id === item.id).itemCurrentAmount = this.targetCars.find(it => it.id === item.id).itemCurrentAmount+1;
-         // this.targetCars = this.targetCars.filter(it => it.id !== item.id);
-          //this.targetCars.push(item);
-          this.targetCars = this.targetCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-          //this.targetCars.push(item);
-      } else {
-          item.itemCurrentAmount = 1;
-          this.targetCars.push(item);
-          this.targetCars = this.targetCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-      }
-      if (item.itemAmount !== 1) {
-          let newitem = {} as Item;
-          newitem.itemAmount = item.itemAmount-1;
-          newitem.itemCurrentAmount = 0;
-          newitem.itemTitle = item.itemTitle;
-          newitem.id = item.id;
-          newitem.itemBill = item.itemBill;
-          newitem.price = item.price;
-          this.sourceCars.push(newitem);
-          this.sourceCars = this.sourceCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-          //this.sourceCars = this.sourceCars.filter(it => it.id !== item.id);
-      }
-  }
+      this.changed_bill = true;
+      const item = this.targetCars.pop();
+      this.billItems.find(it => it.id === item.id).itemCurrentAmount--;
+      this.meetingService.updateItem(this.billItems.find(it => it.id === item.id)).subscribe(
+          res => {
+              console.log(res);
+              if (this.targetCars.find(it => it.id === res.id)) {
+                  // item.itemCurrentAmount++;
+                  this.targetCars.find(it => it.id === res.id).itemCurrentAmount = this.targetCars.find(it => it.id === res.id).itemCurrentAmount + 1;
+                  // this.targetCars = this.targetCars.filter(it => it.id !== item.id);
+                  // this.targetCars.push(item);
+                  this.targetCars = this.targetCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+                  // this.targetCars.push(item);
+              } else {
+                  item.itemCurrentAmount = 1;
+                  this.targetCars.push(res);
+                  this.targetCars = this.targetCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+              }
+              if (res.itemAmount > 1) {
+                  const newitem = {} as Item;
+                  newitem.itemAmount = res.itemCurrentAmount ;
+                  newitem.itemCurrentAmount = 0;
+                  newitem.itemTitle = res.itemTitle;
+                  newitem.id = res.id;
+                  newitem.itemBill = res.itemBill;
+                  newitem.price = res.price;
+                  if (newitem.itemAmount > 0) {
+                      this.sourceCars.push(newitem);
+                  }
+                  this.sourceCars = this.sourceCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+                  // this.sourceCars = this.sourceCars.filter(it => it.id !== item.id);
+              }
+          },
+          (err: HttpErrorResponse) => {
+              this.billItems.find(it => it.id === item.id).itemCurrentAmount++;
+              console.log(err.status);
+              if (err.status === 409) {
+                  this.messService.add({
+                      severity: 'error',
+                      summary: 'Error Message',
+                      detail: 'wrong amount'
+                  });
+              }
+              else {
+                  this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
 
+              }
+          }
+      );
+  }
 
   deleteFromMyCheck() {
-      let item = this.sourceCars.pop();
-      if (this.sourceCars.find(it => it.id === item.id)) {
-          //item.itemCurrentAmount++;
-          this.sourceCars.find(it => it.id === item.id).itemAmount = this.sourceCars.find(it => it.id === item.id).itemAmount + 1;
-          // this.targetCars = this.targetCars.filter(it => it.id !== item.id);
-          //this.targetCars.push(item);
-          this.sourceCars = this.sourceCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-          //this.targetCars.push(item);
-      } else {
-          item.itemAmount = 1;
-          this.sourceCars.push(item);
-          this.sourceCars = this.sourceCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-      }
-      if (item.itemCurrentAmount !== 1) {
-          item.itemCurrentAmount--;
-          this.targetCars.push(item);
-          this.targetCars = this.targetCars.sort((a, b): number => {
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1;}
-              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1;}
-              return 0; });
-          //this.sourceCars = this.sourceCars.filter(it => it.id !== item.id);
-      } else {
-          item.itemCurrentAmount--;
-      }
+      this.changed_bill = true;
+      const item = this.sourceCars.pop();
+      this.billItems.find(it => it.id === item.id).itemCurrentAmount++;
+      this.meetingService.updateItem(this.billItems.find(it => it.id === item.id)).subscribe(
+          res => {
+              console.log(res);
+              if (this.sourceCars.find(it => it.id === res.id)) {
+                  // item.itemCurrentAmount++;
+                  this.sourceCars.find(it => it.id === res.id).itemAmount = this.sourceCars.find(it => it.id === res.id).itemAmount + 1;
+                  // this.targetCars = this.targetCars.filter(it => it.id !== item.id);
+                  // this.targetCars.push(item);
+                  this.sourceCars = this.sourceCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+                  // this.targetCars.push(item);
+              } else {
+                  res.itemAmount = 1;
+                  const newitem = {} as Item;
+                  newitem.itemAmount = res.itemCurrentAmount ;
+                  newitem.itemCurrentAmount = 0;
+                  newitem.itemTitle = res.itemTitle;
+                  newitem.id = res.id;
+                  newitem.itemBill = res.itemBill;
+                  newitem.price = res.price;
+                  this.sourceCars.push(res);
+                  this.sourceCars = this.sourceCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+              }
+              //this.billItems.find(it => it.id === res.id).itemCurrentAmount++;
+              if (item.itemCurrentAmount > 1) {
+
+                  this.targetCars.push(res);
+                  this.targetCars = this.targetCars.sort((a, b): number => {
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                      if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                      return 0; });
+                  // this.sourceCars = this.sourceCars.filter(it => it.id !== item.id);
+              } else {
+                  item.itemCurrentAmount--;
+              }
+          },
+          (err: HttpErrorResponse) => {
+              this.billItems.find(it => it.id === item.id).itemCurrentAmount--;
+              console.log(err.status);
+              if (err.status === 409) {
+                  this.messService.add({
+                      severity: 'error',
+                      summary: 'Error Message',
+                      detail: 'wrong amount'
+                  });
+              }
+              else {
+                  this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+
+              }
+          }
+      );
   }
 
+    addNewItem() {
+        this.changed_bill = true;
+    }
+
+    backToBill() {
+      if (!this.changed_bill) {
+          this.show_bill = true;
+          this.edit_bill = false;
+          this.your_list = false;
+      } else {
+
+      }
+    }
+
+    saveList() {
+        this.changed_bill = false;
+        this.messService.add({severity:'success', summary: 'Success Message', detail:'List saved'});
+        //this.messService.add({severity:'error', summary: 'Error Message', detail:'failed'});
+    }
+
+    editBill() {
+      this.edit_bill = true;
+      this.show_bill = false;
+    }
+
+    saveBill() {
+        this.changed_bill = false;
+        //this.messService.add({severity:'error', summary: 'Error Message', detail:'failed'});
+        this.messService.add({severity:'success', summary: 'Success Message', detail:'Bill saved'});
+    }
+
+    showYourList() {
+        this.show_bill = false;
+        this.your_list = true;
+    }
+
+
+    //show_bill
+    showDialogToAdd() {
+        this.newCar = true;
+        this.car = {} as Item;
+        this.displayDialog = true;
+    }
+
+    descriptionEdit() {
+        this.displayDialogDescription = true;
+    }
+
+    descriptionSave() {
+        console.log(this.meeting.meetingDescription);
+       //this.meeting.meetingDescription = this.meeting.meetingDescription.substr(0);
+        //this.meeting.meetingDescription = this.meeting.meetingDescription.substr(0,
+          // this.meeting.meetingDescription.indexOf('\"') - 1);
+        //console.log(this.meeting.meetingDescription);
+        this.meetingService.setDescription(this.meeting.meetingDescription, this.meeting.id);
+        this.messService.add({severity:'success', summary: 'Success Message', detail:'Description saved'});
+    }
+
+    save() {
+      if (this.car.price < 0) {
+          this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid price'});
+          if (this.car.itemAmount <= 0) {
+              this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid amount'});
+          }
+      } else if (this.car.itemAmount <= 0) {
+          this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid amount'});
+      } else {
+          let cars = [...this.sourceCars];
+          if (this.newCar) {
+
+              this.meetingService.addItem(this.car).subscribe(
+                  res => {
+                      cars.push(res);
+                      console.log(res);
+                      this.billItems = cars;
+                      this.sourceCars.push(res);
+                      this.sourceCars.find(item => item.id = res.id).itemCurrentAmount = 0;
+                      this.sourceCars = this.sourceCars.sort((a, b): number => {
+                          if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                              return -1;
+                          }
+                          if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                              return 1;
+                          }
+                          return 0;
+                      });
+                      this.car = null;
+                      this.displayDialog = false;
+                  },
+                  // (err: any) => {
+                  //     if (err instanceof HttpErrorResponse) {
+                  //         this.messService.add({severity: 'error', summary: 'Error Message', detail: ''});
+                  //     }
+                  // }
+                  (err: HttpErrorResponse) => {
+                      console.log(err.error);
+                      console.log(err.name);
+                      console.log(err.message);
+                      console.log(err.status);
+                      this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+                      this.car = null;
+                      this.displayDialog = false;
+                      return;
+                  }
+              );
+          } else {
+              console.log(this.car);
+              this.meetingService.updateItem(this.car).subscribe(
+                  res => {
+                      console.log(res);
+                      cars[this.billItems.indexOf(this.selectedCar)] = res;
+                      this.billItems = cars;
+                      this.sourceCars = this.sourceCars.filter(item => item.id !== res.id);
+                      let tmpItem = {} as Item;
+                      tmpItem.itemAmount = res.itemAmount;
+                      tmpItem.itemTitle = res.itemTitle;
+                      tmpItem.itemCurrentAmount = 0;
+                      tmpItem.id = res.id;
+                      tmpItem.price = res.price;
+                      tmpItem.itemBill = res.itemBill;
+                      this.sourceCars.push(tmpItem);
+                      this.sourceCars = this.sourceCars.sort((a, b): number => {
+                          if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                              return -1;
+                          }
+                          if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                              return 1;
+                          }
+                          return 0;
+                      });
+                      this.car = null;
+                      this.displayDialog = false;
+                  },
+                  //  (err: any) => {
+                  //     if (err instanceof HttpErrorResponse) {
+                  //         this.messService.add({severity: 'error', summary: 'Error Message', detail: ''});
+                  //     }
+                  // }
+
+                  (err: HttpErrorResponse) => {
+                      //console.log(err.error);
+                      //console.log(err.name);
+                      //console.log(err.message);
+                      console.log(err.status);
+                      if (err.status === 409) {
+                          this.messService.add({
+                              severity: 'error',
+                              summary: 'Error Message',
+                              detail: 'the amount should be not less then already in lists'
+                          });
+                      }
+                      else {
+                          this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+
+                      }
+                      this.car = null;
+                      this.displayDialog = false;
+                      return;
+                  }
+              );
+
+          }
+      }
+    }
+
+    delete() {
+        if (!this.newCar) {
+            this.meetingService.deleteItem(this.selectedCar.id);
+        }
+        let index = this.sourceCars.indexOf(this.selectedCar);
+        this.billItems = this.billItems.filter((val, i) => i != index);
+        this.sourceCars = this.sourceCars.filter((val, i) => i != index);
+        this.car = null;
+        this.displayDialog = false;
+    }
+
+    onRowSelect(event) {
+        this.newCar = false;
+        this.car = this.cloneCar(event.data);
+        this.displayDialog = true;
+    }
+
+    cloneCar(c: Item): Item {
+        let car = {} as Item;
+        for (let prop in c) {
+            car[prop] = c[prop];
+        }
+        return car;
+    }
 }
 
 
