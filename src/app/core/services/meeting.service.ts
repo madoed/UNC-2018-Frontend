@@ -9,6 +9,7 @@ import {Chat} from '../models/chat.model';
 import {Item} from '@app/core/models/item.model';
 import {ItemAmount} from '@app/core/models/itemamount.model';
 import {HttpClient} from '@angular/common/http';
+import {Bill} from '@app/core/models/bill.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,9 @@ export class MeetingService {
   private meeting: Meeting;
   private participant: Participant;
 
-  constructor(private apiService: ApiService, private authService: AuthService, private http: HttpClient) { }
+  constructor(private apiService: ApiService,
+              private authService: AuthService,
+              private http: HttpClient) { }
 
   getAll(): Observable<Participant[]> {
     // return this.apiService.get(this.MEETING_API + '/1');
@@ -59,8 +62,8 @@ export class MeetingService {
     }
 
     getAllItems(): Observable<Item[]> {
-        return this.apiService.get('http://127.0.0.1:8000/bill-items/-9');
-        //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
+        //return this.apiService.get('http://127.0.0.1:8000/bill-items/-9');
+        return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
     }
 
     getParticipantItems(): Observable<ItemAmount[]> {
@@ -70,21 +73,36 @@ export class MeetingService {
     }
 
     updateItem(item: Item): Observable<any> {
-        return this.http.put('http://127.0.0.1:8000/item-update/-9', item);
-        //return this.apiService.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
+        //return this.http.put('http://127.0.0.1:8000/item-update/-9', item);
+        return this.apiService.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
     }
+
+
 
     addItem(item: Item): Observable<any> {
-        return this.http.post('http://127.0.0.1:8000/item-add/-9', item);
-       // return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id, item);
+        //return this.http.post('http://127.0.0.1:8000/item-add/-9', item);
+        return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id, item);
     }
 
-    deleteItem(item: number) {
-        this.apiService.delete('http://127.0.0.1:8000/item-delete/' +  item);
+    deleteItem(item: number): Observable<any>  {
+        return this.http.delete('http://127.0.0.1:8000/item-delete/' +  item);
     }
 
     setDescription (descriprion: string, id: number) {
     this.apiService.post('http://127.0.0.1:8000/meeting-description/' + id, descriprion) .subscribe(
         result => console.log(result));
   }
+
+    checkUpdate (items: Array<Item>, participantId: number): Observable<any> {
+        return this.http.post('http://127.0.0.1:8000/check-items-update/' +  participantId, items);
+    }
+
+    deleteItemFromCheck(item: number, participantId: number): Observable<any>  {
+        return this.http.delete('http://127.0.0.1:8000/check-delete-item/' +  participantId + '/' + item);
+    }
+
+    getBill (meetingId: number): Observable<any> {
+    return this.apiService.get('http://127.0.0.1:8000/bill/' + meetingId);
+    //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
+}
 }

@@ -41,6 +41,12 @@ div {
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
 
+.title{
+    background-color: white;
+    color: black;
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
 .title:hover{
     font-size: large;
 }

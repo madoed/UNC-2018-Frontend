@@ -16,8 +16,10 @@ export class MeetingListComponent implements OnInit {
 
   private date = new Date();
   panelOpenState = false;
-  meetings: Array<Participant>;
+  meetings: Participant[] = [];
   meeting: Meeting;
+  meetingsNew: Participant[] = [];
+  meetingsPast: Participant[] = [];
 
   constructor(private meetingService: MeetingService,
               private authService: AuthService,
@@ -26,8 +28,16 @@ export class MeetingListComponent implements OnInit {
 
   ngOnInit() {
     this.meetingService.getAll().subscribe(data => {
-      this.meetings = data;
       console.log(data);
+      data.forEach(item => {
+          if (item.participantOfMeeting.status === 'new') {
+              this.meetingsNew.push(item);
+          } else if (item.participantOfMeeting.status === 'past') {
+              this.meetingsPast.push(item);
+          } else {
+              this.meetings.push(item);
+          }
+      });
     });
   }
 

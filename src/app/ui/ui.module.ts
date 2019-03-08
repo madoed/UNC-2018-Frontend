@@ -31,7 +31,7 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 import {
     AccordionModule,
     ButtonModule,
-    CalendarModule,
+    CalendarModule, ConfirmDialogModule,
     DialogModule,
     DragDropModule, EditorModule, InputTextareaModule,
     InputTextModule, PanelModule,
@@ -80,7 +80,8 @@ import {TableModule} from 'primeng/table';
       ButtonModule,
       PanelModule,
       EditorModule,
-      InputTextareaModule
+      InputTextareaModule,
+      ConfirmDialogModule
   ],
   declarations: [],
   exports: [
@@ -104,9 +105,9 @@ import {TableModule} from 'primeng/table';
     MatSlideToggleModule,
     MatGridListModule,
     MatSnackBarModule,
-    MatExpansionModule, 
-    MatTabsModule, 
-    MatTableModule, 
+    MatExpansionModule,
+    MatTabsModule,
+    MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
     AngularDateTimePickerModule,
@@ -121,7 +122,8 @@ import {TableModule} from 'primeng/table';
       ButtonModule,
       PanelModule,
       EditorModule,
-      InputTextareaModule
+      InputTextareaModule,
+      ConfirmDialogModule
   ],
   providers: [
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }

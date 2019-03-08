@@ -9,6 +9,7 @@ const routes: Routes = [
   {path: 'card-list', loadChildren: './modules/card/card-list/card-list.module#CardListModule'},
   {path: 'chat', loadChildren: './modules/chat/chat.module#ChatModule'},
   {path: 'meeting-list', loadChildren: './modules/meeting/meeting-list.module#MeetingListModule'},
+  {path: 'check-list', loadChildren: './modules/check/check-list.module#CheckListModule'}
 ];
 
 @NgModule({

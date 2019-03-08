@@ -1,0 +1,115 @@
+<div class="container">
+  <p-toast [style]="{marginTop: '80px'}"></p-toast>
+
+  <p-dialog header="Confirmation" [(visible)]="displayDialogToMarkAsPayed" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+            [maximizable]="false" [baseZIndex]="10000">
+    <h3> Mark this check as payed? </h3>
+    <br />
+    <p-footer>
+      <button mat-raised-button color="primary" type="button" (click)="displayDialogToMarkAsPayed = false; markAsPayed()">
+        Yes</button>
+      <button mat-raised-button color="primary" type="button" (click)="displayDialogToMarkAsPayed = false;">
+        No</button>
+    </p-footer>
+  </p-dialog>
+
+  <mat-card>
+    <mat-card-header background-color="accent">
+      <h1 class = "myFont" >Checkbook</h1>
+    </mat-card-header>
+    <mat-card-content >
+      <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"
+                     style="height: auto; width: 950px;"
+                     (selectedTabChange)="loadChecksFromOwners($event)">
+        <mat-tab label="I owe" >
+          <div class="basic-container">
+            <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
+              <mat-grid-tile *ngFor="let check of checksToPay" style="border-style: ridge;">
+                <mat-card [style.width]="'100%'"  style="cursor: pointer;">
+
+                  <div  >
+                      <div style="height: 40px;" >
+                        <a >
+                          <h3 class="title" (click)="openCheck(check)"
+                              style="float: left; margin-left: 400px;">
+                            {{check.name}}
+                          </h3>
+                          <button mat-raised-button color="primary" [routerLink]="['/check-list/check-to-pay-info', check.id]"
+                                  style="float: right; float: top; margin-top: 0px; margin-right: 5px;">
+                            Pay
+                          </button>
+                        </a>
+                      </div>
+                    <br />
+                    <h3 style="color: #989898" align="left" >
+                      <span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
+                      {{parse(check.checkOwner.participantOfMeeting.dateOfMeeting.toString())}}
+                      <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">
+                        From meeting:
+                      </span>{{check.checkOwner.participantOfMeeting.name}}
+                      <span align="left" class="meeting-title"style="color:steelblue;float: right; margin-right: 60px;">
+                        Amount:
+                        <span style="color: #989898;">
+                          {{check.checkAmount}}
+                        </span>
+                      </span>
+                    </h3>
+                  </div>
+                </mat-card>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="I'm owed " >
+          <div class="basic-container">
+            <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
+              <mat-grid-tile *ngFor="let check of checksToPay" style="border-style: ridge;">
+                <mat-card [style.width]="'100%'" style="cursor: pointer;">
+
+                  <div  >
+                    <div style="height: 40px;" >
+                    <a >
+                      <h3 class="title" (click)="openCheck(check)"
+                          style="float: left; margin-left: 400px;">
+                        {{check.name}}
+                      </h3>
+                      <button mat-raised-button color="primary" (click)="fixCheck(check)"
+                              style="float: right;  margin-right: 5px;">
+                        Mark as payed
+                      </button>
+                    </a>
+                  </div>
+                    <br />
+
+                      <h3 style="color: #989898" align="left" >
+                        <span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
+                        {{parse(check.checkOwner.participantOfMeeting.dateOfMeeting.toString())}}
+                        <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">
+                        From meeting:
+                      </span>{{check.checkOwner.participantOfMeeting.name}}
+                        <span align="left" class="meeting-title"style="color:steelblue;float: right; margin-right: 60px;">
+                        Amount:
+                        <span style="color: #989898;">
+                          {{check.checkAmount}}
+                        </span>
+                      </span>
+                      </h3>
+
+                  </div>
+                </mat-card>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="History" >
+
+        </mat-tab>
+      </mat-tab-group>
+
+    </mat-card-content>
+
+
+  </mat-card>
+</div>
