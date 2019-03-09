@@ -4,12 +4,8 @@ import {MessagesComponent} from '@app/modules/messages/messages.component';
 import {MeetingListComponent} from '@app/modules/meeting/meeting-list.component';
 import {MeetingRoutingModule} from '@app/modules/meeting/meeting-routing.module';
 import {MeetingForOwnerComponent} from '@app/modules/meeting/meeting-for-owner/meeting-for-owner.component';
-import {MessagesModule} from '@app/modules/messages/messages.module';
-import {MessageService} from '@app/core/services/message.service';
-import {CardListComponent} from '@app/modules/card/card-list/card-list.component';
-import {ChatComponent} from '@app/modules/chat/chat.component';
-import {ChatModule} from '@app/modules/chat/chat.module';
-import {MatTableModule} from '@angular/material';
+import {MeetingCreateComponent} from '@app/modules/meeting/meeting-create/meeting-create.component';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
   imports: [
@@ -17,6 +13,6 @@ import {MatTableModule} from '@angular/material';
     MeetingRoutingModule
   ],
   providers: [],
-  declarations: [MeetingListComponent, MeetingForOwnerComponent ]
+  declarations: [MeetingListComponent, MeetingForOwnerComponent, MeetingCreateComponent ]
 })
 export class MeetingListModule { }

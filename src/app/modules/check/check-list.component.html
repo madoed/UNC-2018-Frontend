@@ -20,7 +20,7 @@
     <mat-card-content >
       <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"
                      style="height: auto; width: 950px;"
-                     (selectedTabChange)="loadChecksFromOwners($event)">
+                     (selectedTabChange)="loadChecks($event)">
         <mat-tab label="I owe" >
           <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
@@ -32,7 +32,7 @@
                         <a >
                           <h3 class="title" (click)="openCheck(check)"
                               style="float: left; margin-left: 400px;">
-                            {{check.name}}
+                            To {{check.name}}
                           </h3>
                           <button mat-raised-button color="primary" [routerLink]="['/check-list/check-to-pay-info', check.id]"
                                   style="float: right; float: top; margin-top: 0px; margin-right: 5px;">
@@ -64,7 +64,7 @@
         <mat-tab label="I'm owed " >
           <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
-              <mat-grid-tile *ngFor="let check of checksToPay" style="border-style: ridge;">
+              <mat-grid-tile *ngFor="let check of checksFromOwners" style="border-style: ridge;">
                 <mat-card [style.width]="'100%'" style="cursor: pointer;">
 
                   <div  >
@@ -72,7 +72,7 @@
                     <a >
                       <h3 class="title" (click)="openCheck(check)"
                           style="float: left; margin-left: 400px;">
-                        {{check.name}}
+                        From {{check.name}}
                       </h3>
                       <button mat-raised-button color="primary" (click)="fixCheck(check)"
                               style="float: right;  margin-right: 5px;">
@@ -104,6 +104,45 @@
         </mat-tab>
 
         <mat-tab label="History" >
+          <div class="basic-container">
+            <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
+              <mat-grid-tile *ngFor="let check of checksFromOwners" style="border-style: ridge;">
+                <mat-card [style.width]="'100%'" style="cursor: pointer;">
+
+                  <div  >
+                    <div style="height: 40px;" >
+                      <a >
+                        <h3 class="title" (click)="openCheck(check)"
+                            style="float: left; margin-left: 400px;">
+                          {{check.checkOwner.meetingParticipant.id===myId? 'To':'From'}} {{check.name}}
+                        </h3>
+                        <button mat-raised-button color="primary" (click)="fixCheck(check)"
+                                style="float: right;  margin-right: 5px;">
+                          Mark as payed
+                        </button>
+                      </a>
+                    </div>
+                    <br />
+
+                    <h3 style="color: #989898" align="left" >
+                      <span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
+                      {{parse(check.checkOwner.participantOfMeeting.dateOfMeeting.toString())}}
+                      <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">
+                        From meeting:
+                      </span>{{check.checkOwner.participantOfMeeting.name}}
+                      <span align="left" class="meeting-title"style="color:steelblue;float: right; margin-right: 60px;">
+                        Amount:
+                        <span style="color: #989898;">
+                          {{check.checkAmount}}
+                        </span>
+                      </span>
+                    </h3>
+
+                  </div>
+                </mat-card>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
 
         </mat-tab>
       </mat-tab-group>

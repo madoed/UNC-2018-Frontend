@@ -1,0 +1,16 @@
+.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 100px;
+
+}
+
+.myFont{
+    font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
+::ng-deep
+.ui-steps .ui-steps-item {
+    width: 25%;
+}
+
+

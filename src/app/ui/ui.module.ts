@@ -33,9 +33,9 @@ import {
     ButtonModule,
     CalendarModule, ConfirmDialogModule,
     DialogModule,
-    DragDropModule, EditorModule, InputTextareaModule,
-    InputTextModule, PanelModule,
-    PickListModule
+    DragDropModule, EditorModule, GMapModule, InputTextareaModule,
+    InputTextModule, OverlayPanelModule, PanelModule,
+    PickListModule, StepsModule
 } from 'primeng/primeng';
 import {MenuItem} from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
@@ -81,7 +81,10 @@ import {TableModule} from 'primeng/table';
       PanelModule,
       EditorModule,
       InputTextareaModule,
-      ConfirmDialogModule
+      ConfirmDialogModule,
+      StepsModule,
+      GMapModule,
+      OverlayPanelModule
   ],
   declarations: [],
   exports: [
@@ -123,7 +126,10 @@ import {TableModule} from 'primeng/table';
       PanelModule,
       EditorModule,
       InputTextareaModule,
-      ConfirmDialogModule
+      ConfirmDialogModule,
+      StepsModule,
+      GMapModule,
+      OverlayPanelModule
   ],
   providers: [
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }

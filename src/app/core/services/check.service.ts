@@ -18,4 +18,10 @@ export class CheckService {
         return this.apiService.get('http://127.0.0.1:8000' + '/check-list/'
             + this.authService.user.id + '/' + status);
     }
+
+    getOwedChecks(status: string): Observable<Check[]> {
+        // return this.apiService.get(this.MEETING_API + '/1');
+        return this.apiService.get('http://127.0.0.1:8000' + '/check-owed-list/'
+            + this.authService.user.id + '/' + status);
+    }
 }

@@ -12,4 +12,5 @@ export interface Meeting {
   meetingChat: Chat;
   name: string;
   amountOfParticipants: number;
+  timeOfMeeting: Date;
 }

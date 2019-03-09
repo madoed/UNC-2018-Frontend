@@ -8,6 +8,7 @@ import {MeetingForOwnerComponent} from '@app/modules/meeting/meeting-for-owner/m
 import {CardListComponent} from '@app/modules/card/card-list/card-list.component';
 import {CardEditComponent} from '@app/modules/card/card-edit/card-edit.component';
 import {CardPayComponent} from '@app/modules/card/card-pay/card-pay.component';
+import {MeetingCreateComponent} from '@app/modules/meeting/meeting-create/meeting-create.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,13 @@ const routes: Routes = [
 
     // этот параметр говорит, что только авторизованные пользователи видят эту страницу
     //canActivate: [AuthGuard]
+  },
+  {
+    path: 'create',
+    component: MeetingCreateComponent,
+
+        // этот параметр говорит, что только авторизованные пользователи видят эту страницу
+        //canActivate: [AuthGuard]
   }
 ];
 

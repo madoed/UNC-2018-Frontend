@@ -104,5 +104,10 @@ export class MeetingService {
     getBill (meetingId: number): Observable<any> {
     return this.apiService.get('http://127.0.0.1:8000/bill/' + meetingId);
     //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
-}
+    }
+
+    getFriends(): Observable<User[]> {
+        // return this.apiService.get(this.CHAT_API + '/1');
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
+    }
 }

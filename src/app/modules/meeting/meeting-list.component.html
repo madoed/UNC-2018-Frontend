@@ -5,7 +5,7 @@
       <h1 class = "myFont" >Meetings</h1>
       <span class="toolbar-filler"></span>
       <mat-card-actions>
-        <button mat-raised-button color="primary" [routerLink]="['/meeting/add']" style="margin-right: 20px"><mat-icon>add_circle_outline</mat-icon></button>
+        <button mat-raised-button color="primary" [routerLink]="['/meeting-list/create']" style="margin-right: 20px"><mat-icon>add_circle_outline</mat-icon></button>
       </mat-card-actions>
     </mat-card-header>
     <mat-card-content >
@@ -17,11 +17,15 @@
                 <mat-grid-tile *ngFor="let meeting of meetings" style="border-style: ridge;">
                     <mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">
 
-                        <div  fxLayout="row" align="center">
-                            <a class="title">
-                            <h3 class="meeting-title">
-                                {{meeting.participantOfMeeting.name}}</h3>
-                            </a>
+                        <div  >
+                            <div style="height: 40px;">
+
+                            <h3 class="title">
+                                {{meeting.participantOfMeeting.name}}
+                            </h3>
+
+                            </div>
+
                             <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
                                 {{parse(meeting.participantOfMeeting.dateOfMeeting.toString())}}
                                 <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место

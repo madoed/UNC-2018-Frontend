@@ -14,6 +14,7 @@ import {ConfirmationService, MessageService as mes} from 'primeng/api';
 })
 export class CheckListComponent implements OnInit {
 
+    myId: number;
     checksToPay: Check[] = [];
     checksHistory: Check[] = [];
     checksFromOwners: Check[] = [];
@@ -25,16 +26,22 @@ export class CheckListComponent implements OnInit {
               private checkService: CheckService,
               private messService: mes) {
       this.displayDialogToMarkAsPayed = false;
+      this.myId = this.authService.user.id;
   }
 
   ngOnInit() {
       this.checkService.getAll('notpayed').subscribe( data => {
-          this.checksToPay = data;
-          this.checksToPay = this.checksToPay.sort((a, b): number => {
-              if (a.id < b.id) {return 1; }
-              return 0; });
-          console.log(data);
-          });
+          if (data !== null) {
+              this.checksToPay = data;
+              this.checksToPay = this.checksToPay.sort((a, b): number => {
+                  if (a.id < b.id) {
+                      return 1;
+                  }
+                  return 0;
+              });
+              console.log(data);
+          }
+      });
   }
 
     parse(value: any): String | null {
@@ -49,17 +56,33 @@ export class CheckListComponent implements OnInit {
         return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
     }
 
-    loadChecksFromOwners(tab: MatTabChangeEvent) {
+    loadChecks(tab: MatTabChangeEvent) {
         if (tab.index === 1 && !this.checksFromOwners.length) {
-
+            this.checkService.getOwedChecks('notpayed').subscribe( data => {
+                if (data !== null) {
+                    this.checksFromOwners = data;
+                    this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    console.log(data);
+                }
+            });
         }
-        if (tab.index === 2 ) {
+        if (tab.index === 2 && !this.checksHistory.length) {
             this.checkService.getAll('payed').subscribe( data => {
-                this.checksFromOwners = data;
-                this.checksFromOwners = this.checksToPay.sort((a, b): number => {
-                    if (a.id < b.id) {return 1; }
-                    return 0; });
-                console.log(data);
+                if (data !== null) {
+                    this.checksHistory = data;
+                    this.checksHistory = this.checksHistory.sort((a, b): number => {
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    console.log(data);
+                }
             });
         }
     }
@@ -70,7 +93,7 @@ export class CheckListComponent implements OnInit {
     }
 
     markAsPayed() {
-      this.messService.add({severity:'success', summary: 'Success Message', detail:'Check added to payed'});
+      this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Check added to payed'});
     }
 
     fixCheck(check: Check) {
