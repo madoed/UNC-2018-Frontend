@@ -1,0 +1,189 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <h1>Account Settings</h1>
+    </div>
+    <p-tabView>
+        <p-tabPanel header="General">
+            <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()">
+                <div class="ui-g">
+                    <div class="ui-g-4">
+                        First Name *
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText formControlName="firstName" style="width: 100%;" type="text" value="{{user.firstName}}" required/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-4">
+                        Last Name *
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText formControlName="lastName" style="width: 100%;" type="text" value="{{user.lastName}}" required/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-4">
+                        Profile Image
+                    </div>
+                    <div class="ui-g-8">
+                        <div class="ui-g-12" style="margin: 0 0 0 0;">
+                            <div class="ui-g-3">
+                                <img src="{{currentAvatar}}" class="profile-img">
+                                <!--<img src="{{IMAGES_URL}}{{general.avatar.value}}" class="profile-img">
+                                -->
+                            </div>
+                            <div class="ui-g-9">
+                                <input pInputText formControlName="avatar" style="width: 100%; margin-bottom: 10px;" disabled="true"/>
+                                <input #file id="file" type="file" accept='image/*' (change)="onSelectFile(file.files)" style="vertical-align: top; margin-right: 10px;" 
+                                class="inputfile"/>
+                                <label for="file" style="vertical-align: top; margin-right: 10px;" class="custom-inputfile">
+                                    Change...
+                                </label>
+                                <label style="vertical-align: top;" class="custom-inputfile" (click)="clearAvatar()">Clear</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="ui-g-4">
+                        About Me
+                    </div>
+                    <div class="ui-g-8">
+                        <textarea pInputTextarea formControlName="aboutMe" style="width: 100%;" value="{{user.aboutMe}}" ></textarea>
+                    </div>
+                    <hr>
+                    <div class="ui-g-12">
+                        <button pButton type="submit" [disabled]="loading" label="Save" icon="pi pi-check" style="margin-right: 10px;" class="ui-button-success"
+                        ></button>
+                        <button pButton type="button" [disabled]="loading" label="Cancel" class="ui-button-secondary" style="margin-right: 10px;"
+                        [routerLink]="['/user', user.id]"></button>
+                        <p-progressSpinner *ngIf="loading" [style]="{width: '23px', height: '23px'}" strokeWidth="4"></p-progressSpinner>
+                    </div>
+                </div>
+            </form>
+         </p-tabPanel>
+         <p-tabPanel header="Username and Email">
+            <form [formGroup]="credentialsForm" (ngSubmit)="onSubmitCredentials()">
+                <div class="ui-g">
+                    <div class="ui-g-4">
+                        User Name
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText formControlName="username" style="width: 100%;" type="text" value="{{user.username}}" required/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-4">
+                        Email
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText formControlName="email" style="width: 100%;" type="text" value="{{user.email}}" required/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-12">
+                        <button pButton type="submit" [disabled]="loading" label="Save" icon="pi pi-check" style="margin-right: 10px;" class="ui-button-success"
+                        ></button>
+                        <button pButton type="button" [disabled]="loading" label="Cancel" class="ui-button-secondary" style="margin-right: 10px;"
+                        [routerLink]="['/user', user.id]"></button>
+                        <p-progressSpinner *ngIf="loading" [style]="{width: '23px', height: '23px'}" strokeWidth="4"></p-progressSpinner>
+                    </div>
+                </div>
+            </form>
+         </p-tabPanel>
+         <p-tabPanel header="Password">
+            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+                <div class="ui-g">
+                    <div class="ui-g-4">
+                        Password
+                    </div>
+                    <div class="ui-g-8">
+                        <input type="text" formControlName="password" style="width: 100%;" pPassword placeholder="New Password"/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-4">
+                        Repeat Password
+                    </div>
+                    <div class="ui-g-8">
+                        <input type="text" formControlName="repeatPassword" style="width: 100%;" pPassword placeholder="Repeat Password"/>
+                    </div>
+                    <hr>
+                    <div class="ui-g-12">
+                        <button pButton type="submit" [disabled]="loading" label="Save" icon="pi pi-check" style="margin-right: 10px;" class="ui-button-success"
+                        ></button>
+                        <button pButton type="button" [disabled]="loading" label="Cancel" class="ui-button-secondary" style="margin-right: 10px;"
+                        [routerLink]="['/user', user.id]"></button>
+                        <p-progressSpinner *ngIf="loading" [style]="{width: '23px', height: '23px'}" strokeWidth="4"></p-progressSpinner>
+                    </div>
+                </div>
+            </form>
+         </p-tabPanel>
+    </p-tabView>
+    
+    <p-toast [style]="{marginTop: '80px'}"></p-toast>
+</div>
+
+    <!--<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="ui-g-12">
+        <div class="ui-g-4">
+            First Name *
+        </div>
+        <div class="ui-g-8">
+            <input pInputText formControlName="firstName" style="width: 100%;" type="text" value="{{user.firstName}}" required/>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            Last Name *
+        </div>
+        <div class="ui-g-8">
+            <input pInputText formControlName="lastName" style="width: 100%;" type="text" value="{{user.lastName}}" required/>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            User Name *
+        </div>
+        <div class="ui-g-8">
+            <input pInputText formControlName="username" style="width: 100%;" type="text" value="{{user.username}}" required/>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            Email *
+        </div>
+        <div class="ui-g-8">
+            <input pInputText formControlName="email" style="width: 100%;" type="text" value="{{user.email}}" required/>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            Profile Image
+        </div>
+        <div class="ui-g-8">
+            <img src="{{user.avatarUrl}}" class="profile-img">
+            <button pButton style="vertical-align: top; margin-right: 10px;" type="button" label="Change..." class="ui-button-secondary"
+            ></button>
+            <button pButton style="vertical-align: top;" type="button" label="Clear" class="ui-button-secondary"
+            ></button>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            About Me
+        </div>
+        <div class="ui-g-8">
+            <textarea pInputTextarea formControlName="aboutMe" style="width: 100%;" value="{{user.aboutMe}}" ></textarea>
+        </div>
+        <hr>
+        <div class="ui-g-4">
+            Password
+        </div>
+        <div class="ui-g-8">
+            <input type="text" style="width: 100%;" pPassword placeholder="New Password"/>
+        </div>
+        <div class="ui-g-4">
+            Repeat Password
+        </div>
+        <div class="ui-g-8">
+            <input type="text" style="width: 100%;" pPassword placeholder="Repeat Password"/>
+        </div>
+        <hr>
+        <div class="ui-g-12">
+            <button pButton type="submit" [disabled]="loading" label="Save" icon="pi pi-check" style="margin-right: 10px;" class="ui-button-success"
+            ></button>
+            <button pButton type="button" [disabled]="loading" label="Cancel" class="ui-button-secondary" style="margin-right: 10px;"
+            [routerLink]="['/user', user.id]"></button>
+            <p-progressSpinner *ngIf="loading" [style]="{width: '23px', height: '23px'}" strokeWidth="4"></p-progressSpinner>
+        </div>
+    </form>
+</div>-->
