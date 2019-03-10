@@ -1,5 +1,5 @@
 
-export interface Location{
+export interface Place {
   id?: number;
   lng: string;
   lat:  string;

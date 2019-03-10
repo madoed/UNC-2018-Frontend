@@ -25,9 +25,9 @@ export class MeetingService {
               private authService: AuthService,
               private http: HttpClient) { }
 
-  getAll(): Observable<Participant[]> {
-    // return this.apiService.get(this.MEETING_API + '/1');
-    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.authService.user.id);
+  getAll(type: number): Observable<Participant[]> {
+    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.authService.user.id +
+    '/' + type);
   }
 
   setMeeting(meeting: Meeting) {
@@ -47,9 +47,14 @@ export class MeetingService {
     return this.meeting;
   }
 
-  setDate(date: Date, id: number){
+  setDate(date: Date, id: number) {
     this.apiService.post('http://127.0.0.1:8000/meeting-date/' + id, date) .subscribe(
-        result => console.log("5. createService: " + result));
+        result => console.log(result));
+  }
+
+  setTime(date: Date, id: number) {
+      this.apiService.post('http://127.0.0.1:8000/meeting-time/' + id, date) .subscribe(
+          result => console.log(result));
   }
 
   getParticipants(): Observable<Participant[]> {
@@ -62,25 +67,18 @@ export class MeetingService {
     }
 
     getAllItems(): Observable<Item[]> {
-        //return this.apiService.get('http://127.0.0.1:8000/bill-items/-9');
         return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
     }
 
     getParticipantItems(): Observable<ItemAmount[]> {
-    console.log(this.participant.id);
         return this.apiService.get('http://127.0.0.1:8000/participant-items/' + this.participant.id);
-        //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
     }
 
     updateItem(item: Item): Observable<any> {
-        //return this.http.put('http://127.0.0.1:8000/item-update/-9', item);
         return this.apiService.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
     }
 
-
-
     addItem(item: Item): Observable<any> {
-        //return this.http.post('http://127.0.0.1:8000/item-add/-9', item);
         return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id, item);
     }
 
@@ -109,5 +107,17 @@ export class MeetingService {
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
         return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
+    }
+
+    createMeeting(meeting: Meeting): Observable<any> {
+        return this.http.post('http://127.0.0.1:8000/meeting-create/' , meeting);
+    }
+
+    addParticipants(participants: Participant[], id: number): Observable<any> {
+        return this.http.post('http://127.0.0.1:8000/meeting-add-participants/' + id , participants);
+    }
+
+    confirmParticipation(participantId: number) {
+        return this.http.post('http://127.0.0.1:8000/participant-confirm/', participantId);
     }
 }

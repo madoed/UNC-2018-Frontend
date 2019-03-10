@@ -1,4 +1,39 @@
 <div class="container">
+
+    <p-dialog [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+              [maximizable]="false" [baseZIndex]="10000">
+
+        <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays"
+                (onMapClick)="handleMapClick($event)" (onOverlayDragEnd)="handleDragEnd($event)"></p-gmap>
+
+        <button mat-raised-button color="primary" type="button" (click)="clear()">
+            Clean</button>
+        <button mat-raised-button color="primary" type="button" (click)="zoomIn(gmap.getMap())" style="margin-left: 10px">
+            <mat-icon>zoom_in</mat-icon></button>
+        <button mat-raised-button color="primary" type="button" (click)="zoomOut(gmap.getMap())" style="margin-left: 10px">
+            <mat-icon>zoom_out</mat-icon></button>
+
+        <p-dialog showEffect="fade" [(visible)]="dialogVisible" header="New Location">
+            <div class="ui-g ui-fluid" *ngIf="selectedPosition">
+                <div class="ui-g-2"><label for="title">Label</label></div>
+                <div class="ui-g-10"><input type="text" pInputText id="title" [(ngModel)]="markerTitle"></div>
+
+                <div class="ui-g-2"><label for="lat">Lat</label></div>
+                <div class="ui-g-10"><input id="lat" type="text" readonly pInputText [ngModel]="selectedPosition.lat()"></div>
+
+                <div class="ui-g-2"><label for="lng">Lng</label></div>
+                <div class="ui-g-10"><input id="lng" type="text" readonly pInputText [ngModel]="selectedPosition.lng()"></div>
+            </div>
+            <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                    <button mat-raised-button color="primary" type="button" [disabled]="!markerTitle"
+                            (click)="addMarker()">
+                        Add</button>
+                </div>
+            </p-footer>
+        </p-dialog>
+    </p-dialog>
+
     <p-toast [style]="{marginTop: '80px'}"></p-toast>
 
     <mat-card style="width: 943px!important; min-height: 100px!important; ">
@@ -27,8 +62,20 @@
         <mat-card-actions>
             <div style="margin-left: 40px; margin-top: 10px;">
             <p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()" >
-
             </p-calendar>
+                <span style="margin-left: 30px"></span>
+
+                <p-calendar [(ngModel)]="time" [timeOnly]="true" (onClose)="changeTime()" >
+                </p-calendar>
+
+                <span style="margin-left: 30px"></span>
+
+                <button mat-raised-button color="primary" (click)="openMap=!openMap;"
+                        style="margin-left: 10px;">
+                    Map
+                </button>
+                {{markerTitle?markerTitle:"No place"}}
+
             </div>
             <br />
             <!--<mat-form-field style="margin-left: 40px;">-->
@@ -222,7 +269,7 @@
                                     </p-dialog>
 
                                     <br />
-                                    <p>Total sum: {{bill.billCommonAmount}}</p>
+                                    <p>Total sum: {{bill.billTotalSum}}</p>
                                 </div>
 
                             </div>

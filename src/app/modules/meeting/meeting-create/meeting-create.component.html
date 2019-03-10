@@ -84,12 +84,12 @@
                     </mat-card-actions>
                     <div style="margin-left: 20px;">
                         <h3 class="first">Date</h3>
-                        <p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()" >
+                        <p-calendar [(ngModel)]="meeting.dateOfMeeting" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" >
 
                         </p-calendar>
 
                         <h3 class="first">Time</h3>
-                        <p-calendar [(ngModel)]="meeting.timeOfMeeting" [timeOnly]="true">
+                        <p-calendar [(ngModel)]="meeting.timeOfMeeting" [timeOnly]="true" >
 
                         </p-calendar>
 
@@ -110,9 +110,11 @@
                 </mat-card-content>
 
                 <mat-card-content *ngIf="activeIndex===2" style="margin-left: 20px;">
+                    <mat-card-actions>
                     <button mat-button color="primary" (click)="activeIndex=1" >
                         <mat-icon>arrow_back</mat-icon>
                     </button>
+                    </mat-card-actions>
 
                     <div style="margin-left: 30px;">
                         <mat-card-header background-color="accent">
@@ -142,16 +144,35 @@
                 </mat-card-content>
 
                 <mat-card-content *ngIf="activeIndex===3" style="margin-left: 20px;">
-                    <button mat-button color="primary" (click)="activeIndex=1" >
+                    <mat-card-actions>
+                    <button mat-button color="primary" (click)="activeIndex=2" >
                         <mat-icon>arrow_back</mat-icon>
                     </button>
+                    </mat-card-actions>
                     <div style="margin-left: 50px;">
-                        <h3>Meeting title: <span style="font-size: small">{{meeting.meetingName}}</span></h3>
+                        <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
+                            {{meeting.meetingName}}</span>
+                        </h3>
                         <br />
-                        <h5>{{meeting.dateOfMeeting? 'meeting.dateOfMeeting': 'No date'}}</h5>
+                        <h3 style="color: steelblue;">Meeting date: <span style="font-size: small; color: black">
+                            {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()): "No date"}}
+                        </span>
+                        </h3>
+                        <br />
+                        <h3 style="color: steelblue;">Meeting time: <span style="font-size: small; color: black">
+                            {{meeting.timeOfMeeting? meeting.timeOfMeeting.getHours(): "No time"}}
+                            {{meeting.timeOfMeeting? ":": ""}}
+                            {{meeting.timeOfMeeting? meeting.timeOfMeeting.getMinutes(): ""}} </span>
+                        </h3>
+                        <br />
+                        <h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">
+                            {{markerTitle? markerTitle: "No location"}}</span>
+                        </h3>
+                        <br />
+
                         <button mat-raised-button color="primary" type="button"
-                                (click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"
-                        >Next</button>
+                                (click)="createMeeting()" style="margin-left: 700px; margin-top: 50px;"
+                        >Create</button>
                     </div>
                 </mat-card-content>
 

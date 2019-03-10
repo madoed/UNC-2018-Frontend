@@ -4,13 +4,13 @@ import {Router} from '@angular/router';
 import {Check} from '@app/core/models/check.model';
 import {CheckService} from '@app/core/services/check.service';
 import {MatTabChangeEvent} from '@angular/material';
-import {ConfirmationService, MessageService as mes} from 'primeng/api';
+import { MessageService as mes} from 'primeng/api';
 
 @Component({
   selector: 'app-check-list',
   templateUrl: './check-list.component.html',
   styleUrls: ['./check-list.component.css'],
-  providers: [mes, ConfirmationService]
+  providers: [mes]
 })
 export class CheckListComponent implements OnInit {
 
@@ -35,6 +35,9 @@ export class CheckListComponent implements OnInit {
               this.checksToPay = data;
               this.checksToPay = this.checksToPay.sort((a, b): number => {
                   if (a.id < b.id) {
+                      return -1;
+                  }
+                  if (a.id > b.id) {
                       return 1;
                   }
                   return 0;
@@ -63,6 +66,9 @@ export class CheckListComponent implements OnInit {
                     this.checksFromOwners = data;
                     this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
                         if (a.id < b.id) {
+                            return -1;
+                        }
+                        if (a.id > b.id) {
                             return 1;
                         }
                         return 0;
@@ -75,13 +81,33 @@ export class CheckListComponent implements OnInit {
             this.checkService.getAll('payed').subscribe( data => {
                 if (data !== null) {
                     this.checksHistory = data;
-                    this.checksHistory = this.checksHistory.sort((a, b): number => {
-                        if (a.id < b.id) {
-                            return 1;
-                        }
-                        return 0;
+                    this.checkService.getOwedChecks('payed').subscribe(res => {
+                        res.forEach(item => {this.checksHistory.push(item); });
+                        this.checksHistory = this.checksHistory.sort((a, b): number => {
+                            if (a.id < b.id) {
+                                return -1;
+                            }
+                            if (a.id > b.id) {
+                                return 1;
+                            }
+                            return 0;
+                        });
                     });
-                    console.log(data);
+                } else {
+                    this.checkService.getOwedChecks('payed').subscribe(res => {
+                        if (res !== null) {
+                            this.checksHistory = res;
+                            this.checksHistory = this.checksHistory.sort((a, b): number => {
+                                if (a.id < b.id) {
+                                    return -1;
+                                }
+                                if (a.id > b.id) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                        }
+                    });
                 }
             });
         }
@@ -92,9 +118,19 @@ export class CheckListComponent implements OnInit {
             .catch(reason => console.log('ups') );
     }
 
-    markAsPayed() {
-      this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Check added to payed'});
+    async delay(ms: number) {
+        await new Promise(resolve => setTimeout(() => resolve(), ms))
+            .then();
     }
+
+    markAsPayed() {
+      this.checkService.confirmParticipation(this.check.id).subscribe(res => {
+          this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Check added to payed'});
+          this.delay(600).then(any => {
+              window.location.reload();
+          });
+         });
+      }
 
     fixCheck(check: Check) {
       console.log('here');

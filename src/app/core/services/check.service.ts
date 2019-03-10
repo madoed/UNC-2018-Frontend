@@ -24,4 +24,8 @@ export class CheckService {
         return this.apiService.get('http://127.0.0.1:8000' + '/check-owed-list/'
             + this.authService.user.id + '/' + status);
     }
+
+    confirmParticipation(checkId: number): Observable<any>  {
+        return this.apiService.post('http://127.0.0.1:8000' + '/payment-confirm', checkId);
+    }
 }

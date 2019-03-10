@@ -1,7 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MenuItem, MessageService as mes} from 'primeng/api';
-import {AuthService, ChatService, Meeting, MeetingService, MessageService, Participant, User} from '@app/core';
+import {AuthService, Meeting, MeetingService, Participant, User, Place} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 declare var google: any;
 
@@ -22,7 +23,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 3;
+  activeIndex: number = 0;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;
@@ -67,7 +68,7 @@ export class MeetingCreateComponent implements OnInit {
       };
 
       this.infoWindow = new google.maps.InfoWindow();
-      if(!this.overlays||!this.overlays.length) {
+      if (!this.overlays || !this.overlays.length) {
           this.overlays = [];
       }
 
@@ -153,6 +154,47 @@ export class MeetingCreateComponent implements OnInit {
         this.users = this.users.filter(item => item.id !== this.fixedUser.id);
         console.log(this.users);
         this.empty = false;
+    }
+
+    parse(value: any): String | '' {
+        if ((typeof value === 'string')) {
+            const str = value.split(' ');
+            const year = str[3];
+            const month = str[1];
+            const date = str[2];
+            return date + ' ' + month + ' ' + year;
+        }
+        return '';
+    }
+
+    createMeeting() {
+        this.meeting.boss = this.authService.user;
+        this.meeting.status = 'new';
+        if (this.selectedPosition) {
+            let place = {} as Place;
+            place.lat = this.selectedPosition.lat();
+            place.lng = this.selectedPosition.lng();
+            place.placeName = this.markerTitle;
+            this.meeting.meetingLocation = place;
+        }
+        this.meetingService.createMeeting(this.meeting).subscribe(data => {
+            this.meeting = data;
+            let participant = {} as Participant;
+            participant.statusOfConfirmation = 'confirmed';
+            participant.meetingParticipant = this.authService.user;
+            this.participants.push(participant);
+            this.meetingService.addParticipants(this.participants, this.meeting.id).subscribe( res => {
+                this.router.navigate(['/meeting-list']);
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail:'Meeting Created'});
+
+                },
+                (err: HttpErrorResponse) => {
+                this.messService.add({severity: 'error', summary: 'Error Message', detail: 'oops something happened'});
+            });
+            },
+            (err: HttpErrorResponse) => {
+                this.messService.add({severity: 'error', summary: 'Error Message', detail: 'oops something happened'});
+            });
     }
 
 }

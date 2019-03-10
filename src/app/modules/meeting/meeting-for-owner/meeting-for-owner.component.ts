@@ -38,6 +38,8 @@ export interface UserData {
   inCart: number;
 }
 
+declare var google: any;
+
 @Component({
   selector: 'app-meeting-for-owner',
   templateUrl: './meeting-for-owner.component.html',
@@ -45,6 +47,15 @@ export interface UserData {
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+
+    openMap: boolean;
+    options: any;
+    overlays: any[];
+    dialogVisible: boolean;
+    markerTitle: string;
+    selectedPosition: any;
+    infoWindow: any;
+
 
     private bill = {} as Bill;
     displayDialogDescription: boolean = false;
@@ -68,6 +79,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
   private participant = {} as Participant;
   private meeting = {} as Meeting;
   private date: Date;
+  time: Date;
   private minDate: Date;
   mark_info = true;
   private participants: Array<any>;
@@ -103,6 +115,23 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
         }
         const timestamp = typeof value === 'number' ? value : Date.parse(value);
         return isNaN(timestamp) ? null : new Date(timestamp);
+    }
+
+    parseTime(value: any): Date|null {
+        if ((typeof value === 'string')) {
+            let str = value.split('T');
+            str = str[1].split(':');
+            let hour = Number(str[0]) + 3;
+            const min = Number(str[1]);
+            if (hour >= 24) {
+                hour = hour - 24;
+            }
+            let myDate = new Date();
+            myDate.setHours(hour);
+            myDate.setMinutes(min);
+            return myDate;
+        }
+        return null;
     }
 
   constructor(private messService: mes,
@@ -187,17 +216,24 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       this.minDate = new Date();
                       this.minDate.setMonth(month);
                       this.minDate.setFullYear(year);
-                      let re = /\\n/gi;
-                      this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,' ');
-                      re = /\"/gi;
-                      this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,'');
+                      if (this.meeting.meetingDescription) {
+                          let re = /\\n/gi;
+                          this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,' ');
+                          re = /\"/gi;
+                          this.meeting.meetingDescription = this.meeting.meetingDescription.replace(re,'');
+                      }
                       // this.date = new Date().to;
-                      this.date = this.parse(this.meeting.dateOfMeeting.toString());
+                      if (this.meeting.dateOfMeeting) {
+                          this.date = this.parse(this.meeting.dateOfMeeting.toString());
+                      }
+                      if (this.meeting.timeOfMeeting) {
+                          this.time = this.parseTime(this.meeting.timeOfMeeting.toString());
+                      }
                       this.meetingService.getParticipants().subscribe(data => {
                           this.participants = data;
                           console.log(data);
                       });
-                      this.route.params = this.chatService.getChannel(-7);
+                      this.route.params = this.chatService.getChannel(this.meeting.meetingChat.id);
                       super.ngOnInit();
                       this.delay(2000).then(any => {
                           super.scrollToBottom();
@@ -219,6 +255,17 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
       this.edit_bill = false;
       this.show_bill = true;
       this.changed_bill = false;
+      this.openMap = false;
+      this.options = {
+          center: {lat: 51.6754966, lng: 39.2088823},
+          zoom: 12
+      };
+
+      this.infoWindow = new google.maps.InfoWindow();
+      if (!this.overlays || !this.overlays.length) {
+          this.overlays = [];
+      }
+
 
       this.cols = [
           { field: 'itemTitle', header: 'item' },
@@ -232,7 +279,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
 
 
-    // this.route.params = this.chatService.getChannel(-7);
+     //this.route.params = this.chatService.getChannel(-7);
 
     // this.meeting = this.meetingService.getCurrentMeeting();
     // this.date = this.meeting.dateOfMeeting;
@@ -255,6 +302,12 @@ ngAfterViewInit() {
     this.meetingService.setDate(this.date, this.meeting.id);
     this.messService.add({severity:'success', summary: 'Success Message', detail:'Date changed'});
  }
+
+    changeTime() {
+        console.log(this.time);
+        this.meetingService.setTime(this.time, this.meeting.id);
+        this.messService.add({severity:'success', summary: 'Success Message', detail:'Time changed'});
+    }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -487,11 +540,7 @@ ngAfterViewInit() {
         this.changed_bill = false;
         //let itemsForUpdate = this.targetCars.filter(item => item.itemCurrentAmount!==0)
         console.log(this.targetCars);
-        this.meetingService.checkUpdate(this.targetCars, this.participant.id).subscribe(
-            (err: HttpErrorResponse) => {
-                console.log(err.status);
-                }
-        );
+        this.meetingService.checkUpdate(this.targetCars, this.participant.id);
         this.messService.add({severity:'success', summary: 'Success Message', detail:'List saved'});
         //this.messService.add({severity:'error', summary: 'Error Message', detail:'failed'});
     }
@@ -701,6 +750,37 @@ ngAfterViewInit() {
             car[prop] = c[prop];
         }
         return car;
+    }
+
+    handleMapClick(event) {
+        this.dialogVisible = true;
+        this.selectedPosition = event.latLng;
+    }
+
+    addMarker() {
+        if (this.overlays) {
+            this.overlays.pop();
+        }
+        this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: true}));
+        //this.markerTitle = null;
+        this.dialogVisible = false;
+    }
+
+    handleDragEnd(event) {
+        this.messService.add({severity:'info', summary:'Marker Dragged', detail: event.overlay.getTitle()});
+    }
+
+
+    zoomIn(map) {
+        map.setZoom(map.getZoom()+1);
+    }
+
+    zoomOut(map) {
+        map.setZoom(map.getZoom()-1);
+    }
+
+    clear() {
+        this.overlays = [];
     }
 }
 

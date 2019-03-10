@@ -10,30 +10,50 @@
     </mat-card-header>
     <mat-card-content >
             <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"
-                           style="height: auto; width: 950px;">
+                           style="height: auto; width: 100%" (selectedTabChange)="loadMeetings($event)">
                 <mat-tab label="Future" >
         <div class="basic-container">
-            <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
-                <mat-grid-tile *ngFor="let meeting of meetings" style="border-style: ridge;">
-                    <mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">
+            <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
+                <mat-grid-tile *ngFor="let meeting of meetings"
+                               style="border-style: ridge; height: 40px; cursor: pointer;" >
+                    <!--<mat-card [style.width]="'100%'" [style.height]="'50px'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
-                        <div  >
-                            <div style="height: 40px;">
-
-                            <h3 class="title">
-                                {{meeting.participantOfMeeting.name}}
-                            </h3>
-
-                            </div>
-
-                            <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
-                                {{parse(meeting.participantOfMeeting.dateOfMeeting.toString())}}
-                                <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место
-                                <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">Status: </span>{{meeting.participantOfMeeting.status}}
-                                <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
-                            </h3>
+                    <div  >
+                        <div style="height: 40px; width: 600px;" >
+                            <a >
+                                <h3 class="title" (click)="openMeeting(meeting)"
+                                    style="float: left; margin-left: 150px;">
+                                    {{meeting.participantOfMeeting.name}}
+                                </h3>
+                            </a>
                         </div>
-                    </mat-card>
+                        <br/>
+
+                        <!--<div  >-->
+                            <!--<div style="height: 40px;">-->
+
+                            <!--<h3 class="title">-->
+                                <!--{{meeting.participantOfMeeting.name}}-->
+                            <!--</h3>-->
+
+                            <!--</div>-->
+
+                        <h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">
+                            Data: </span>
+                            {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}
+                            <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>
+                            {{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}
+                            <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
+                            <span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">
+                                Status:
+                                <span style="color: #989898">
+                                {{meeting.participantOfMeeting.status}}
+                                </span>
+                            </span>
+                        </h3>
+
+                    </div>
+                    <!--</mat-card>-->
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
@@ -41,23 +61,43 @@
 
                 <mat-tab label="Past" >
                     <div class="basic-container">
-                        <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
-                            <mat-grid-tile *ngFor="let meeting of meetingsPast" style="border-style: ridge;">
-                                <mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">
+                        <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
+                            <mat-grid-tile *ngFor="let meeting of meetingsPast" style="border-style: ridge;
+                            height: 40px; cursor: pointer;" >>
+                                <!--<mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
-                                    <div  fxLayout="row" align="center">
-                                        <a class="title">
-                                            <h3 class="meeting-title">
-                                                {{meeting.participantOfMeeting.name}}</h3>
+                                <div  >
+                                    <div style="height: 40px; width: 600px;" >
+                                        <a >
+                                            <h3 class="title" (click)="openMeeting(meeting)"
+                                                style="float: left; margin-left: 150px;">
+                                                {{meeting.participantOfMeeting.name}}
+                                            </h3>
+
                                         </a>
-                                        <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
-                                            {{parse(meeting.participantOfMeeting.dateOfMeeting.toString())}}
-                                            <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место
-                                            <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">Status: </span>{{meeting.participantOfMeeting.status}}
-                                            <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
-                                        </h3>
                                     </div>
-                                </mat-card>
+                                    <br/>
+
+                                    <!--<div  fxLayout="row" align="center">-->
+                                        <!--<a class="title">-->
+                                            <!--<h3 class="meeting-title">-->
+                                                <!--{{meeting.participantOfMeeting.name}}</h3>-->
+                                        <!--</a>-->
+                                    <h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">
+                            Data: </span>
+                                        {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}
+                                        <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>
+                                        {{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}
+                                        <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
+                                        <span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">
+                                Status:
+                                <span style="color: #989898">
+                                {{meeting.participantOfMeeting.status}}
+                                </span>
+                            </span>
+                                    </h3>
+                                    </div>
+                                <!--</mat-card>-->
                             </mat-grid-tile>
                         </mat-grid-list>
                     </div>
@@ -65,23 +105,46 @@
 
                 <mat-tab label="New" >
                     <div class="basic-container">
-                        <mat-grid-list cols="1" rowHeight="fit" gutterSize="10px" [style.height]="'200px'">
-                            <mat-grid-tile *ngFor="let meeting of meetingsNew" style="border-style: ridge;">
-                                <mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">
+                        <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
+                            <mat-grid-tile *ngFor="let meeting of meetingsNew" style="border-style: ridge;
+                            height: 40px; cursor: pointer;" >
+                                <!--<mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
-                                    <div  fxLayout="row" align="center">
-                                        <a class="title">
-                                            <h3 class="meeting-title">
-                                                {{meeting.participantOfMeeting.name}}</h3>
+                                <div  >
+                                    <div style="height: 40px; width: 600px;" >
+                                        <a >
+                                            <h3 class="title" (click)="openMeeting(meeting)"
+                                                style="float: left; margin-left: 150px;">
+                                                {{meeting.participantOfMeeting.name}}
+                                            </h3>
+                                            <button mat-raised-button color="primary"(click)="confirm(meeting)"
+                                                    style="float: right; margin-right: -150px; float: top; margin-top: 20px;">
+                                                Confirm
+                                            </button>
                                         </a>
-                                        <h3 style="color: #989898" align="left" ><span align="left" class="meeting-title" style="color:steelblue"> Data: </span>
-                                            {{parse(meeting.participantOfMeeting.dateOfMeeting.toString())}}
-                                            <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>место
-                                            <span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">Status: </span>{{meeting.participantOfMeeting.status}}
-                                            <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
-                                        </h3>
                                     </div>
-                                </mat-card>
+                                    <br/>
+
+                                    <!--<div  fxLayout="row" align="center">-->
+                                        <!--<a class="title">-->
+                                            <!--<h3 class="meeting-title">-->
+                                                <!--{{meeting.participantOfMeeting.name}}</h3>-->
+                                        <!--</a>-->
+                                    <h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">
+                            Data: </span>
+                                        {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}
+                                        <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>
+                                        {{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}
+                                        <!--Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>-->
+                                        <span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">
+                                Status:
+                                <span style="color: #989898">
+                                {{meeting.participantOfMeeting.status}}
+                                </span>
+                            </span>
+                                    </h3>
+                                    </div>
+                                <!--</mat-card>-->
                             </mat-grid-tile>
                         </mat-grid-list>
                     </div>

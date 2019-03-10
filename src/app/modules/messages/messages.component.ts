@@ -90,10 +90,11 @@ export class MessagesComponent implements OnInit {
       this.messageService.getMessages(this.channel.id).subscribe(data => {
         if (data === null) {
           this.filteredMessages = []; } else {
-          this.filteredMessages = data; }
-      });
-      this.delay(1000).then(any => {
-        this.scrollToBottom();
+          this.filteredMessages = data;
+            this.delay(1000).then(any => {
+                this.scrollToBottom();
+            });
+        }
       });
 
       //this.channel = this.chatService.getChannel();

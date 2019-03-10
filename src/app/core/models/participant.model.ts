@@ -7,4 +7,5 @@ export interface Participant {
   suggestedLocations?:  Location;
   participantOfMeeting: Meeting;
   statusOfConfirmation: string;
+  name: string;
 }

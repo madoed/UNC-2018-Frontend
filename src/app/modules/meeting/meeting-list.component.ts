@@ -6,11 +6,14 @@ import {Meeting} from '@app/core/models/meeting.model';
 import {MeetingService} from '@app/core/services/meeting.service';
 import {Router} from '@angular/router';
 import {Participant} from '@app/core/models/participant.model';
+import {MatTabChangeEvent} from '@angular/material';
+import {MessageService as mes} from 'primeng/api';
 
 @Component({
   selector: 'app-meeting-list',
   templateUrl: './meeting-list.component.html',
-  styleUrls: ['./meeting-list.component.css']
+  styleUrls: ['./meeting-list.component.css'],
+  providers: [mes]
 })
 export class MeetingListComponent implements OnInit {
 
@@ -24,22 +27,31 @@ export class MeetingListComponent implements OnInit {
   constructor(private meetingService: MeetingService,
               private authService: AuthService,
               private router: Router,
-              private chatService: ChatService) { }
+              private messService: mes) { }
 
   ngOnInit() {
-    this.meetingService.getAll().subscribe(data => {
-      console.log(data);
-      data.forEach(item => {
-          if (item.participantOfMeeting.status === 'new') {
-              this.meetingsNew.push(item);
-          } else if (item.participantOfMeeting.status === 'past') {
-              this.meetingsPast.push(item);
-          } else {
-              this.meetings.push(item);
-          }
-      });
+    this.meetingService.getAll(0).subscribe(data => {
+      this.meetings = data;
     });
   }
+
+    loadMeetings(tab: MatTabChangeEvent) {
+        if (tab.index === 1 && !this.meetingsPast.length) {
+            this.meetingService.getAll(1).subscribe( data => {
+                if (data !== null) {
+                    this.meetingsPast = data;
+                    console.log(data);
+                }
+            });
+        }
+        if (tab.index === 2 && !this.meetingsNew.length) {
+            this.meetingService.getAll(2).subscribe( data => {
+                if (data !== null) {
+                    this.meetingsNew = data;
+                }
+            });
+        }
+    }
 
     parse(value: any): String | null {
         if ((typeof value === 'string')) {
@@ -54,19 +66,32 @@ export class MeetingListComponent implements OnInit {
     }
 
   openMeeting(meeting: Participant) {
-    //-1 is  this.authService.getCurrentUser().id
     console.log(meeting);
     this.meetingService.getMeeting(meeting.participantOfMeeting.id).subscribe((meet: Meeting) => {
       if (meet) {
         this.meeting = meet;
         this.meetingService.setMeeting(this.meeting);
-        if (this.meeting.boss.id === -1) {
+        if (this.meeting.boss.id === this.authService.user.id) {
           this.router.navigate(['/meeting-list/meeting-main', meeting.id]);
         }
       } else {
         console.log(`another boss`);
       }
     });
+  }
+
+  async delay(ms: number) {
+      await new Promise(resolve => setTimeout(() => resolve(), ms))
+          .then();
+  }
+
+  confirm(part: Participant) {
+      this.meetingService.confirmParticipation(part.id).subscribe( res => {
+          this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Meeting confirmed'});
+          this.delay(600).then(any => {
+              window.location.reload();
+          });
+          });
   }
 
 }
