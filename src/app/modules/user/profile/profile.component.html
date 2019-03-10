@@ -1,67 +1,100 @@
-<div class="card-container">
-  <mat-card style="align-items: center; height: 200px;">
-    <div id="avatar">
-      <img *ngIf="user.avatarUrl" src="{{user.avatarUrl}}" alt="User Avatar" height="100" width="100">
-      <img *ngIf="!user.avatarUrl" src="{{defaultAvatar}}" alt="User Avatar" height="100" width="100">
-    </div>
-    <mat-card-header>
-      <mat-card-title>{{user.firstName}} {{user.lastName}} @{{user.username}}</mat-card-title>
-      <mat-card-subtitle *ngIf="user.online">online</mat-card-subtitle>
-    </mat-card-header>
+<div class="ui-g">
+  <h1 *ngIf="currentUser.id === user.id">My Profile</h1>
+  <h1 *ngIf="currentUser.id !== user.id">{{user.firstName}}'s Profile</h1>
+  <div class="ui-g-12">
+      <div class="ui-g-4 user-card">
+          <p-card header="{{user.firstName}} {{user.lastName}}" subheader="@{{user.username}}" styleClass="ui-card-shadow">
+            <p-header *ngIf="user.avatarUrl">
+              <img src="{{user.avatarUrl}}" class="profile-img">
+            </p-header>
+            <p-header *ngIf="!user.avatarUrl">
+                <img src="{{defaultAvatar}}" class="profile-img">
+              </p-header>
+            <div>
+              {{user.status}}
+            </div>
+            <p-footer *ngIf="currentUser.id !== user.id">
+              <button pButton *ngIf="!isFriend()" class="card-button ui-button-primary"
+              type="button" label="Add Friend" icon="pi pi-user-plus" (click)="addFriend()"></button>
+              <button pButton *ngIf="isFriend()" class="card-button ui-button-success"
+              type="button" label="Friends" [disabled]="true" icon="pi pi-check"></button>
+              <br>
+              <button pButton class="card-button ui-button-secondary"
+              type="button" label="Send Message" icon="pi pi-envelope"></button>
+            </p-footer>
+            <p-footer *ngIf="currentUser.id == user.id">
+              <button pButton class="card-button ui-button-primary"
+              type="button" label="Edit" [routerLink]="['/user', authService.user.id, 'edit']"></button>
+            </p-footer>
+          </p-card>
+      </div>
+      
+      <div class="ui-g-8">
+          <p-tabView>
+              <p-tabPanel header="Profile">
+                  <h2><i class="pi pi-user"></i> ABOUT</h2>
+                  <div class="ui-g" *ngFor="let item of userInfo | keyvalue">
+                    <div class="ui-g-4" *ngIf="item.value">
+                      <b>{{item.key}}:</b>
+                    </div>
+                    <div class="ui-g-8" *ngIf="item.value">
+                        {{item.value}}
+                    </div>
+                  </div>
+                  <!--<h2><i class="pi pi-globe"></i> ACTIVITY</h2>-->
+              </p-tabPanel>
+              <!--<p-tabPanel header="Photos">
+                  <ng-template pTemplate="content">
 
-    <mat-card-actions>
-      <button mat-button *ngIf="user.id !== currentUser.id">
-        <i class="material-icons">mail</i> Send a message
-      </button>
-      <button mat-button *ngIf="user.id === currentUser.id">
-        <i class="material-icons">edit</i> Edit
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card style="margin-left: 5px; width: 81%;">
-    <mat-card-content>
-      <mat-tab-group>
-        <mat-tab label="Info">
-          <div class="small-box">
-            <mat-list>
-              <mat-list-item>
-                <h3 mat-subheader>About Me:</h3>   {{ user.aboutMe }}
-              </mat-list-item>
-              <mat-list-item>
-                <h3 mat-subheader>Email:</h3>      {{ user.email }}
-              </mat-list-item>
-            </mat-list>
-          </div>
-        </mat-tab>
-        <mat-tab label="Friends">
-          <div class="small-box">
-             <div *ngFor="let friend of user.friends">
-               <mat-card class="friend-container">
-                <img *ngIf="friend.avatarUrl"
-                src="{{friend.avatarUrl}}"
-                alt="User Avatar"
-                height="70" width="70">
-                <img *ngIf="!friend.avatarUrl"
-                    src="{{defaultAvatar}}"
-                    alt="User Avatar"
-                    height="70" width="70"> 
-                <mat-card-header>
-                   <mat-card-title>
-                     {{friend.firstName}} {{friend.lastName}}
-                     <br>
-                     <a [routerLink]="['/user', friend.id]" style="color: gray">
-                       @{{friend.username}}
-                     </a>
-                   </mat-card-title>
-                   <mat-card-subtitle *ngIf="friend.online">online</mat-card-subtitle>
-                 </mat-card-header>
-               </mat-card>
-             </div>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-      <mat-divider></mat-divider>
-    </mat-card-content>
-  </mat-card>
+                  </ng-template>
+              </p-tabPanel>-->
+              <p-tabPanel header="Friends">
+                  <h2><i class="pi pi-users"></i> FRIENDS</h2>
+                  <ng-template pTemplate="content">
+                      <div id="friend" *ngFor="let friend of user.friends" class="friend-card">
+                        <p-card styleClass="ui-card-shadow">
+                          <p-header [routerLink]="['/user', friend.id]" style="cursor: pointer;" *ngIf="friend.avatarUrl">
+                            <img src="{{friend.avatarUrl}}" class="friend-img">
+                          </p-header>
+                          <p-header [routerLink]="['/user', friend.id]" style="cursor: pointer;" *ngIf="!friend.avatarUrl">
+                            <img src="{{defaultAvatar}}" class="friend-img">
+                          </p-header>
+                          <div style="text-align: center;">
+                            <p>{{friend.firstName}} {{friend.lastName}}</p>
+                            <p style="color: gray;">@{{friend.username}}</p>
+                          </div>
+                          <p-footer>
+                            <div class="card-button" style="text-align:center;">
+                              <button pButton *ngIf="currentUser.id !== friend.id" class="friend-btn ui-button-rounded ui-button-success"
+                                type="button" icon="pi pi-envelope" pTooltip="Send Message" tooltipPosition="bottom"></button>
+                              <button pButton *ngIf="currentUser.id == user.id" class="friend-btn ui-button-rounded ui-button-danger"
+                                type="button" icon="pi pi-times" pTooltip="Unfriend" tooltipPosition="bottom"
+                                (click)="unfriend(friend)"></button>
+                            </div>
+                          </p-footer>
+                        </p-card>
+                      </div>
+                  </ng-template>
+              </p-tabPanel>
+          </p-tabView>
+      </div>
+  </div>
 </div>
+
+<p-toast position="center" key="c" (onClose)="onReject()" [modal]="true" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+      <div style="text-align: center">
+          <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+          <h3>{{message.summary}}</h3>
+          <p>{{message.detail}}</p>
+      </div>
+      <div class="ui-g ui-fluid">
+          <div class="ui-g-6">
+              <button type="button" pButton (click)="onConfirm()" label="Yes" class="ui-button-success"></button>
+          </div>
+          <div class="ui-g-6">
+              <button type="button" pButton (click)="onReject()" label="No" class="ui-button-secondary"></button>
+          </div>
+      </div>
+  </ng-template>
+</p-toast>

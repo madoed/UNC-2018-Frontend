@@ -31,15 +31,31 @@ import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 import {
     AccordionModule,
     ButtonModule,
-    CalendarModule, ConfirmDialogModule,
+    CalendarModule,
+    ConfirmDialogModule,
     DialogModule,
-    DragDropModule, EditorModule, GMapModule, InputTextareaModule,
-    InputTextModule, OverlayPanelModule, PanelModule,
-    PickListModule, StepsModule
+    DragDropModule,
+    EditorModule,
+    GMapModule,
+    InputTextModule,
+    OverlayPanelModule,
+    PanelModule,
+    PickListModule,
+    StepsModule,
+    CardModule,
+    TabViewModule,
+    ToolbarModule,
+    SidebarModule,
+    TooltipModule,
+    PasswordModule
 } from 'primeng/primeng';
-import {MenuItem} from 'primeng/api';
-import {ToastModule} from 'primeng/toast';
-import {TableModule} from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { DataViewModule } from 'primeng/dataview';
+import { PaginatorModule } from 'primeng/paginator';
+import { MessageService } from 'primeng/api';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   imports: [
@@ -74,17 +90,26 @@ import {TableModule} from 'primeng/table';
     PickListModule,
     DragDropModule,
     ToastModule,
-      TableModule,
-      DialogModule,
-      InputTextModule,
-      ButtonModule,
-      PanelModule,
-      EditorModule,
-      InputTextareaModule,
-      ConfirmDialogModule,
-      StepsModule,
-      GMapModule,
-      OverlayPanelModule
+    TableModule,
+    DialogModule,
+    InputTextModule,
+    ButtonModule,
+    PanelModule,
+    EditorModule,
+    InputTextareaModule,
+    ConfirmDialogModule,
+    StepsModule,
+    GMapModule,
+    OverlayPanelModule,
+    CardModule,
+    TabViewModule,
+    ToolbarModule,
+    SidebarModule,
+    TooltipModule,
+    PasswordModule,
+    DataViewModule,
+    PaginatorModule,
+    ProgressSpinnerModule
   ],
   declarations: [],
   exports: [
@@ -119,19 +144,29 @@ import {TableModule} from 'primeng/table';
     PickListModule,
     DragDropModule,
     ToastModule,
-      TableModule,
-      DialogModule,
-      InputTextModule,
-      ButtonModule,
-      PanelModule,
-      EditorModule,
-      InputTextareaModule,
-      ConfirmDialogModule,
-      StepsModule,
-      GMapModule,
-      OverlayPanelModule
+    TableModule,
+    DialogModule,
+    InputTextModule,
+    ButtonModule,
+    PanelModule,
+    EditorModule,
+    InputTextareaModule,
+    ConfirmDialogModule,
+    StepsModule,
+    GMapModule,
+    OverlayPanelModule,
+    CardModule,
+    TabViewModule,
+    ToolbarModule,
+    SidebarModule,
+    TooltipModule,
+    PasswordModule,
+    DataViewModule,
+    PaginatorModule,
+    ProgressSpinnerModule
   ],
   providers: [
+    MessageService,
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }
   ]
 })
