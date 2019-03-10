@@ -16,7 +16,7 @@
         <p-dialog showEffect="fade" [(visible)]="dialogVisible" header="New Location">
             <div class="ui-g ui-fluid" *ngIf="selectedPosition">
                 <div class="ui-g-2"><label for="title">Label</label></div>
-                <div class="ui-g-10"><input type="text" pInputText id="title" [(ngModel)]="markerTitle"></div>
+                <div class="ui-g-10"><input type="text" pInputText  [(ngModel)]="markerTitle"></div>
 
                 <div class="ui-g-2"><label for="lat">Lat</label></div>
                 <div class="ui-g-10"><input id="lat" type="text" readonly pInputText [ngModel]="selectedPosition.lat()"></div>
@@ -36,7 +36,7 @@
 
     <p-toast [style]="{marginTop: '80px'}"></p-toast>
 
-    <mat-card style="width: 943px!important; min-height: 100px!important; ">
+    <mat-card style="width: 1160px!important; min-height: 100px!important; ">
         <mat-card-header><h1 class = "myFont" >{{meeting.name}}</h1></mat-card-header>
             <!--<mat-expansion-panel (opened)="panelOpenState = true"-->
                                  <!--(closed)="panelOpenState = false">-->
@@ -74,7 +74,7 @@
                         style="margin-left: 10px;">
                     Map
                 </button>
-                {{markerTitle?markerTitle:"No place"}}
+                <span style="margin-left: 10px;">{{markerTitle?markerTitle:"No place"}}</span>
 
             </div>
             <br />
@@ -101,7 +101,7 @@
 
 
     <div style="margin-top: 20px;">
-        <div flex style="float: left; width: 300px; ">
+        <div flex style="float: left; width: 530px; ">
             <mat-card *ngIf="mark_info" style="  height: fit-content">
                 <mat-card-header >Vote for Place</mat-card-header>
                 <br />
@@ -157,7 +157,7 @@
             </mat-card>
         </div>
 
-        <div flex style="padding: 0px; margin-left: 340px; width: 604px; height: auto;">
+        <div flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto;">
             <mat-card >
                 <mat-card-content>
                     <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"
@@ -270,6 +270,7 @@
 
                                     <br />
                                     <p>Total sum: {{bill.billTotalSum}}</p>
+                                    
                                 </div>
 
                             </div>

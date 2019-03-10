@@ -10,6 +10,7 @@ import {Item} from '@app/core/models/item.model';
 import {ItemAmount} from '@app/core/models/itemamount.model';
 import {HttpClient} from '@angular/common/http';
 import {Bill} from '@app/core/models/bill.model';
+import {Place} from '@app/core';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,11 @@ export class MeetingService {
 
   setTime(date: Date, id: number) {
       this.apiService.post('http://127.0.0.1:8000/meeting-time/' + id, date) .subscribe(
+          result => console.log(result));
+  }
+
+  setLocation(place: Place, id: number) {
+      this.apiService.post('http://127.0.0.1:8000/meeting-location/' + id, place) .subscribe(
           result => console.log(result));
   }
 

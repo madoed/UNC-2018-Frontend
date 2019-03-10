@@ -44,7 +44,8 @@ export class MeetingCreateComponent implements OnInit {
               private meetingService: MeetingService,
               public route: ActivatedRoute,
               private authService: AuthService,
-              public router: Router) {
+              public router: Router,
+                ) {
         const today = new Date();
         const month = today.getMonth();
         const year = today.getFullYear();

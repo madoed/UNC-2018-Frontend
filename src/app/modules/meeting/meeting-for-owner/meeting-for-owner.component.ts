@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Meeting} from '@app/core/models/meeting.model';
 import {MeetingService} from '@app/core/services/meeting.service';
-import {AuthService, Participant} from '@app/core';
+import {AuthService, Participant, Place} from '@app/core';
 import {FormControl} from '@angular/forms';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
 import {MetadataOverride} from '@angular/core/testing';
@@ -18,6 +18,7 @@ import {Message} from 'primeng/api';
 import {MessageService as mes} from 'primeng/api';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Bill} from '@app/core/models/bill.model';
+import {CheckService} from '@app/core/services/check.service';
 
 
 
@@ -140,7 +141,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
               authService: AuthService,
               public router: Router,
               messageService: MessageService,
-              public chatService: ChatService) {
+              public chatService: ChatService,
+              private checkService: CheckService) {
     super(messageService, router, chatService, authService, route);
     const users: UserData[] = [];
     for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
@@ -764,6 +766,12 @@ ngAfterViewInit() {
         this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: true}));
         //this.markerTitle = null;
         this.dialogVisible = false;
+        let place = {} as Place;
+        place.lat = this.selectedPosition.lat();
+        place.lng = this.selectedPosition.lng();
+        place.placeName = this.markerTitle;
+        this.meeting.meetingLocation = place;
+        this.meetingService.setLocation(place, this.meeting.id);
     }
 
     handleDragEnd(event) {
@@ -782,6 +790,14 @@ ngAfterViewInit() {
     clear() {
         this.overlays = [];
     }
+
+    // parseCheck() {
+    //   this.checkService.parseCheck('8710000101914246',
+    //       '0000073341', '2947395005')
+    //       .subscribe(res => {
+    //           console.log(res);
+    //       });
+    // }
 }
 
 
