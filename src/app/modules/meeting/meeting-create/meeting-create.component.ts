@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MenuItem, MessageService as mes} from 'primeng/api';
-import {AuthService, Meeting, MeetingService, Participant, User, Place} from '@app/core';
+import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 
@@ -14,6 +14,8 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
+  cards: Array<any> = null;
+  fixedCardId: number = null;
   users: Array<any>;
   fixedUserId;
   fixedUser: User;
@@ -23,7 +25,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 0;
+  activeIndex: number = 3;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;
@@ -45,7 +47,7 @@ export class MeetingCreateComponent implements OnInit {
               public route: ActivatedRoute,
               private authService: AuthService,
               public router: Router,
-                ) {
+              private cardService: CardService) {
         const today = new Date();
         const month = today.getMonth();
         const year = today.getFullYear();
@@ -105,7 +107,15 @@ export class MeetingCreateComponent implements OnInit {
               }
           }
       ];
+
+      this.cardService.getAll(this.authService.user.id).subscribe(data => {
+          this.cards = data;
+      });
   }
+
+    setCard(card: any) {
+        this.fixedCardId = card.id;
+    }
 
     handleMapClick(event) {
         this.dialogVisible = true;

@@ -1,15 +1,13 @@
 import {NgModule} from '@angular/core';
 import {UiModule} from '@app/ui';
-import {CheckListComponent} from '@app/modules/check/check-list.component';
 import {CheckRoutingModule} from '@app/modules/check/check-routing.module';
 import {CheckInfoComponent} from '@app/modules/check/check-info/check-info.component';
 
 @NgModule({
+    declarations: [CheckInfoComponent],
     imports: [
-        UiModule,
-        CheckRoutingModule
-    ],
-    providers: [],
-    declarations: [CheckListComponent, CheckInfoComponent]
+        CheckRoutingModule,
+        UiModule
+    ]
 })
-export class CheckListModule { }
+export class CheckInfoModule { }

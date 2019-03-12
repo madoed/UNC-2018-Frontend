@@ -170,7 +170,10 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           this.meetingService.getParticipantItems().subscribe(items => {
                               console.log('here');
                               this.myList = items;
-                              this.myList.forEach(item => this.targetCars.push(item.billItemAmount));
+                              this.myList.forEach(itemAmount => {
+                                  itemAmount.billItemAmount.itemCurrentAmount = itemAmount.amountInCheck;
+                                  this.targetCars.push(itemAmount.billItemAmount);
+                              });
                               this.targetCars = this.targetCars.sort((a, b): number => {
                                   if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
                                   if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
@@ -542,7 +545,9 @@ ngAfterViewInit() {
         this.changed_bill = false;
         //let itemsForUpdate = this.targetCars.filter(item => item.itemCurrentAmount!==0)
         console.log(this.targetCars);
-        this.meetingService.checkUpdate(this.targetCars, this.participant.id);
+        this.meetingService.checkUpdate(this.targetCars, this.participant.id).subscribe(res => {
+            console.log(res);
+        });
         this.messService.add({severity:'success', summary: 'Success Message', detail:'List saved'});
         //this.messService.add({severity:'error', summary: 'Error Message', detail:'failed'});
     }
@@ -689,10 +694,16 @@ ngAfterViewInit() {
                           this.messService.add({
                               severity: 'error',
                               summary: 'Error Message',
-                              detail: 'the amount should be not less then already in lists'
+                              detail: 'the amount can\'t be less then already in lists'
                           });
                       }
-                      else {
+                      if (err.status === 403) {
+                          this.messService.add({
+                              severity: 'error',
+                              summary: 'Error Message',
+                              detail: 'can\'t decrease amount. Someone already payed'
+                          });
+                      } else {
                           this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
 
                       }
@@ -729,7 +740,13 @@ ngAfterViewInit() {
                         this.messService.add({
                             severity: 'error',
                             summary: 'Error Message',
-                            detail: 'this item already in someones list'
+                            detail: 'can\'t delete. This item already in someones list'
+                        });
+                    } else if (err.status === 403) {
+                        this.messService.add({
+                            severity: 'error',
+                            summary: 'Error Message',
+                            detail: 'can\'t delete. Someone already payed'
                         });
                     } else {
                         this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});

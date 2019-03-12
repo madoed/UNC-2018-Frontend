@@ -6,4 +6,5 @@ export interface ItemAmount {
     billItemAmount: Item;
     itemAmountCheck:  Check;
     amountInCheck: number;
+    name: string;
 }

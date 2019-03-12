@@ -31,7 +31,18 @@ export class MeetingListComponent implements OnInit {
 
   ngOnInit() {
     this.meetingService.getAll(0).subscribe(data => {
-      this.meetings = data;
+        if (data !== null) {
+            this.meetings = data;
+            this.meetings.sort((a, b): number => {
+                if (a.id > b.id) {
+                    return -1;
+                }
+                if (a.id < b.id) {
+                    return 1;
+                }
+                return 0;
+            });
+        }
     });
   }
 
@@ -40,6 +51,15 @@ export class MeetingListComponent implements OnInit {
             this.meetingService.getAll(1).subscribe( data => {
                 if (data !== null) {
                     this.meetingsPast = data;
+                    this.meetingsPast.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
                     console.log(data);
                 }
             });
@@ -48,6 +68,15 @@ export class MeetingListComponent implements OnInit {
             this.meetingService.getAll(2).subscribe( data => {
                 if (data !== null) {
                     this.meetingsNew = data;
+                    this.meetingsNew.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
                 }
             });
         }

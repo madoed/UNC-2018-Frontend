@@ -15,14 +15,14 @@
         <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
                 <mat-grid-tile *ngFor="let meeting of meetings"
-                               style="border-style: ridge; height: 40px; cursor: pointer;" >
+                               style="border-style: ridge; height: 40px;" >
                     <!--<mat-card [style.width]="'100%'" [style.height]="'50px'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
                     <div  >
                         <div style="height: 40px; width: 600px;" >
                             <a >
                                 <h3 class="title" (click)="openMeeting(meeting)"
-                                    style="float: left; margin-left: 150px;">
+                                    style="float: left; margin-left: 150px; cursor: pointer;">
                                     {{meeting.participantOfMeeting.name}}
                                 </h3>
                             </a>
@@ -65,14 +65,14 @@
                     <div class="basic-container">
                         <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
                             <mat-grid-tile *ngFor="let meeting of meetingsPast" style="border-style: ridge;
-                            height: 40px; cursor: pointer;" >>
+                            height: 40px;" >
                                 <!--<mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
                                 <div  >
                                     <div style="height: 40px; width: 600px;" >
                                         <a >
                                             <h3 class="title" (click)="openMeeting(meeting)"
-                                                style="float: left; margin-left: 150px;">
+                                                style="float: left; margin-left: 150px;  cursor: pointer;">
                                                 {{meeting.participantOfMeeting.name}}
                                             </h3>
 
@@ -110,18 +110,18 @@
                     <div class="basic-container">
                         <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
                             <mat-grid-tile *ngFor="let meeting of meetingsNew" style="border-style: ridge;
-                            height: 40px; cursor: pointer;" >
+                            height: 40px;" >
                                 <!--<mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">-->
 
                                 <div  >
                                     <div style="height: 40px; width: 600px;" >
                                         <a >
                                             <h3 class="title" (click)="openMeeting(meeting)"
-                                                style="float: left; margin-left: 150px;">
+                                                style="float: left; margin-left: 150px; cursor: pointer;">
                                                 {{meeting.participantOfMeeting.name}}
                                             </h3>
                                             <button mat-raised-button color="primary"(click)="confirm(meeting)"
-                                                    style="float: right; margin-right: -150px; float: top; margin-top: 20px;">
+                                                    style="float: right; margin-right: -150px; float: top; margin-top: 10px;">
                                                 Confirm
                                             </button>
                                         </a>

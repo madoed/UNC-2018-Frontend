@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {ApiService, AuthService, Participant} from '@app/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Check} from '@app/core/models/check.model';
+import {ItemAmount} from '@app/core/models/itemamount.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,14 @@ export class CheckService {
         // return this.apiService.get(this.MEETING_API + '/1');
         return this.apiService.get('http://127.0.0.1:8000' + '/check-list/'
             + this.authService.user.id + '/' + status);
+    }
+
+    getItems(id: number): Observable<any> {
+        return this.http.get('http://127.0.0.1:8000' + '/check-items-by-check/' + id);
+    }
+
+    getCheck(id: number): Observable<Check> {
+        return this.apiService.get('http://127.0.0.1:8000' + '/check/' + id);
     }
 
     getOwedChecks(status: string): Observable<Check[]> {

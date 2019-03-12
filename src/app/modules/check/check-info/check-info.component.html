@@ -1,0 +1,56 @@
+<div class="container">
+  <p-toast [style]="{marginTop: '80px'}"></p-toast>
+
+  <mat-card>
+    <mat-card-header background-color="accent">
+      <mat-card-actions>
+        <button mat-button color="primary" [routerLink]="['/check-list']">
+          <mat-icon>subdirectory_arrow_left</mat-icon></button>
+      </mat-card-actions>
+      <h1 class = "myFont" *ngIf="check!==null" style="margin-left: 100px;"> Check
+      {{check.checkOwner.meetingParticipant.id===myId? 'to ':'from '}}
+      {{check.checkOwner.meetingParticipant.id===myId? check.name: check.checkOwner.name}}
+        info</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-divider></mat-divider>
+      <br />
+      <h3 style="color: #000000" *ngIf="check!==null">
+      <span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >
+                        From meeting: </span>{{check.checkOwner.participantOfMeeting.name}}
+      </h3>
+
+      <div style="width: 70%; margin-left: 90px;">
+        <p-table [value]="items">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Price</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{item.billItemAmount.itemTitle}}</td>
+                <td>{{item.amountInCheck}}</td>
+                <td>{{item.billItemAmount.price}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+      </div>
+
+      <!--<h3  style="margin-left: 50px;">No selected items</h3>-->
+       <br />
+      <h3  style="margin-left: 50px;" *ngIf="check!==null">Common amount: {{check.checkAmount}}
+        <span style="color: #989898">
+           (includes shared amount)
+        </span></h3>
+
+      <mat-card-actions *ngIf="check!==null&&check.checkStatus!='payed'">
+        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id!==myId" color="primary" type="button" style="margin-left: 700px" (click)="markAsPayed()">Pay</button>
+        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id===myId" color="primary" type="button" style="margin-left: 700px" (click)="markAsPayed()">Mark as payed</button>
+      </mat-card-actions>
+
+    </mat-card-content>
+  </mat-card>
+</div>

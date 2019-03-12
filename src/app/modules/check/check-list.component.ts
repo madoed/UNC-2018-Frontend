@@ -65,10 +65,10 @@ export class CheckListComponent implements OnInit {
                 if (data !== null) {
                     this.checksFromOwners = data;
                     this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
-                        if (a.id < b.id) {
+                        if (a.id > b.id) {
                             return -1;
                         }
-                        if (a.id > b.id) {
+                        if (a.id < b.id) {
                             return 1;
                         }
                         return 0;
@@ -84,10 +84,10 @@ export class CheckListComponent implements OnInit {
                     this.checkService.getOwedChecks('payed').subscribe(res => {
                         res.forEach(item => {this.checksHistory.push(item); });
                         this.checksHistory = this.checksHistory.sort((a, b): number => {
-                            if (a.id < b.id) {
+                            if (a.id > b.id) {
                                 return -1;
                             }
-                            if (a.id > b.id) {
+                            if (a.id < b.id) {
                                 return 1;
                             }
                             return 0;
@@ -98,10 +98,10 @@ export class CheckListComponent implements OnInit {
                         if (res !== null) {
                             this.checksHistory = res;
                             this.checksHistory = this.checksHistory.sort((a, b): number => {
-                                if (a.id < b.id) {
+                                if (a.id > b.id) {
                                     return -1;
                                 }
-                                if (a.id > b.id) {
+                                if (a.id < b.id) {
                                     return 1;
                                 }
                                 return 0;
@@ -114,7 +114,7 @@ export class CheckListComponent implements OnInit {
     }
 
     openCheck(check: Check) {
-        this.router.navigate(['/check-list/check-to-pay-info', check.id])
+        this.router.navigate(['/check-list/check-info', check.id])
             .catch(reason => console.log('ups') );
     }
 

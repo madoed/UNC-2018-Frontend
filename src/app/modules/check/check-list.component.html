@@ -25,17 +25,17 @@
           <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
               <mat-grid-tile *ngFor="let check of checksToPay" style="border-style: ridge;
-                            height: 40px; cursor: pointer;" >
+                            height: 40px;" >
                 <!--<mat-card [style.width]="'100%'"  style="cursor: pointer;">-->
 
                   <div  >
                       <div style="height: 40px; width: 600px;" >
                         <a >
                           <h3 class="title" (click)="openCheck(check)"
-                              style="float: left; margin-left: 150px;"> To {{check.name}}
+                              style="float: left; margin-left: 150px;  cursor: pointer;"> To {{check.name}}
                           </h3>
-                          <button mat-raised-button color="primary" [routerLink]="['/check-list/check-to-pay-info', check.id]"
-                                  style="float: right; margin-right: -150px; float: top; margin-top: 20px;">
+                          <button mat-raised-button color="primary" [routerLink]="['/check-list/check-pay', check.id]"
+                                  style="float: right; margin-right: -150px; float: top; margin-top: 10px;">
                             Pay
                           </button>
                         </a>
@@ -67,16 +67,16 @@
           <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
               <mat-grid-tile *ngFor="let check of checksFromOwners"
-                             style="border-style: ridge; height: 40px; cursor: pointer;" >
+                             style="border-style: ridge; height: 40px;" >
                 <!--<mat-card [style.width]="'100%'" style="cursor: pointer;">-->
                 <div  >
                   <div style="height: 40px; width: 600px;" >
                     <a >
                       <h3 class="title" (click)="openCheck(check)"
-                          style="float: left; margin-left: 150px;"> From  {{check.checkOwner.name}}
+                          style="float: left; margin-left: 150px; cursor: pointer;"> From  {{check.checkOwner.name}}
                       </h3>
                       <button mat-raised-button color="primary"(click)="fixCheck(check)"
-                              style="float: right; margin-right: -150px; float: top; margin-top: 20px;">
+                              style="float: right; margin-right: -150px; float: top; margin-top: 10px;">
                         Mark as payed
                       </button>
                     </a>
@@ -97,38 +97,6 @@
                   </h3>
                 </div>
 
-
-                  <!--<div  >-->
-                    <!--<div style="height: 40px;" >-->
-                    <!--<a >-->
-                      <!--<h3 class="title" (click)="openCheck(check)"-->
-                          <!--style="float: left; margin-left: 400px;">-->
-                        <!--From {{check.name}}-->
-                      <!--</h3>-->
-                      <!--<button mat-raised-button color="primary" (click)="fixCheck(check)"-->
-                              <!--style="float: right;  margin-right: 5px;">-->
-                        <!--Mark as payed-->
-                      <!--</button>-->
-                    <!--</a>-->
-                  <!--</div>-->
-                    <!--<br />-->
-
-                      <!--<h3 style="color: #989898" align="left" >-->
-                        <!--<span align="left" class="meeting-title" style="color:steelblue"> Data: </span>-->
-                        <!--{{parse(check.checkOwner.participantOfMeeting.dateOfMeeting.toString())}}-->
-                        <!--<span align="left" class="meeting-title"style="color:steelblue; margin-left: 50px;">-->
-                        <!--From meeting:-->
-                      <!--</span>{{check.checkOwner.participantOfMeeting.name}}-->
-                        <!--<span align="left" class="meeting-title"style="color:steelblue;float: right; margin-right: 60px;">-->
-                        <!--Amount:-->
-                        <!--<span style="color: #989898;">-->
-                          <!--{{check.checkAmount}}-->
-                        <!--</span>-->
-                      <!--</span>-->
-                      <!--</h3>-->
-
-                  <!--</div>-->
-                <!--</mat-card>-->
               </mat-grid-tile>
             </mat-grid-list>
           </div>
@@ -138,13 +106,13 @@
           <div class="basic-container">
             <mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">
               <mat-grid-tile *ngFor="let check of checksHistory" style="border-style: ridge;
-              height: 40px; cursor: pointer;" >
+              height: 40px; " >
 
                   <div  >
                     <div style="height: 40px; width: 600px;" >
                       <a >
                         <h3 class="title" (click)="openCheck(check)"
-                            style="float: left; margin-left: 150px;">
+                            style="float: left; margin-left: 150px;  cursor: pointer;">
                           {{check.checkOwner.meetingParticipant.id===myId? 'To ':'From '}}
                           {{check.checkOwner.meetingParticipant.id===myId? check.name: check.checkOwner.name}}
                         </h3>
