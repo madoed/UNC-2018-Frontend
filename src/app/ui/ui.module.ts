@@ -47,7 +47,7 @@ import {
     ToolbarModule,
     SidebarModule,
     TooltipModule,
-    PasswordModule
+    PasswordModule, ProgressBarModule
 } from 'primeng/primeng';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
@@ -109,7 +109,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PasswordModule,
     DataViewModule,
     PaginatorModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ProgressBarModule
   ],
   declarations: [],
   exports: [
@@ -163,7 +164,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PasswordModule,
     DataViewModule,
     PaginatorModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ProgressBarModule
   ],
   providers: [
     MessageService,

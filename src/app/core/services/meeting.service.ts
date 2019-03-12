@@ -53,6 +53,11 @@ export class MeetingService {
         result => console.log(result));
   }
 
+  changeMeetingStatus(status: string, id: number) {
+        this.apiService.post('http://127.0.0.1:8000/meeting-status/' + id, status) .subscribe(
+            result => console.log(result));
+  }
+
   setTime(date: Date, id: number) {
       this.apiService.post('http://127.0.0.1:8000/meeting-time/' + id, date) .subscribe(
           result => console.log(result));
@@ -121,6 +126,10 @@ export class MeetingService {
 
     addParticipants(participants: Participant[], id: number): Observable<any> {
         return this.http.post('http://127.0.0.1:8000/meeting-add-participants/' + id , participants);
+    }
+
+    addParticipant(participant: Participant, id: number): Observable<any> {
+        return this.http.post('http://127.0.0.1:8000/meeting-add-participant/' + id , participant);
     }
 
     confirmParticipation(participantId: number) {

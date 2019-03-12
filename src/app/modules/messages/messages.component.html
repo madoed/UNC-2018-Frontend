@@ -3,7 +3,7 @@
   <mat-card>
     <mat-card-header background-color="accent">
       <mat-card-actions>
-        <button mat-raised-button color="accent" [routerLink]="['/chat']" ><mat-icon color="white">arrow_back</mat-icon></button>
+        <button mat-raised-button color="primary" [routerLink]="['/chat']" ><mat-icon color="white">arrow_back</mat-icon></button>
       </mat-card-actions>
       <h1 class = "myFont"  style="margin-left: 150px">{{channel.chatName}}</h1>
     </mat-card-header>
@@ -27,7 +27,7 @@
               (keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>
 
     </div>
-    <div id="c2"  style="margin-right: 40px"><button mat-raised-button color="accent" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>
+    <div id="c2"  style="margin-right: 40px"><button mat-raised-button color="primary" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>
   </div>
 
 </div>

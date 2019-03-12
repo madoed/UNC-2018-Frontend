@@ -74,7 +74,7 @@
                         style="margin-left: 10px;">
                     Map
                 </button>
-                <span style="margin-left: 10px;">{{markerTitle?markerTitle:"No place"}}</span>
+                <span style="margin-left: 10px;" *ngIf="meeting">{{meeting.meetingLocation?meeting.meetingLocation.placeName:"No place"}}</span>
 
             </div>
             <br />
@@ -98,37 +98,162 @@
          </p-footer>
     </p-dialog>
 
+    <p-dialog [(visible)]="showMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+              [maximizable]="false" [baseZIndex]="10000">
 
+        <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlaysPoll"
+                (onMapClick)="handleMapClick($event)" (onOverlayDragEnd)="handleDragEnd($event)"></p-gmap>
+
+        <button mat-raised-button color="primary" type="button" (click)="zoomIn(gmap.getMap())" style="margin-left: 10px">
+            <mat-icon>zoom_in</mat-icon></button>
+        <button mat-raised-button color="primary" type="button" (click)="zoomOut(gmap.getMap())" style="margin-left: 10px">
+            <mat-icon>zoom_out</mat-icon></button>
+
+        <p-dialog showEffect="fade" [(visible)]="dialogVisible" header="New Location">
+            <div class="ui-g ui-fluid" *ngIf="selectedPosition">
+                <div class="ui-g-2"><label for="title">Label</label></div>
+                <div class="ui-g-10"><input type="text" pInputText  [(ngModel)]="markerTitle2"></div>
+
+                <div class="ui-g-2"><label for="lat">Lat</label></div>
+                <div class="ui-g-10"><input  type="text" readonly pInputText [ngModel]="selectedPosition.lat()"></div>
+
+                <div class="ui-g-2"><label for="lng">Lng</label></div>
+                <div class="ui-g-10"><input  type="text" readonly pInputText [ngModel]="selectedPosition.lng()"></div>
+            </div>
+            <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                    <button mat-raised-button color="primary" type="button" [disabled]="!markerTitle2"
+                            (click)="addPlaceOnMap()">
+                        Add</button>
+                </div>
+            </p-footer>
+        </p-dialog>
+    </p-dialog>
+
+    <p-dialog header="Add participants" [(visible)]="showAddParticipants" [responsive]="true" [style]="{ minWidth: '100px'}" [minY]="70"
+              [maximizable]="false" [baseZIndex]="10000">
+
+        <mat-card-content style="width: 400px;">
+            <div>
+                <mat-card-header background-color="accent">
+                    <h2  style="margin-left: 50px" >Invite friends </h2>
+                    <mat-card-actions>
+                        <button mat-raised-button color="primary" style="margin-left: 50px" (click)="add()"
+                                [disabled]="!fixedUser">Invite</button>
+                    </mat-card-actions>
+                </mat-card-header>
+
+                <mat-card-content >
+
+                    <mat-list>
+                        <mat-list-item *ngFor="let user of users">
+                            <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
+                            <h3 mat-line>
+                                <a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+                            </h3>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+            </div>
+        </mat-card-content>
+        <p-footer>
+            <button mat-raised-button color="primary" type="button" (click)="showAddParticipants = false;">
+                Close</button>
+        </p-footer>
+    </p-dialog>
 
     <div style="margin-top: 20px;">
         <div flex style="float: left; width: 530px; ">
-            <mat-card *ngIf="mark_info" style="  height: fit-content">
+            <mat-card *ngIf="mark_info" style="height: fit-content">
                 <mat-card-header >Vote for Place</mat-card-header>
                 <br />
                 <mat-divider></mat-divider>
                 <mat-card-actions>
                     <button mat-raised-button color="primary" *ngIf="meeting.pollForPlaceOpen===0" style="float: bottom;
-                    float: right; margin-right: 20px; margin-bottom: 30px;">
+                    float: right; margin-right: 20px; margin-bottom: 30px;" (click)="openVoteForPlace()">
                         Open vote
                     </button>
+                    <button mat-raised-button color="primary" *ngIf="meeting.pollForPlaceOpen===1" style="float: bottom;
+                    float: right; margin-right: 20px; margin-bottom: 30px;" (click)="closeVoteForPlace()">
+                        Close vote
+                    </button>
                 </mat-card-actions>
-                <mat-card-content>
-                    thjy
+                <mat-card-content *ngIf="meeting.pollForPlaceOpen===1">
+                    <br />
+                    <br />
+                    <mat-list>
+                        <mat-list-item *ngFor="let place of placePoll">
+                            <div style="width: 200px;">
+                                <button mat-raised-button (click)="setAsMain(place.oneLocation)">
+                                    {{place.oneLocation.placeName}}
+                                </button>
+                            </div>
+                            <div style="width: 100px;">
+                                <button mat-raised-button  (click)="voteForPlace(place.id)">
+                                    {{voted(place)?"unvote":"vote"}}
+                                </button>
+                            </div>
+                            <div style="width: 200px; margin-left: 100px;">
+                            <p-progressBar [showValue]="false" [value]="place.voicesForLocation.length*100/meeting.amountOfParticipants"></p-progressBar>
+                            </div>
+
+                        </mat-list-item>
+                    </mat-list>
                 </mat-card-content>
+                <mat-card-content *ngIf="meeting.pollForPlaceOpen===0">
+                    <br />
+                </mat-card-content>
+                <mat-card-footer *ngIf="meeting.pollForPlaceOpen===1">
+                    <button mat-raised-button color="primary" (click)="addPlace()"
+                            style="margin-left: 10px; margin-bottom: 10px;">
+                        Add place
+                    </button>
+                </mat-card-footer>
             </mat-card>
-        <mat-card *ngIf="mark_info" style="margin-top: 20px;  height: fit-content">
+
+            <mat-card *ngIf="mark_info" style="height: fit-content;margin-top: 40px;">
                 <mat-card-header >Vote for Date</mat-card-header>
                 <br />
                 <mat-divider></mat-divider>
                 <mat-card-actions>
-                   <button mat-raised-button color="primary"  style="float: bottom;
-                      float: right; margin-right: 20px; margin-bottom: 30px;">
-                      Open vote
-                   </button>
+                    <button mat-raised-button color="primary" *ngIf="meeting.pollForDateOpen===0" style="float: bottom;
+                    float: right; margin-right: 20px; margin-bottom: 30px;" (click)="openVoteForDate()">
+                        Open vote
+                    </button>
+                    <button mat-raised-button color="primary" *ngIf="meeting.pollForDateOpen===1" style="float: bottom;
+                    float: right; margin-right: 20px; margin-bottom: 30px;" (click)="closeVoteForDate()">
+                        Close vote
+                    </button>
                 </mat-card-actions>
-                <mat-card-content>
-                    fghngh
+                <mat-card-content *ngIf="meeting.pollForDateOpen===1">
+                    <br />
+                    <br />
+                    <mat-list>
+                        <mat-list-item *ngFor="let date of datePoll">
+                            <div style="width: 300px;">
+                                {{parser(date.name)}}</div>
+                            <div style="width: 200px;">
+                            <button mat-raised-button (click)="voteForDate(date.id)">
+                                {{votedDate(date)?"unvote":"vote"}}
+                            </button>
+                            </div>
+                            <div style="width: 200px; margin-left: 100px;">
+                                <p-progressBar [showValue]="false" [value]="date.voicesForDate.length*100/meeting.amountOfParticipants"></p-progressBar>
+                            </div>
+
+                        </mat-list-item>
+                    </mat-list>
                 </mat-card-content>
+                <mat-card-content *ngIf="meeting.pollForDateOpen===0">
+                    <br />
+                </mat-card-content>
+                <mat-card-footer *ngIf="meeting.pollForDateOpen===1">
+                    <h3 style="margin-left: 30px;" class="first">Add new date</h3>
+                    <div style="margin-left: 30px; margin-bottom: 10px;">
+                        <p-calendar [(ngModel)]="dateForVote" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="addDate()" >
+                        </p-calendar>
+                    </div>
+                </mat-card-footer>
             </mat-card>
 
             <mat-card *ngIf="mark_info" style="margin-top: 40px; height: fit-content">
@@ -138,7 +263,7 @@
                 <mat-divider></mat-divider>
                 <mat-card-actions>
                     <button mat-raised-button color="primary"  style="
-                         float: right; margin-right: 20px;">
+                         float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
                         <mat-icon>add_circle_outline</mat-icon>
                     </button>
                     <br />
@@ -148,7 +273,11 @@
                         <mat-list-item *ngFor="let participant of participants">
                             <img mat-list-avatar src="{{participant.meetingParticipant.avatarUrl}}" onerror="this.src='./user.png';">
                             <h3 mat-line>
-                                <a mat-raised-button [style.width]="'200px'">{{participant.meetingParticipant.name}}</a>
+                                <a mat-raised-button [style.width]="'200px'">{{participant.meetingParticipant.name}} -
+                                    <span style="color: steelblue;">
+                                    {{participant.statusOfConfirmation}}
+                                </span>
+                                </a>
                             </h3>
                         </mat-list-item>
                     </mat-list>

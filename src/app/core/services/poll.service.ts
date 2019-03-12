@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ApiService, AuthService, Meeting, Participant} from '@app/core';
+import {ApiService, AuthService, Meeting, Participant, Place} from '@app/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Meetinglocation} from '@app/core/models/meetinglocation';
@@ -24,5 +24,33 @@ export class PollService {
 
     closePlacePoll(meetingId: number): Observable<any> {
         return this.http.get(this.MEETING_API + '/meeting-place-poll-close/' + meetingId);
+    }
+
+    addPlaceInPoll(location: Place, participantId: number): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-place-poll-add/' + participantId, location);
+    }
+
+    voteForPlace (meetingLocationId: number): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-place-poll-vote/' + this.authService.user.id, meetingLocationId);
+    }
+
+    getDatePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-date-poll/' + meetingId);
+    }
+
+    openDatePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-date-poll-open/' + meetingId);
+    }
+
+    closeDatePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-date-poll-close/' + meetingId);
+    }
+
+    addDateInPoll(date: Date, participantId: number): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-date-poll-add/' + participantId, date);
+    }
+
+    voteForDate (dateId: number): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-date-poll-vote/' + this.authService.user.id, dateId);
     }
 }

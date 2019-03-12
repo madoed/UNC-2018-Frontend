@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Meeting} from '@app/core/models/meeting.model';
 import {MeetingService} from '@app/core/services/meeting.service';
-import {AuthService, Participant, Place} from '@app/core';
+import {AuthService, Participant, Place, User} from '@app/core';
 import {FormControl} from '@angular/forms';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
 import {MetadataOverride} from '@angular/core/testing';
@@ -51,9 +51,19 @@ declare var google: any;
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+    dateForVote: Date;
 
+    showAddParticipants: boolean = false;
+    users: Array<any>;
+    fixedUserId;
+    fixedUser: User;
+
+    me = {} as User;
     placePoll: Meetinglocation[];
     datePoll: DatePoll[];
+    showMap: boolean = false;
+    overlaysPoll: any[];
+    markerTitle2: string;
 
     openMap: boolean;
     options: any;
@@ -124,6 +134,28 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
         return isNaN(timestamp) ? null : new Date(timestamp);
     }
 
+    // parser(value: any): String | '' {
+    //     if ((typeof value === 'string')) {
+    //         const str = value.split('-');
+    //         const year = str[0];
+    //         const month = str[1];
+    //         const date = (Number(str[2].split('T')[0]) + 1).toString();
+    //         return date + '/ ' + month + '/ ' + year;
+    //     }
+    //     return '';
+    // }
+
+    parser(value: any): String | '' {
+        if ((typeof value === 'string')) {
+            const str = value.split(' ');
+            const year = str[5];
+            const month = str[1];
+            const date = str[2];
+            return date + ' ' + month + ' ' + year;
+        }
+        return '';
+    }
+
     parseTime(value: any): Date|null {
         if ((typeof value === 'string')) {
             let str = value.split('T');
@@ -166,16 +198,61 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
         this.meetingService.getByParticipant(id).subscribe((participant: any) => {
           if (participant) {
             this.participant = participant;
+            this.me = this.participant.meetingParticipant;
             this.meetingService.setParticipant(participant);
 
               this.meetingService.getMeeting(this.participant.participantOfMeeting.id).subscribe((meeting: any) => {
                   if (meeting) {
                       console.log(meeting);
                       this.meeting = meeting;
+                      if (this.meeting.meetingLocation) {
+                          this.markerTitle = this.meeting.meetingLocation.placeName;
+                          this.overlays.push(new google.maps.Marker({
+                              position:
+                                  {lat: Number(this.meeting.meetingLocation.lat), lng: Number(this.meeting.meetingLocation.lng)},
+                              title: this.meeting.meetingLocation.placeName
+                          }));
+                      }
                       this.meetingService.setMeeting(meeting);
-                      if (this.meeting.pollForPlaceOpen === 0) {
+                      this.overlaysPoll = [];
+                      if (this.meeting.pollForPlaceOpen === 1) {
                           this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
-                              this.placePoll = poll;
+                              if (poll) {
+                                  this.placePoll = poll;
+                                  this.placePoll = this.placePoll.sort((a, b): number => {
+                                      if (a.id > b.id) {
+                                          return 1;
+                                      }
+                                      if (a.id < b.id) {
+                                          return -1;
+                                      }
+                                      return 0;
+                                  });
+                                  this.placePoll.forEach(item => {
+                                      this.overlaysPoll.push(new google.maps.Marker({
+                                          position:
+                                              {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                                          title: item.oneLocation.placeName
+                                      }));
+                                  });
+                              }
+                          });
+                      }
+
+                      if (this.meeting.pollForDateOpen === 1) {
+                          this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
+                              if (poll) {
+                                  this.datePoll = poll;
+                                  this.datePoll = this.datePoll.sort((a, b): number => {
+                                      if (a.id > b.id) {
+                                          return 1;
+                                      }
+                                      if (a.id < b.id) {
+                                          return -1;
+                                      }
+                                      return 0;
+                                  });
+                              }
                           });
                       }
 
@@ -252,8 +329,18 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       }
                       this.meetingService.getParticipants().subscribe(data => {
                           this.participants = data;
-                          console.log(data);
-                      });
+                          this.meetingService.getFriends().subscribe(fr => {
+                              this.users = fr;
+                              this.participants.forEach(part => {
+                                  if (this.users) {
+                                      this.users = this.users.filter(item => item.id !== part.meetingParticipant.id);
+                                  }
+                              });
+                          });
+                          if (this.participants) {
+                              this.participants = this.participants.filter(item => item.meetingParticipant.id !== this.me.id);
+                          }
+                        });
                       this.route.params = this.chatService.getChannel(this.meeting.meetingChat.id);
                       super.ngOnInit();
                       this.delay(2000).then(any => {
@@ -807,6 +894,33 @@ ngAfterViewInit() {
         this.meetingService.setLocation(place, this.meeting.id);
     }
 
+    addPlaceOnMap() {
+        this.dialogVisible = false;
+        let place = {} as Place;
+        place.lat = this.selectedPosition.lat();
+        place.lng = this.selectedPosition.lng();
+        place.placeName = this.markerTitle2;
+        this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
+        this.pollService.addPlaceInPoll(place, this.participant.id).subscribe(res => {
+          this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
+              if (places) {
+                  this.placePoll = places;
+                  this.placePoll = this.placePoll.sort((a, b): number => {
+                      if (a.id > b.id) {
+                          return 1;
+                      }
+                      if (a.id < b.id) {
+                          return -1;
+                      }
+                      return 0;
+                  });
+                  this.markerTitle = null;
+              }
+          });
+      });
+        //this.markerTitle = '';
+    }
+
     handleDragEnd(event) {
         this.messService.add({severity:'info', summary:'Marker Dragged', detail: event.overlay.getTitle()});
     }
@@ -831,6 +945,173 @@ ngAfterViewInit() {
     //           console.log(res);
     //       });
     // }
+
+    openVoteForPlace() {
+      this.pollService.openPlacePoll(this.meeting.id).subscribe(res => {
+          this.meeting = res;
+          this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
+              if (places) {
+                  this.placePoll = places;
+              }
+          });
+      });
+    }
+
+    voteForPlace(meetingLocationId: number) {
+      this.pollService.voteForPlace(meetingLocationId).subscribe(res => {
+          this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
+              if (places) {
+                  this.placePoll = places;
+                  this.placePoll = this.placePoll.sort((a, b): number => {
+                      if (a.id > b.id) {
+                          return 1;
+                      }
+                      if (a.id < b.id) {
+                          return -1;
+                      }
+                      return 0;
+                  });
+                  this.placePoll.forEach(item => {
+                      this.overlaysPoll.push(item.oneLocation);
+
+                  });
+              }
+          });
+      });
+    }
+
+    closeVoteForPlace() {
+        this.pollService.closePlacePoll(this.meeting.id).subscribe(res => {
+            this.meeting = res;
+            this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
+                if (places) {
+                    this.placePoll = places;
+                    this.placePoll = this.placePoll.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return 1;
+                        }
+                        if (a.id < b.id) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                    this.placePoll.forEach(item => {
+                        this.overlaysPoll.push(item.oneLocation);
+                    });
+                }
+            });
+        });
+    }
+
+    addPlace() {
+      this.showMap = true;
+    }
+
+    setAsMain(place: Place) {
+        this.meetingService.setLocation(place, this.meeting.id);
+    }
+
+    voted(place: Meetinglocation): boolean {
+      let checkOut = false;
+      place.voicesForLocation.forEach(voice => {
+          if (voice.id === this.me.id) {checkOut = true; }
+      });
+      return checkOut;
+    }
+
+    votedDate(date: DatePoll) {
+        let checkOut = false;
+        date.voicesForDate.forEach(voice => {
+            if (voice.id === this.me.id) {checkOut = true; }
+        });
+        return checkOut;
+    }
+
+    fix(user: User) {
+        this.fixedUserId = user.id;
+        this.fixedUser = user;
+    }
+
+    add() {
+        let participant = {} as Participant;
+        participant.statusOfConfirmation = 'not confirmed';
+        participant.meetingParticipant = this.fixedUser;
+        this.users = this.users.filter(item => item.id !== this.fixedUser.id);
+        this.meetingService.addParticipant(participant, this.meeting.id).subscribe(res => {
+            participant = res;
+            this.participants.push(participant);
+        });
+    }
+
+    openVoteForDate() {
+        this.pollService.openDatePoll(this.meeting.id).subscribe(res => {
+            this.meeting = res;
+            this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
+                if (dates) {
+                    this.datePoll = dates;
+                }
+            });
+        });
+    }
+
+    voteForDate(dateId: number) {
+        this.pollService.voteForDate(dateId).subscribe(res => {
+            this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
+                if (dates) {
+                    this.datePoll = dates;
+                    this.datePoll = this.datePoll.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return 1;
+                        }
+                        if (a.id < b.id) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                }
+            });
+        });
+    }
+
+    closeVoteForDate() {
+        this.pollService.closeDatePoll(this.meeting.id).subscribe(res => {
+            this.meeting = res;
+            this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
+                if (dates) {
+                    this.datePoll = dates;
+                    this.datePoll = this.datePoll.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return 1;
+                        }
+                        if (a.id < b.id) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                }
+            });
+        });
+    }
+
+    addDate() {
+        this.pollService.addDateInPoll(this.dateForVote, this.participant.id).subscribe(res => {
+            this.pollService.getDatePoll(this.meeting.id).subscribe(places => {
+                if (places) {
+                    this.datePoll = places;
+                    this.datePoll = this.datePoll.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return 1;
+                        }
+                        if (a.id < b.id) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+                }
+            });
+            this.dateForVote = null;
+        });
+    }
 }
 
 
