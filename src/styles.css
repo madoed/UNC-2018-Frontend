@@ -1,7 +1,24 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 
+* {
+    box-sizing: border-box;
+}
+  
+html, body {
+    height: 100%;
+  }
+
 body {
     margin: 0;
-    font-family: Roboto, sans-serif;
+    /*font-family: Roboto, sans-serif;*/
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: "Open Sans","Helvetica Neue",sans-serif;
+    font-weight: 400;
+    color: #333c40;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    background-color: rgba(180,207,208,0.43);
 }

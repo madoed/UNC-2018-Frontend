@@ -1,69 +1,30 @@
+<div class="wrapper">
+  <p-toolbar>
+    <div class="ui-toolbar-group-left">
+        <b style="margin-right: 15px; font-size: 20px;" routerLink="/">{{title}}</b>
+        <button pButton pInputText pTooltip="My Profile" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-home"
+        [routerLink]="['/user', authService.user.id]"></button>
+        <button pButton pTooltip="My Chats" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-envelope"
+        routerLink="/chat"></button>
+        <button pButton pTooltip="My Meetings" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-users"
+        routerLink="/meeting-list"></button>
+        <button pButton pTooltip="My Checkbook" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-dollar"
+        routerLink="/check-list"></button>
+    </div>
+    
+    <div class="ui-toolbar-group-right">
+        <button pButton pTooltip="Help" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-question"
+        routerLink="."></button>
+        <button pButton pTooltip="Search" tooltipPosition="bottom" type="button" icon="pi pi-search" class="ui-button-primary"
+        routerLink="/user/search"></button>
+        <button pButton pTooltip="Settings" tooltipPosition="bottom" type="button" icon="pi pi-cog" class="ui-button-primary"
+        routerLink="."></button>
+        <button pButton pTooltip="Log Out" tooltipPosition="bottom" type="button" icon="pi pi-power-off" class="ui-button-primary"
+        (click)="authService.logout()"></button>
+    </div>
+  </p-toolbar>
 
-<div class="container">
-  <!--Toolbar-->
-  <mat-toolbar color="secondary" class="header">
-    <mat-toolbar-row>
-      <h1 routerLink="/" class="logo">Meet Up</h1>
-      <span class="toolbar-filler"></span>
-
-      <a routerLink="/user/search">User Search</a>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <span>Settings</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="authService.logout()">
-          <span>Logout</span>
-        </button>
-      </mat-menu>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
-  <mat-sidenav-container class="sidenav-container">
-    <!--Sidenav-->
-    <mat-sidenav #snav opened disableClose mode="side" class="sidenav" [fixedInViewport]="true" [fixedTopGap]="65" [fixedBottomGap]="0">
-
-      <mat-nav-list>
-        <mat-list-item [routerLink]="['/user', authService.user.id]">
-            <i class="material-icons">home</i>
-            <a class="sidenav-item">My page</a>
-        </mat-list-item>
-
-        <mat-list-item routerLink="/chat">
-            <i class="material-icons">chat</i>
-            <a class="sidenav-item">My chats</a>
-        </mat-list-item>
-
-        <mat-list-item routerLink="/meeting-list">
-            <i class="material-icons">group</i>
-            <a class="sidenav-item">My meetings</a>
-        </mat-list-item>
-
-        <mat-list-item routerLink="/check-list">
-            <i class="material-icons">attach_money</i>
-            <a class="sidenav-item">My checkbook</a>
-        </mat-list-item>
-
-        <mat-list-item routerLink="/card-list">
-            <i class="material-icons">credit_card</i>
-            <a class="sidenav-item">My cards</a>
-        </mat-list-item>
-
-        <mat-list-item routerLink="/map">
-            <i class="material-icons">place</i>
-            <a class="sidenav-item">My maps</a>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-sidenav>
-
-    <!--Page content-->
-    <mat-sidenav-content style="background-color: rgba(180,207,208,0.43) !important">
-      <div class="content">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
 </div>
