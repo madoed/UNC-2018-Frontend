@@ -37,6 +37,6 @@ export class UserService {
   }
 
   update(user: User): Observable<User> {
-    return this.apiService.put(this.USERS_API, user);
+    return this.apiService.put(this.USERS_API + '/' + user.id, user);
   }
 }
