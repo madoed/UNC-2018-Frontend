@@ -3,6 +3,8 @@ import {MenuItem, MessageService as mes} from 'primeng/api';
 import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
+import {NgForm} from '@angular/forms';
+import {Card} from '@app/core/models/card.model';
 
 declare var google: any;
 
@@ -14,7 +16,11 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
-  cards: Array<any> = null;
+    card = {} as Card;
+    cards: Array<Card> = null;
+    showAddCard: boolean = false;
+    CVV: number;
+    lastFourNumbers: number;
   fixedCardId: number = null;
   users: Array<any>;
   fixedUserId;
@@ -25,7 +31,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 0;
+  activeIndex: number = 3;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;
@@ -62,7 +68,12 @@ export class MeetingCreateComponent implements OnInit {
     }
 
   ngOnInit() {
+      this.meeting.boss = this.authService.user;
+      this.meeting.status = 'new';
+      this.meeting.pollForPlaceOpen = 0;
+      this.meeting.pollForDateOpen = 0;
 
+      this.showAddCard = false;
       this.participants = [];
 
       this.options = {
@@ -112,6 +123,31 @@ export class MeetingCreateComponent implements OnInit {
           this.cards = data;
       });
   }
+
+    saveCard() {
+        if ((this.lastFourNumbers.toString().length !== 16) || (this.lastFourNumbers.toString().includes('.'))) {
+            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid card number'});
+        } else if (!this.card.nameSurname.includes(' ') || (this.card.nameSurname.indexOf(' ') ===
+            (this.card.nameSurname.length - 1))) {
+                this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid name on card'});
+        } else if (this.CVV.toString().length !== 3) {
+            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid CVV'});
+        } else {
+            this.card.lastFourNumbers = this.lastFourNumbers.toString();
+            this.card.owner = this.authService.user;
+            this.cardService.save(this.card).subscribe(result => {
+                //this.card = null;
+                this.cards.push(result);
+                this.showAddCard = false;
+                this.messService.add({severity: 'success', summary: 'Success Message', detail:'Card added'});
+            }, error => console.error(error));
+        }
+    }
+
+    removeCard(href) {
+        this.cardService.remove(href).subscribe(result => {
+        }, error => console.error(error));
+    }
 
     setCard(card: any) {
         this.fixedCardId = card.id;
@@ -179,8 +215,6 @@ export class MeetingCreateComponent implements OnInit {
     }
 
     createMeeting() {
-        this.meeting.boss = this.authService.user;
-        this.meeting.status = 'new';
         if (this.selectedPosition) {
             let place = {} as Place;
             place.lat = this.selectedPosition.lat();
@@ -190,6 +224,7 @@ export class MeetingCreateComponent implements OnInit {
         }
         this.meetingService.createMeeting(this.meeting).subscribe(data => {
             this.meeting = data;
+            this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
             let participant = {} as Participant;
             participant.statusOfConfirmation = 'confirmed';
             participant.meetingParticipant = this.authService.user;

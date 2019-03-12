@@ -107,7 +107,7 @@
                 <br />
                 <mat-divider></mat-divider>
                 <mat-card-actions>
-                    <button mat-raised-button color="primary"  style="float: bottom;
+                    <button mat-raised-button color="primary" *ngIf="meeting.pollForPlaceOpen===0" style="float: bottom;
                     float: right; margin-right: 20px; margin-bottom: 30px;">
                         Open vote
                     </button>

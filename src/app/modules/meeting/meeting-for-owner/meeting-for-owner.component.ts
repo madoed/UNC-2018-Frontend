@@ -19,6 +19,9 @@ import {MessageService as mes} from 'primeng/api';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Bill} from '@app/core/models/bill.model';
 import {CheckService} from '@app/core/services/check.service';
+import {Meetinglocation} from '@app/core/models/meetinglocation';
+import {PollService} from '@app/core/services/poll.service';
+import {DatePoll} from '@app/core/models/datepoll.model';
 
 
 
@@ -48,6 +51,9 @@ declare var google: any;
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+
+    placePoll: Meetinglocation[];
+    datePoll: DatePoll[];
 
     openMap: boolean;
     options: any;
@@ -142,7 +148,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
               public router: Router,
               messageService: MessageService,
               public chatService: ChatService,
-              private checkService: CheckService) {
+              private checkService: CheckService,
+              private pollService: PollService) {
     super(messageService, router, chatService, authService, route);
     const users: UserData[] = [];
     for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
@@ -150,6 +157,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
 
+    this.placePoll = null;
+    this.datePoll = null;
     this.targetCars = [];
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
@@ -161,8 +170,15 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
               this.meetingService.getMeeting(this.participant.participantOfMeeting.id).subscribe((meeting: any) => {
                   if (meeting) {
+                      console.log(meeting);
                       this.meeting = meeting;
                       this.meetingService.setMeeting(meeting);
+                      if (this.meeting.pollForPlaceOpen === 0) {
+                          this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+                              this.placePoll = poll;
+                          });
+                      }
+
                       this.meetingService.getBill(meeting.id).subscribe(item => {
                           console.log(item);
                          this.bill = item;

@@ -1,0 +1,28 @@
+import { Injectable } from '@angular/core';
+import {ApiService, AuthService, Meeting, Participant} from '@app/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Meetinglocation} from '@app/core/models/meetinglocation';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PollService {
+  public MEETING_API = 'http://127.0.0.1:8000';
+
+  constructor(private apiService: ApiService,
+              private authService: AuthService,
+              private http: HttpClient) { }
+
+    getPlacePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-place-poll/' + meetingId);
+    }
+
+    openPlacePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-place-poll-open/' + meetingId);
+    }
+
+    closePlacePoll(meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-place-poll-close/' + meetingId);
+    }
+}

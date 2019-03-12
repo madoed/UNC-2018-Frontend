@@ -15,4 +15,6 @@ export interface Meeting {
   name: string;
   amountOfParticipants: number;
   timeOfMeeting: Date;
+  pollForPlaceOpen: number;
+  pollForDateOpen: number;
 }
