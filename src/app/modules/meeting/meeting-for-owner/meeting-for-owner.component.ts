@@ -1008,7 +1008,11 @@ ngAfterViewInit() {
     }
 
     setAsMain(place: Place) {
-        this.meetingService.setLocation(place, this.meeting.id);
+        this.meetingService.setLocation(place, this.meeting.id).subscribe( loc => {
+            this.meetingService.getMeeting(this.meeting.id).subscribe(res => {
+                this.meeting = res;
+            });
+        });
     }
 
     voted(place: Meetinglocation): boolean {

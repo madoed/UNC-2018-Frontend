@@ -6,6 +6,7 @@ import {MeetingRoutingModule} from '@app/modules/meeting/meeting-routing.module'
 import {MeetingForOwnerComponent} from '@app/modules/meeting/meeting-for-owner/meeting-for-owner.component';
 import {MeetingCreateComponent} from '@app/modules/meeting/meeting-create/meeting-create.component';
 import {AgmCoreModule} from '@agm/core';
+import {MeetingForParticipantComponent} from '@app/modules/meeting/meeting-for-participant/meeting-for-participant.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import {AgmCoreModule} from '@agm/core';
     MeetingRoutingModule
   ],
   providers: [],
-  declarations: [MeetingListComponent, MeetingForOwnerComponent, MeetingCreateComponent ]
+  declarations: [MeetingListComponent, MeetingForOwnerComponent, MeetingCreateComponent, MeetingForParticipantComponent ]
 })
 export class MeetingListModule { }

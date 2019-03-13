@@ -98,13 +98,13 @@ export class MeetingListComponent implements OnInit {
     console.log(meeting);
     this.meetingService.getMeeting(meeting.participantOfMeeting.id).subscribe((meet: Meeting) => {
       if (meet) {
-        this.meeting = meet;
-        this.meetingService.setMeeting(this.meeting);
-        if (this.meeting.boss.id === this.authService.user.id) {
-          this.router.navigate(['/meeting-list/meeting-main', meeting.id]);
-        }
-      } else {
-        console.log(`another boss`);
+          this.meeting = meet;
+          this.meetingService.setMeeting(this.meeting);
+          if (this.meeting.boss.id === this.authService.user.id) {
+              this.router.navigate(['/meeting-list/meeting-main', meeting.id]);
+          } else {
+              this.router.navigate(['/meeting-list/meeting-participant', meeting.id]);
+          }
       }
     });
   }

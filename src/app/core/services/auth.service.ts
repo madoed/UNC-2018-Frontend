@@ -25,6 +25,15 @@ export class AuthService {
             lastName: "Smith",
             email: "alice@example.com"
           };
+            // if (this.isLoggedIn()) {
+            //     //this.userDetails = await this.keycloakService.loadUserProfile();
+            //     this.userDetails = {
+            //         id: "ooo",
+            //         username: "bob",
+            //         firstName: "Bob",
+            //         lastName: "Wilde",
+            //         email: "bob@example.com"
+            //     };
           this.user = await this.getCurrentUser();
         }
     }

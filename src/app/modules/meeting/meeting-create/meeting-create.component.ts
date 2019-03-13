@@ -31,7 +31,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 3;
+  activeIndex: number = 0;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;

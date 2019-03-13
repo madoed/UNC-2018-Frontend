@@ -9,6 +9,8 @@ import {CardListComponent} from '@app/modules/card/card-list/card-list.component
 import {CardEditComponent} from '@app/modules/card/card-edit/card-edit.component';
 import {CardPayComponent} from '@app/modules/card/card-pay/card-pay.component';
 import {MeetingCreateComponent} from '@app/modules/meeting/meeting-create/meeting-create.component';
+import {MeetingForParticipantModule} from '@app/modules/meeting/meeting-for-participant/meeting-for-participant.module';
+import {MeetingForParticipantComponent} from '@app/modules/meeting/meeting-for-participant/meeting-for-participant.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,13 @@ const routes: Routes = [
     // этот параметр говорит, что только авторизованные пользователи видят эту страницу
     //canActivate: [AuthGuard]
   },
+  {
+        path: 'meeting-participant/:id',
+        component: MeetingForParticipantComponent,
+
+        // этот параметр говорит, что только авторизованные пользователи видят эту страницу
+        //canActivate: [AuthGuard]
+   },
   {
     path: 'create',
     component: MeetingCreateComponent,

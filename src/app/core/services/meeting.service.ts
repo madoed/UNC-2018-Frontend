@@ -63,9 +63,8 @@ export class MeetingService {
           result => console.log(result));
   }
 
-  setLocation(place: Place, id: number) {
-      this.apiService.post('http://127.0.0.1:8000/meeting-location/' + id, place) .subscribe(
-          result => console.log(result));
+  setLocation(place: Place, id: number): Observable<any> {
+      return this.apiService.post('http://127.0.0.1:8000/meeting-location/' + id, place);
   }
 
   getParticipants(): Observable<Participant[]> {
