@@ -197,7 +197,7 @@
                                 </button>
                             </div>
                             <div style="width: 200px; margin-left: 100px;">
-                            <p-progressBar [showValue]="false" [value]="place.voicesForLocation.length*100/meeting.amountOfParticipants"></p-progressBar>
+                            <p-progressBar [showValue]="true" [value]="place.percentageForPlace"></p-progressBar>
                             </div>
 
                         </mat-list-item>
@@ -241,7 +241,7 @@
                             </button>
                             </div>
                             <div style="width: 200px; margin-left: 100px;">
-                                <p-progressBar [showValue]="true" [value]="date.voicesForDate.length*100/meeting.amountOfParticipants"></p-progressBar>
+                                <p-progressBar [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
                             </div>
 
                         </mat-list-item>

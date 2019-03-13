@@ -120,7 +120,11 @@ export class MeetingCreateComponent implements OnInit {
       ];
 
       this.cardService.getAll(this.authService.user.id).subscribe(data => {
-          this.cards = data;
+          if (data) {
+              this.cards = data;
+          } else {
+              this.cards = [];
+          }
       });
   }
 

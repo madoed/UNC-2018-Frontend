@@ -6,4 +6,5 @@ export interface Meetinglocation {
     locationOfMeeting: Meeting;
     suggesterOfLocation: User;
     voicesForLocation: User[];
+    percentageForPlace: number;
 }

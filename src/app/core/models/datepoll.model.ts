@@ -6,4 +6,5 @@ export interface DatePoll {
     suggesterOfDate: User;
     voicesForDate: User[];
     dateOption: Date;
+    percentageForDate: number;
 }
