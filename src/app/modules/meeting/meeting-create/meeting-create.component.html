@@ -166,7 +166,7 @@
                         <mat-card-header background-color="accent">
                             <h2  style="margin-left: 200px" >Invite friends </h2>
                             <mat-card-actions>
-                                <button mat-raised-button color="primary" style="margin-left: 370px" (click)="add()"
+                                <button mat-raised-button style="margin-left: 370px" (click)="add()"
                                         [disabled]="!fixedUser">Invite</button>
                             </mat-card-actions>
                         </mat-card-header>
@@ -177,7 +177,10 @@
                                 <mat-list-item *ngFor="let user of users">
                                     <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
                                     <h3 mat-line>
-                                        <a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+                                        <a mat-raised-button (click)="fix(user)" style="background-color: white!important;
+                                        color: black!important;"
+                                           [style.width]="'200px'"
+                                           [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
                                     </h3>
                                 </mat-list-item>
                             </mat-list>
@@ -236,7 +239,8 @@
                                 <mat-card-content >
                                     <mat-list >
                                         <mat-list-item *ngFor="let card of cards">
-                                            <button style="width: 250px!important;"
+                                            <button style="width: 250px!important; background-color: white!important;
+                                                    color: black!important;"
                                                     mat-raised-button [style.border-style]="card.id === fixedCardId? 'solid':'ridge'"
                                                     (click)="setCard(card)">**** **** **** {{card.lastFourNumbers}}</button>
                                         </mat-list-item>

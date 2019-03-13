@@ -61,7 +61,8 @@
         </p-panel>
         <mat-card-actions>
             <div style="margin-left: 40px; margin-top: 10px;">
-            <p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()" >
+            <p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()"
+                        [style]="{'background-color': 'black'}">
             </p-calendar>
                 <span style="margin-left: 30px"></span>
 
@@ -149,7 +150,8 @@
                         <mat-list-item *ngFor="let user of users">
                             <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
                             <h3 mat-line>
-                                <a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+                                <a mat-raised-button style="background-color: white!important;
+                                        color: black!important;" (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
                             </h3>
                         </mat-list-item>
                     </mat-list>
@@ -184,7 +186,8 @@
                     <mat-list>
                         <mat-list-item *ngFor="let place of placePoll">
                             <div style="width: 200px;">
-                                <button mat-raised-button (click)="setAsMain(place.oneLocation)">
+                                <button mat-raised-button style="background-color: white!important;
+                                        color: black!important;" (click)="setAsMain(place.oneLocation)">
                                     {{place.oneLocation.placeName}}
                                 </button>
                             </div>
@@ -238,7 +241,7 @@
                             </button>
                             </div>
                             <div style="width: 200px; margin-left: 100px;">
-                                <p-progressBar [showValue]="false" [value]="date.voicesForDate.length*100/meeting.amountOfParticipants"></p-progressBar>
+                                <p-progressBar [showValue]="true" [value]="date.voicesForDate.length*100/meeting.amountOfParticipants"></p-progressBar>
                             </div>
 
                         </mat-list-item>
@@ -273,7 +276,9 @@
                         <mat-list-item *ngFor="let participant of participants">
                             <img mat-list-avatar src="{{participant.meetingParticipant.avatarUrl}}" onerror="this.src='./user.png';">
                             <h3 mat-line>
-                                <a mat-raised-button [style.width]="'200px'">{{participant.meetingParticipant.name}} -
+                                <a mat-raised-button style="background-color: white!important;
+                                        color: black!important;"
+                                   [style.width]="'200px'">{{participant.meetingParticipant.name}} -
                                     <span style="color: steelblue;">
                                     {{participant.statusOfConfirmation}}
                                 </span>
@@ -336,12 +341,12 @@
                                 <div style="margin-top: 40px" style="height: fit-content; width: 558px;">
 
                                     <p-table [columns]="cols" [value]="billItems" selectionMode="single" [(selection)]="selectedCar"
-                                             (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15" >
-                                        <ng-template pTemplate="header" let-columns >
+                                             (onRowSelect)="onRowSelect($event)" [paginator]="false">
+                                        <ng-template pTemplate="header" let-columns  >
                                             <tr>
                                                 <th *ngFor="let col of columns" [pSortableColumn]="col.field"  >
                                                     {{col.header}}
-                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+
                                                 </th>
                                             </tr>
                                         </ng-template>

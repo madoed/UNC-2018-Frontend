@@ -86,9 +86,7 @@ input{
 .message-container {
     overflow-y: auto;
     height: 400px;
-    border-color: black;
     background-color: white;
-    border-style: solid
 }
 
 .message-input {
@@ -106,5 +104,3 @@ input{
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
 }
-
-

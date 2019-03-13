@@ -20,5 +20,16 @@ body {
     color: #333c40;
     -webkit-font-smoothing: antialiased;
     font-size: 14px;
-    background-color: rgba(180,207,208,0.43);
+    background-color: #edeef0;
+}
+
+
+
+.bl .ui-toolbar {
+    background-color: #007ad9 !important;
+}
+
+.mat-raised-button:not([disabled]){
+    background-color: #007ad9 !important;
+    color: white !important;
 }

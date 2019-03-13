@@ -149,7 +149,8 @@
             <mat-list-item *ngFor="let user of users">
               <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
               <h3 mat-line>
-                <a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+                <a mat-raised-button style="background-color: white!important;
+                                        color: black!important;"(click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
               </h3>
             </mat-list-item>
           </mat-list>
@@ -175,7 +176,8 @@
           <mat-list>
             <mat-list-item *ngFor="let place of placePoll">
               <div style="width: 200px;">
-                <button mat-raised-button >
+                <button mat-raised-button style="background-color: white!important;
+                                        color: black!important;">
                   {{place.oneLocation.placeName}}
                 </button>
               </div>
@@ -250,7 +252,8 @@
             <mat-list-item *ngFor="let participant of participants">
               <img mat-list-avatar src="{{participant.meetingParticipant.avatarUrl}}" onerror="this.src='./user.png';">
               <h3 mat-line>
-                <a mat-raised-button [style.width]="'200px'">{{participant.meetingParticipant.name}} -
+                <a mat-raised-button style="background-color: white!important;
+                                        color: black!important;" [style.width]="'200px'">{{participant.meetingParticipant.name}} -
                   <span style="color: steelblue;">
                                     {{participant.statusOfConfirmation}}
                                 </span>
@@ -313,12 +316,12 @@
                 <div style="margin-top: 40px" style="height: fit-content; width: 558px;">
 
                   <p-table [columns]="cols" [value]="billItems" selectionMode="single" [(selection)]="selectedCar"
-                           (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15" >
-                    <ng-template pTemplate="header" let-columns >
+                           (onRowSelect)="onRowSelect($event)" [paginator]="false">
+                    <ng-template pTemplate="header" let-columns  >
                       <tr>
                         <th *ngFor="let col of columns" [pSortableColumn]="col.field"  >
                           {{col.header}}
-                          <p-sortIcon [field]="col.field"></p-sortIcon>
+
                         </th>
                       </tr>
                     </ng-template>

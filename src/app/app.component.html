@@ -1,14 +1,14 @@
 <div class="wrapper">
-  <p-toolbar>
+  <p-toolbar [class]="'bl'">
     <div class="ui-toolbar-group-left">
-        <b style="margin-right: 15px; font-size: 20px;" routerLink="/">{{title}}</b>
-        <button pButton pInputText pTooltip="My Profile" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-home"
+        <b style="margin-right: 15px; font-size: 20px; color: white;" routerLink="/">{{title}}</b>
+        <button pButton pTooltip="My Profile" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-home"
         [routerLink]="['/user', authService.user.id]"></button>
-        <button pButton pTooltip="My Chats" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-envelope"
+        <button pButton pTooltip="My Chats" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-envelope"
         routerLink="/chat"></button>
-        <button pButton pTooltip="My Meetings" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-users"
+        <button pButton pTooltip="My Meetings" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-users"
         routerLink="/meeting-list"></button>
-        <button pButton pTooltip="My Checkbook" tooltipPosition="bottom" type="button" class="ui-button-secondary" icon="pi pi-dollar"
+        <button pButton pTooltip="My Checkbook" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-dollar"
         routerLink="/check-list"></button>
     </div>
     
