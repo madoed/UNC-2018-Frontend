@@ -8,7 +8,6 @@ import {AgmCoreModule} from '@agm/core';
 @NgModule({
     declarations: [MeetingCreateComponent],
     imports: [
-        AgmCoreModule.forRoot({apiKey: 'AIzaSyCEvO8_I4HJK0GPmbcrfPJ5otCpKzxhe78'}),
         MeetingRoutingModule,
         UiModule,
         MatTableModule

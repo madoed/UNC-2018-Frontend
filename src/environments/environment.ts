@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   api_url: 'http://localhost:8000',
-  defaultAvatar: 'assets/images/default.png'
+  defaultAvatar: 'assets/images/default.png',
+  defaultMeeting: 'assets/images/glass.png'
 };
 
 /*

@@ -213,7 +213,7 @@
             <mat-list-item *ngFor="let date of datePoll">
               <div style="width: 300px;">
                 {{parser(date.name)}}</div>
-              <div style="width: 200px;">
+              <div style="width: 100px;">
                 <button mat-raised-button (click)="voteForDate(date.id)">
                   {{votedDate(date)?"unvote":"vote"}}
                 </button>

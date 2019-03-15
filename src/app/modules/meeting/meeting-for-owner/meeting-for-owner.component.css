@@ -1,5 +1,4 @@
 
-
 ui-picklist-buttons{
     visibility: hidden !important;
 }
@@ -103,4 +102,45 @@ input{
     background-color: white;
     color: black;
     font-family: Pompadur,'Comic Sans MS', cursive;
+}
+
+.myClass.ui-progressbar .ui-progressbar-label {
+    color: yellow;
+    background: red;
+}
+
+.myClass.ui-progressbar .ui-progressbar-value {
+    color: yellow!important;
+    background: red!important;
+}
+
+.textareaDescription {
+    width: 241px;
+    height: 138px;
+    cursor: pointer;
+    border: none;
+    text-indent: -140px;
+    margin-left: 5px;
+    margin-top: 2px;
+    color: #6D6D6D;
+}
+
+.textareaDescription:hover {
+    background: #f4f5f7 !important;
+}
+
+.divDescription {
+    width: 250px;
+    height: 148px;
+
+    border-bottom-style: dotted;
+    border-color: #edeef0;
+}
+
+.voted {
+    background-color: rgba(0, 83, 155, 0.75) !important;
+}
+
+.notvoted {
+    background-color: #a6a6a6 !important;
 }

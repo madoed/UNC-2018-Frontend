@@ -187,15 +187,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                     this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                                         if (poll) {
                                             this.placePoll = poll;
-                                            this.placePoll = this.placePoll.sort((a, b): number => {
-                                                if (a.id > b.id) {
-                                                    return 1;
-                                                }
-                                                if (a.id < b.id) {
-                                                    return -1;
-                                                }
-                                                return 0;
-                                            });
+                                            // this.placePoll = this.placePoll.sort((a, b): number => {
+                                            //     if (a.id > b.id) {
+                                            //         return 1;
+                                            //     }
+                                            //     if (a.id < b.id) {
+                                            //         return -1;
+                                            //     }
+                                            //     return 0;
+                                            // });
                                             this.placePoll.forEach(item => {
                                                 this.overlaysPoll.push(new google.maps.Marker({
                                                     position:
@@ -211,15 +211,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                     this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
                                         if (poll) {
                                             this.datePoll = poll;
-                                            this.datePoll = this.datePoll.sort((a, b): number => {
-                                                if (a.id > b.id) {
-                                                    return 1;
-                                                }
-                                                if (a.id < b.id) {
-                                                    return -1;
-                                                }
-                                                return 0;
-                                            });
+                                            // this.datePoll = this.datePoll.sort((a, b): number => {
+                                            //     if (a.id > b.id) {
+                                            //         return 1;
+                                            //     }
+                                            //     if (a.id < b.id) {
+                                            //         return -1;
+                                            //     }
+                                            //     return 0;
+                                            // });
                                         }
                                     });
                                 }
@@ -791,21 +791,21 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         place.lat = this.selectedPosition.lat();
         place.lng = this.selectedPosition.lng();
         place.placeName = this.markerTitle2;
-        this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
+        //this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
         this.pollService.addPlaceInPoll(place, this.participant.id).subscribe(res => {
             this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
                 if (places) {
                     this.placePoll = places;
-                    this.placePoll = this.placePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
-                    this.markerTitle = null;
+                    // this.placePoll = this.placePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
+                    this.markerTitle2 = null;
                 }
             });
         });
@@ -844,15 +844,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
             this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
                 if (places) {
                     this.placePoll = places;
-                    this.placePoll = this.placePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.placePoll = this.placePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
                     this.placePoll.forEach(item => {
                         this.overlaysPoll.push(item.oneLocation);
 
@@ -903,15 +903,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
             this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
                 if (dates) {
                     this.datePoll = dates;
-                    this.datePoll = this.datePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
                 }
             });
         });
@@ -922,15 +922,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
             this.pollService.getDatePoll(this.meeting.id).subscribe(places => {
                 if (places) {
                     this.datePoll = places;
-                    this.datePoll = this.datePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
                 }
             });
             this.dateForVote = null;

@@ -22,7 +22,7 @@ import {CheckService} from '@app/core/services/check.service';
 import {Meetinglocation} from '@app/core/models/meetinglocation';
 import {PollService} from '@app/core/services/poll.service';
 import {DatePoll} from '@app/core/models/datepoll.model';
-
+import {environment} from '@env';
 
 
 /** Constants used to fill up our data base. */
@@ -51,6 +51,10 @@ declare var google: any;
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+    defaultMeeting = environment.defaultMeeting;
+    defaultAvatar = environment.defaultAvatar;
+
+    meetingDescript: string = '';
     dateForVote: Date;
 
     showAddParticipants: boolean = false;
@@ -219,15 +223,15 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                               if (poll) {
                                   this.placePoll = poll;
-                                  this.placePoll = this.placePoll.sort((a, b): number => {
-                                      if (a.id > b.id) {
-                                          return 1;
-                                      }
-                                      if (a.id < b.id) {
-                                          return -1;
-                                      }
-                                      return 0;
-                                  });
+                                  // this.placePoll = this.placePoll.sort((a, b): number => {
+                                  //     if (a.id > b.id) {
+                                  //         return 1;
+                                  //     }
+                                  //     if (a.id < b.id) {
+                                  //         return -1;
+                                  //     }
+                                  //     return 0;
+                                  // });
                                   this.placePoll.forEach(item => {
                                       this.overlaysPoll.push(new google.maps.Marker({
                                           position:
@@ -243,15 +247,15 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
                               if (poll) {
                                   this.datePoll = poll;
-                                  this.datePoll = this.datePoll.sort((a, b): number => {
-                                      if (a.id > b.id) {
-                                          return 1;
-                                      }
-                                      if (a.id < b.id) {
-                                          return -1;
-                                      }
-                                      return 0;
-                                  });
+                                  // this.datePoll = this.datePoll.sort((a, b): number => {
+                                  //     if (a.id > b.id) {
+                                  //         return 1;
+                                  //     }
+                                  //     if (a.id < b.id) {
+                                  //         return -1;
+                                  //     }
+                                  //     return 0;
+                                  // });
                               }
                           });
                       }
@@ -681,15 +685,17 @@ ngAfterViewInit() {
 
     descriptionEdit() {
         this.displayDialogDescription = true;
+        this.meetingDescript = this.meeting.meetingDescription;
     }
 
     descriptionSave() {
-        console.log(this.meeting.meetingDescription);
+        //console.log(this.meeting.meetingDescription);
        //this.meeting.meetingDescription = this.meeting.meetingDescription.substr(0);
         //this.meeting.meetingDescription = this.meeting.meetingDescription.substr(0,
           // this.meeting.meetingDescription.indexOf('\"') - 1);
         //console.log(this.meeting.meetingDescription);
-        this.meetingService.setDescription(this.meeting.meetingDescription, this.meeting.id);
+        this.meetingService.setDescription(this.meetingDescript, this.meeting.id);
+        this.meeting.meetingDescription = this.meetingDescript;
         this.messService.add({severity:'success', summary: 'Success Message', detail:'Description saved'});
     }
 
@@ -883,7 +889,7 @@ ngAfterViewInit() {
         if (this.overlays) {
             this.overlays.pop();
         }
-        this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: true}));
+        this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: false}));
         //this.markerTitle = null;
         this.dialogVisible = false;
         let place = {} as Place;
@@ -891,7 +897,10 @@ ngAfterViewInit() {
         place.lng = this.selectedPosition.lng();
         place.placeName = this.markerTitle;
         this.meeting.meetingLocation = place;
-        this.meetingService.setLocation(place, this.meeting.id);
+        this.meetingService.setLocation(place, this.meeting.id).subscribe(res=>{
+            this.markerTitle = null;
+        });
+        this.messService.add({severity: 'success', summary: 'Success Message', detail: 'place changed'});
     }
 
     addPlaceOnMap() {
@@ -900,21 +909,21 @@ ngAfterViewInit() {
         place.lat = this.selectedPosition.lat();
         place.lng = this.selectedPosition.lng();
         place.placeName = this.markerTitle2;
-        this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
+        this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: false}));
         this.pollService.addPlaceInPoll(place, this.participant.id).subscribe(res => {
           this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
               if (places) {
                   this.placePoll = places;
-                  this.placePoll = this.placePoll.sort((a, b): number => {
-                      if (a.id > b.id) {
-                          return 1;
-                      }
-                      if (a.id < b.id) {
-                          return -1;
-                      }
-                      return 0;
-                  });
-                  this.markerTitle = null;
+                  // this.placePoll = this.placePoll.sort((a, b): number => {
+                  //     if (a.id > b.id) {
+                  //         return 1;
+                  //     }
+                  //     if (a.id < b.id) {
+                  //         return -1;
+                  //     }
+                  //     return 0;
+                  // });
+                  this.markerTitle2 = null;
               }
           });
       });
@@ -923,7 +932,7 @@ ngAfterViewInit() {
 
     handleDragEnd(event) {
         this.messService.add({severity:'info', summary:'Marker Dragged', detail: event.overlay.getTitle()});
-    }
+  }
 
 
     zoomIn(map) {
@@ -962,19 +971,20 @@ ngAfterViewInit() {
           this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
               if (places) {
                   this.placePoll = places;
-                  this.placePoll = this.placePoll.sort((a, b): number => {
-                      if (a.id > b.id) {
-                          return 1;
-                      }
-                      if (a.id < b.id) {
-                          return -1;
-                      }
-                      return 0;
-                  });
+                  // this.placePoll = this.placePoll.sort((a, b): number => {
+                  //     if (a.id > b.id) {
+                  //         return 1;
+                  //     }
+                  //     if (a.id < b.id) {
+                  //         return -1;
+                  //     }
+                  //     return 0;
+                  // });
                   this.placePoll.forEach(item => {
                       this.overlaysPoll.push(item.oneLocation);
 
                   });
+                  this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
               }
           });
       });
@@ -986,15 +996,15 @@ ngAfterViewInit() {
             this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
                 if (places) {
                     this.placePoll = places;
-                    this.placePoll = this.placePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.placePoll = this.placePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
                     this.placePoll.forEach(item => {
                         this.overlaysPoll.push(item.oneLocation);
                     });
@@ -1008,10 +1018,9 @@ ngAfterViewInit() {
     }
 
     setAsMain(place: Place) {
+      this.meeting.meetingLocation = place;
         this.meetingService.setLocation(place, this.meeting.id).subscribe( loc => {
-            this.meetingService.getMeeting(this.meeting.id).subscribe(res => {
-                this.meeting = res;
-            });
+                this.messService.add({severity: 'success', summary: 'Success Message', detail: 'place changed'});
         });
     }
 
@@ -1063,15 +1072,16 @@ ngAfterViewInit() {
             this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
                 if (dates) {
                     this.datePoll = dates;
-                    this.datePoll = this.datePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
                 }
             });
         });
@@ -1083,15 +1093,15 @@ ngAfterViewInit() {
             this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
                 if (dates) {
                     this.datePoll = dates;
-                    this.datePoll = this.datePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
                 }
             });
         });
@@ -1102,15 +1112,16 @@ ngAfterViewInit() {
             this.pollService.getDatePoll(this.meeting.id).subscribe(places => {
                 if (places) {
                     this.datePoll = places;
-                    this.datePoll = this.datePoll.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return 1;
-                        }
-                        if (a.id < b.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail: 'new date added'});
                 }
             });
             this.dateForVote = null;
