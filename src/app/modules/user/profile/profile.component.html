@@ -20,7 +20,7 @@
               type="button" label="Friends" [disabled]="true" icon="pi pi-check"></button>
               <br>
               <button pButton class="card-button ui-button-secondary"
-              type="button" label="Send Message" icon="pi pi-envelope"></button>
+              type="button" label="Send Message" icon="pi pi-envelope" (click)="sendMess(user.id)"></button>
             </p-footer>
             <p-footer *ngIf="currentUser.id == user.id">
               <button pButton class="card-button ui-button-primary"
@@ -66,7 +66,7 @@
                           <p-footer>
                             <div class="card-button" style="text-align:center;">
                               <button pButton *ngIf="currentUser.id !== friend.id" class="friend-btn ui-button-rounded ui-button-success"
-                                type="button" icon="pi pi-envelope" pTooltip="Send Message" tooltipPosition="bottom"></button>
+                                type="button" icon="pi pi-envelope" pTooltip="Send Message" tooltipPosition="bottom" (click)="sendMess(friend.id)"></button>
                               <button pButton *ngIf="currentUser.id == user.id" class="friend-btn ui-button-rounded ui-button-danger"
                                 type="button" icon="pi pi-times" pTooltip="Unfriend" tooltipPosition="bottom"
                                 (click)="unfriend(friend)"></button>

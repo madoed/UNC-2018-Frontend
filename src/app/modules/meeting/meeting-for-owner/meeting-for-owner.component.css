@@ -116,9 +116,10 @@ input{
 
 .textareaDescription {
     width: 241px;
-    height: 138px;
+    height: 156px;
     cursor: pointer;
     border: none;
+    resize: none;
     text-indent: -140px;
     margin-left: 5px;
     margin-top: 2px;
@@ -131,9 +132,7 @@ input{
 
 .divDescription {
     width: 250px;
-    height: 148px;
-
-    border-bottom-style: dotted;
+    height: 158px;
     border-color: #edeef0;
 }
 

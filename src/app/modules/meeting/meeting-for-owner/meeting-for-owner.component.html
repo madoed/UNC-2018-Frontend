@@ -120,7 +120,7 @@
         </div>
         </div>
 
-        <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 170px;
+        <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
         border-left-style: dotted; border-color: #edeef0;"
              (click)="descriptionEdit()">
         <h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>
@@ -210,7 +210,8 @@
 
                     <mat-list>
                         <mat-list-item *ngFor="let user of users">
-                            <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
+                            <img mat-list-avatar *ngIf="user.avatarUrl" src="{{user.avatarUrl}}">
+                            <img mat-list-avatar *ngIf="!user.avatarUrl" src="{{defaultAvatar}}">
                             <h3 mat-line>
                                 <a mat-raised-button style="background-color: white!important;
                                         color: black!important;" (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>

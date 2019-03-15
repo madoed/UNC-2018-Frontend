@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { AuthService, UserService, User } from '@app/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService, UserService, User, ChatService} from '@app/core';
 import { MessageService } from 'primeng/api';
 import { environment } from '@env';
 
@@ -20,7 +20,9 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private userService: UserService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private chatService: ChatService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -93,5 +95,11 @@ export class ProfileComponent implements OnInit {
     this.userService.update(this.currentUser).subscribe(
       u => this.authService.user = u
     );
+  }
+
+  sendMess(friend: number) {
+    this.chatService.getDialogue(friend, this.authService.user.id).subscribe(res => {
+       this.router.navigate(['/chat/start', res.id]);
+    });
   }
 }

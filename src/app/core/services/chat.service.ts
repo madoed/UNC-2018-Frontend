@@ -43,6 +43,10 @@ export class ChatService {
         return this.apiService.post('http://127.0.0.1:8000/chat', card);
     }
 
+    getDialogue (user1: number, user2: number): Observable<any> {
+        return this.apiService.get('http://127.0.0.1:8000/dialogue/' + user1 + '/' + user2);
+    }
+
     /*getChannelId(): number {
         return this.channel_id;
     }
