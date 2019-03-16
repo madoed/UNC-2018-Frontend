@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, UserService, User } from '@app/core';
+import { AuthService, UserService, User, StorageService } from '@app/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
@@ -12,8 +12,9 @@ import { environment } from '@env';
 })
 export class ProfileEditComponent implements OnInit {
   user: User = {} as User;
-  defaultAvatar = environment.defaultAvatar;
-  currentAvatar: any;
+  avatar: File;
+  defaultAvatarUrl: string = environment.defaultAvatar;
+  currentAvatarUrl: any;
   IMAGES_URL = environment.api_url + '/images/';
   submitting = false;
   generalForm: FormGroup;
@@ -24,16 +25,17 @@ export class ProfileEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private storageService: StorageService
     ) { }
 
   ngOnInit() {
     this.user = this.authService.user;
-    this.currentAvatar = this.user.avatarUrl ? this.user.avatarUrl : this.defaultAvatar;
+    this.currentAvatarUrl = this.user.avatarUrl ? this.user.avatarUrl : this.defaultAvatarUrl;
     this.generalForm = this.formBuilder.group({
       firstName: [this.user.firstName, Validators.required],
       lastName: [this.user.lastName, Validators.required],
-      avatar: [this.currentAvatar.substr(this.currentAvatar.lastIndexOf('/') + 1)],
+      avatar: [null],
       aboutMe: [this.user.aboutMe]
     });
     this.credentialsForm = this.formBuilder.group({
@@ -61,11 +63,23 @@ export class ProfileEditComponent implements OnInit {
     this.submitting = true;
     this.user.firstName = this.general.firstName.value;
     this.user.lastName = this.general.lastName.value;
-    this.user.avatarUrl = this.general.avatar.value ?
-                          this.IMAGES_URL + this.general.avatar.value :
-                          null;
     this.user.aboutMe = this.general.aboutMe.value;
-    
+    if (this.avatar) {
+      const filename = this.user.username + '-' + this.avatar.name;
+      //this.user.avatarUrl = this.IMAGES_URL + filename;
+      this.storageService.upload(this.avatar, filename).subscribe(
+        data => {
+          console.log(data);
+          this.user.avatarUrl = data.fileDownloadUri;
+          this.saveUser();
+        })
+    } else if (this.currentAvatarUrl == this.defaultAvatarUrl) {
+      this.user.avatarUrl = null;
+      this.saveUser();
+    }
+  }
+
+  private saveUser() {
     this.userService.update(this.user)
       .pipe(first())
       .subscribe(
@@ -124,7 +138,7 @@ export class ProfileEditComponent implements OnInit {
 
   clearAvatar() {
     this.general.avatar.setValue(null);
-    this.currentAvatar = this.defaultAvatar;
+    this.currentAvatarUrl = this.defaultAvatarUrl;
   }
 
   onSelectFile(files) {
@@ -133,11 +147,13 @@ export class ProfileEditComponent implements OnInit {
       this.messageService.add({severity:'error', summary:'Error', detail: 'Please select an image file'});
       return;
     }
+
+    this.avatar = files[0];
     var reader = new FileReader();
-    reader.readAsDataURL(files[0]); 
+    reader.readAsDataURL(this.avatar); 
     reader.onload = (_event) => { 
-      this.currentAvatar = reader.result;
-      this.general.avatar.setValue(files[0].name); 
+      this.currentAvatarUrl = reader.result; 
     }
+    this.general.avatar.setValue(this.avatar.name);
   }
 }
