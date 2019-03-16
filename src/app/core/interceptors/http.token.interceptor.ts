@@ -14,21 +14,28 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     /*const tokenPromise: Promise<string> = this.auth.getToken();
     const tokenObservable: Observable<string> = from(tokenPromise);
 
+    const headersConfig = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + authToken
+      };
+    if (!req.headers.has('Do-Not-Set-Content-Type')) {
+      headersConfig['Content-Type'] = 'application/json';
+    }
+
     return tokenObservable.pipe(
       map(authToken => {
-        req = req.clone({setHeaders: {
-          'Authorization': 'Bearer ' + authToken,
-          'Content-type': 'application/json'
-        }});
+        req = req.clone({setHeaders: headersConfig});
       }),
       concatMap(request => {
         return next.handle(req);
       }));*/
 
       const headersConfig = {
-        'Content-Type': 'application/json',
         'Accept': 'application/json'
       };
+      if (!req.headers.has('Do-Not-Set-Content-Type')) {
+        headersConfig['Content-Type'] = 'application/json';
+      }
   
       const request = req.clone({ setHeaders: headersConfig });
       return next.handle(request);

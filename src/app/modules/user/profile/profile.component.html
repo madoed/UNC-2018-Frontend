@@ -52,7 +52,7 @@
                   <h2><i class="pi pi-users"></i> FRIENDS</h2>
                   <ng-template pTemplate="content">
                       <div id="friend" *ngFor="let friend of user.friends" class="friend-card">
-                        <p-card styleClass="ui-card-shadow">
+                        <p-card styleClass="ui-card-shadow" id="friend {{friend.id}}">
                           <p-header [routerLink]="['/user', friend.id]" style="cursor: pointer;" *ngIf="friend.avatarUrl">
                             <img src="{{friend.avatarUrl}}" class="friend-img">
                           </p-header>

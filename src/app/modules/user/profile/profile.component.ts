@@ -57,9 +57,6 @@ export class ProfileComponent implements OnInit {
     this.userInfo.set("Last Name", user.lastName);
     this.userInfo.set("User Name", user.username);
     this.userInfo.set("Email", user.email);
-    //this.userInfo.set("Phone", user.birthday);
-    //this.userInfo.set("City", user.city);
-    //this.userInfo.set("Birthday", user.birthday);
     this.userInfo.set("About Me", user.aboutMe);
   }
 
@@ -74,7 +71,8 @@ export class ProfileComponent implements OnInit {
     this.messageService.clear('c');
     this.currentUser.friends = this.user.friends.filter(f => this.friendId !== f.id);
     this.updateCurrentUser();
-    location.reload();
+    let element = document.getElementById("friend " + this.friendId);
+    element.remove();
   }
 
   onReject() {
@@ -91,7 +89,9 @@ export class ProfileComponent implements OnInit {
 
   updateCurrentUser() {
     this.userService.update(this.currentUser).subscribe(
-      u => this.authService.user = u
-    );
+      u => {
+        this.authService.user = u;
+        this.currentUser = u;
+      });
   }
 }

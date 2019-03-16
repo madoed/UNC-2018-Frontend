@@ -8,3 +8,4 @@ export * from './card.service';
 export * from './meeting.service';
 export * from './message.service';
 export * from './web-socket.service';
+export * from './storage.service';
