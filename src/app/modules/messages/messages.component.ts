@@ -87,7 +87,7 @@ export class MessagesComponent implements OnInit {
     }*/
 
     async setUpChat() {
-      this.messageService.getMessages(this.channel.id).subscribe(data => {
+      this.messageService.getMessages(this.channel.id, this.authService.user.id).subscribe(data => {
         if (data === null) {
           this.filteredMessages = []; } else {
           this.filteredMessages = data;

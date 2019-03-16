@@ -3,6 +3,7 @@ import {Observable, Subject} from 'rxjs';
 import {ApiService} from './api.service';
 import {Message} from '../models/message.model';
 import {Chat} from '../models/chat.model';
+import {AuthService} from '@app/core';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class MessageService {
     private messages: Array<Message> = [];
     private msgs = new Subject<Array<Message>>();
 
-    constructor(private apiService: ApiService) {}
+    constructor(private apiService: ApiService ) {}
 
     push(message: Message) {
         this.messages.push(message);
@@ -24,16 +25,16 @@ export class MessageService {
 //        this.msgs.next(this.messages);
 //    }
 
-    filterMessages(channel: Chat): Array<Message> {
-        return this.messages.filter(message => channel === message.from_chat)
-            .sort((m1, m2) => {
-                if (m1.timestamp > m2.timestamp) {
-                    return 1;
-                }
-
-                return -1;
-            });
-    }
+    // filterMessages(channel: Chat): Array<Message> {
+    //     return this.messages.filter(message => channel === message.from_chat)
+    //         .sort((m1, m2) => {
+    //             if (m1.timestamp > m2.timestamp) {
+    //                 return 1;
+    //             }
+    //
+    //             return -1;
+    //         });
+    // }
 /*
     sendReadReceipt(channelId: string, username: string) {
         this.apiService.post('http://127.0.0.1:8000' + '/messages/', {
@@ -42,8 +43,8 @@ export class MessageService {
         });
     }*/
 
-    getMessages(id: number): Observable<Message[]> {
-        return this.apiService.get('http://127.0.0.1:8000' + '/messages/' + id);
+    getMessages(id: number, iduser: number): Observable<Message[]> {
+        return this.apiService.get('http://127.0.0.1:8000' + '/messages-old/' + id + '/' + iduser);
     }
 
     save(mes: Message): Observable<Message> {

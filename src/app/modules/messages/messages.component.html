@@ -23,7 +23,7 @@
 
   <div id="wrapper" style="margin-top: 30px">
     <div id="c1" style="margin-left: 200px">
-      <input  id="input" type="text"  [(ngModel)]="newMessage"
+      <input  type="text"  [(ngModel)]="newMessage"
               (keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>
 
     </div>

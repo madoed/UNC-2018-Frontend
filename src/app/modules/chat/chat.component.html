@@ -1,33 +1,80 @@
 <div class="container">
 
-  <mat-card>
-    <mat-card-header background-color="accent">
-      <h1 class = "myFont" >Chats</h1>
-      <span class="toolbar-filler"></span>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" [routerLink]="['/chat/add']" style="margin-right: 20px"><mat-icon>add_circle_outline</mat-icon></button>
-      </mat-card-actions>
-    </mat-card-header>
-    <mat-card-content >
 
-      <mat-list>
-        <mat-list-item *ngFor="let chat of chats">
+    <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
 
-          <h3 mat-line>
-            <a mat-raised-button  [routerLink]="['/chat/start', chat.id]" class="myButton" (click)="startChat(chat)"> {{chat.chatName}}</a>
-          </h3>
+      <p-dataView #dv [value]="chats" [paginator]="false" [rows]="20"
+                  [sortField]="sortField" [sortOrder]="sortOrder" filterBy="chatName">
+        <p-header>
+                <div style="position:relative">
+                  <input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">
+                </div>
 
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
+        </p-header>
+      <ng-template let-chat pTemplate="listItem">
+
+        <div class="ui-g" style=" padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openChat(chat.id)">
+          <!--<div class="ui-g-12 ui-md-3" style="text-align:center">-->
+            <!--<img *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" class="user-img">-->
+            <!--<img *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">-->
+          <!--</div>-->
+          <!--<div class="ui-g-12 ui-md-5">-->
+            <!--<div class="ui-g">-->
+              <!--<div class="ui-g-8 ui-sm-6"><b>{{chat.chatName}}</b></div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <div style="float: left; margin-left: -10px; border-style: solid; height: 70px; width: 70px; border-radius: 70px;">
+            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
+            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">
+          </div>
+
+          <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px;">
+            <h3 style="color: #282828;">{{cutLine(chat.chatName)}}</h3>
+            <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;">
+              <div style="float: left; width: 30px; height: 30px; border-radius: 30px;">
+                <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
+                <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">
+              </div>
+              <div style="float: left; margin-left: 2px; width: 360px; color: #6D6D6D">
+                {{chat.lastMessage?cutLine(chat.lastMessage):''}}
+              </div>
+            </div>
+            <div *ngIf="!chat.lastMessage" style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
+              No messages yet
+            </div>
+          </div>
+
+          <div style="margin-left: 50px; width: 100px; height: 50px; color: #828282">
+            {{chat.lastUpdate?parser(chat.lastUpdate):''}}
+          </div>
 
 
-  </mat-card>
-</div>
+          </div>
+        </ng-template>
+        </p-dataView>
+
+
+      </div>
+
+  <div style="margin-left: 72.5%;">
+  <p-card [style]="{width: '310px'}" styleClass="ui-card-shadow">
+    <p-header >
+      <img src="Card" src="assets/images/chat.png" style="height: 130px;">
+    </p-header>
+
+    <button mat-button [routerLink]="['/chat/add']" style="margin-right: 20px;
+     height: 40px; width: 284px!important;">
+      <span style="color: #007ad9;">Create chat</span>
+    </button>
+  </p-card>
+  </div>
+
+  </div>
 
 
 
-<!--<mat-sidenav-container class="container">-->
+  <!--<mat-sidenav-container class="container">-->
   <!--<mat-sidenav mode="side" opened>-->
     <!--<mat-card>-->
       <!--<mat-tab-group>-->

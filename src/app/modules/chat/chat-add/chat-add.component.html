@@ -25,9 +25,9 @@
     <mat-divider></mat-divider>
     <mat-card-header background-color="accent">
 
-        <h1 class = "myFont" style="margin-left: 100px">Add friends </h1>
+        <h2 class = "myFont" style="margin-left: 100px">Add friends </h2>
       <mat-card-actions>
-        <button mat-raised-button color="primary" style="margin-left: 150px" (click)="add()"
+        <button mat-raised-button color="primary" style="margin-left: 216px" (click)="add()"
                 [disabled]="!fixedUser">Add</button>
       </mat-card-actions>
     </mat-card-header>
@@ -35,10 +35,22 @@
 
       <mat-list>
         <mat-list-item *ngFor="let user of users">
-          <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
+
+          <img mat-list-avatar *ngIf="user.avatarUrl" src="{{user.avatarUrl}}">
+          <img mat-list-avatar *ngIf="!user.avatarUrl" src="{{defaultAvatar}}">
           <h3 mat-line>
-            <a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+            <a mat-raised-button style="background-color: white!important; color: black!important;" [style.width]="'200px'"
+               [style.border-style]="user.id === fixedUserId? 'solid':'ridge'" (click)="fix(user)"  >
+              {{user.name}}
+            </a>
           </h3>
+
+
+
+          <!--<img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">-->
+          <!--<h3 mat-line>-->
+            <!--<a mat-raised-button (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>-->
+          <!--</h3>-->
         </mat-list-item>
       </mat-list>
     </mat-card-content>

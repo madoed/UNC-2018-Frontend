@@ -4,6 +4,7 @@ import {ChatService} from '@app/core/services/chat.service';
 import {Chat} from '@app/core/models/chat.model';
 import {Router} from '@angular/router';
 declare function require(path: string);
+import {environment} from '@env';
 
 @Component({
   selector: 'app-chat-add',
@@ -12,6 +13,7 @@ declare function require(path: string);
   // template: `<img src= "{{imageSrc}}"/>`
 })
 export class ChatAddComponent implements OnInit {
+    defaultAvatar = environment.defaultAvatar;
     users: Array<any>;
     imageSrc = require('./user.png');
     fixedUserId;
