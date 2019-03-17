@@ -8,6 +8,7 @@ import { UiModule } from '@app/ui';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
+import {VirtualScrollerModule} from 'primeng/virtualscroller';
 
 @NgModule({
   declarations: [

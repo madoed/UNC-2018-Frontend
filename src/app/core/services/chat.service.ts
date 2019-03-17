@@ -22,9 +22,14 @@ export class ChatService {
         private authService: AuthService 
     ) {}
 
-    getAll(): Observable<Chat[]> {
+    getOld(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
         return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.authService.user.id);
+    }
+
+    getNew(): Observable<Chat[]> {
+        // return this.apiService.get(this.CHAT_API + '/1');
+        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.authService.user.id);
     }
 
     setChannel(channel: Chat) {

@@ -43,8 +43,12 @@ export class MessageService {
         });
     }*/
 
-    getMessages(id: number, iduser: number): Observable<Message[]> {
+    getOldMessages(id: number, iduser: number): Observable<Message[]> {
         return this.apiService.get('http://127.0.0.1:8000' + '/messages-old/' + id + '/' + iduser);
+    }
+
+    getNewMessages(id: number, iduser: number): Observable<Message[]> {
+        return this.apiService.get('http://127.0.0.1:8000' + '/messages-new/' + id + '/' + iduser);
     }
 
     save(mes: Message): Observable<Message> {

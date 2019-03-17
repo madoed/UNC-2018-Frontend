@@ -11,6 +11,7 @@ import {AuthService, User} from '@app/core';
 import {Message} from '@app/core/models/message.model';
 import {Chat} from '@app/core/models/chat.model';
 import {delay} from 'rxjs/operators';
+import {environment} from '@env';
 //import {Message} from 'stompjs';
 //import { StompService } from 'ng2-stomp-service';
 
@@ -21,8 +22,11 @@ import {delay} from 'rxjs/operators';
 })
 export class MessagesComponent implements OnInit {
 
+    public opponent: User;
+    defaultAvatar = environment.defaultAvatar;
     private serverUrl = 'http://127.0.0.1:8000/wechat';
     public filteredMessages: Array<Message> = [];
+    public newMessages: Array<Message> = [];
     private newMessage: string;
     private channel = {}as Chat;
     private user: User;
@@ -57,7 +61,8 @@ export class MessagesComponent implements OnInit {
     }
 
     async delay(ms: number) {
-        await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(()=>console.log("fired"));
+        await new Promise(resolve => setTimeout(() => resolve(), ms)).then(() =>
+            console.log("fired"));
     }
 
 
@@ -70,6 +75,9 @@ export class MessagesComponent implements OnInit {
               this.chatService.setChannel(chat);
               this.channel = chat;
               this.user = this.authService.user;
+              if (this.channel.chatType === 'dialogue') {
+                  this.getNotYou();
+              }
               this.setUpChat();
             } else {
               console.log(`Card with id '${id}' not found, returning to list`);
@@ -87,17 +95,48 @@ export class MessagesComponent implements OnInit {
     }*/
 
     async setUpChat() {
-      this.messageService.getMessages(this.channel.id, this.authService.user.id).subscribe(data => {
-        if (data === null) {
-          this.filteredMessages = []; } else {
-          this.filteredMessages = data;
-            this.delay(1000).then(any => {
-                this.scrollToBottom();
+      this.messageService.getOldMessages(this.channel.id, this.authService.user.id).subscribe(data => {
+        if (data) {
+            this.filteredMessages = data;
+            this.messageService.getNewMessages(this.channel.id, this.authService.user.id).subscribe(newmes => {
+                if (newmes) {
+                    newmes.forEach(mes => {
+                        this.filteredMessages.push(mes);
+                    });
+                    this.newMessages = newmes;
+                    this.delay(1000).then(any => {
+                        this.scrollToBottom();
+                    });
+                } else {
+                    this.newMessages = [];
+                    this.delay(1000).then(any => {
+                        this.scrollToBottom();
+                    });
+                }
+            });
+        } else {
+            this.messageService.getNewMessages(this.channel.id, this.authService.user.id).subscribe(newmes => {
+                if (newmes) {
+                    this.filteredMessages = newmes;
+                    this.newMessages = newmes;
+                    this.delay(1000).then(any => {
+                        this.scrollToBottom();
+                    });
+                } else {
+                    this.newMessages = [];
+                    this.filteredMessages = [];
+                    this.delay(1000).then(any => {
+                        this.scrollToBottom();
+                    });
+                }
             });
         }
       });
 
-      //this.channel = this.chatService.getChannel();
+        // this.delay(10000).then(any => {
+        //    this.newMessages = [];
+        // });
+
       console.log(this.channel);
       this.user = this.authService.user;
       let ws = new SockJS(this.serverUrl);
@@ -115,10 +154,32 @@ export class MessagesComponent implements OnInit {
       });
     }
 
+    checkIfNew(mes: Message): boolean {
+        return true;
+    }
+
     scrollToBottom() {
         const msgContainer = document.getElementById('msg-container');
         msgContainer.scrollBy(0, 2000);
         //msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
+
+    getNotYou() {
+        this.channel.subscribers.forEach(sub => {
+            if (sub.id !== this.authService.user.id) {
+                this.opponent = sub;
+            }
+        });
+    }
+
+    getAmountOfRows(str: String): number {
+        let amount = Math.round(str.length / 50) + 1;
+        let sub = str;
+        while (sub.indexOf('\n', 0) > 0) {
+            amount = amount + 1;
+            sub = sub.substr(sub.indexOf('\n', 0) + 1);
+        }
+        return amount;
     }
 
    /* sendMessage() {

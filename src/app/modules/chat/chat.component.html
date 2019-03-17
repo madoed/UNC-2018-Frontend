@@ -13,24 +13,24 @@
         </p-header>
       <ng-template let-chat pTemplate="listItem">
 
-        <div class="ui-g" style=" padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openChat(chat.id)">
-          <!--<div class="ui-g-12 ui-md-3" style="text-align:center">-->
-            <!--<img *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" class="user-img">-->
-            <!--<img *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">-->
-          <!--</div>-->
-          <!--<div class="ui-g-12 ui-md-5">-->
-            <!--<div class="ui-g">-->
-              <!--<div class="ui-g-8 ui-sm-6"><b>{{chat.chatName}}</b></div>-->
-            <!--</div>-->
-          <!--</div>-->
+        <div class="ui-g" [style.background-color]="checkIfNew(chat)?'#f4f5f7':'white'"
+             style=" padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openChat(chat.id)">
 
-          <div style="float: left; margin-left: -10px; border-style: solid; height: 70px; width: 70px; border-radius: 70px;">
-            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
-            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">
+          <div *ngIf="chat.chatType=='dialogue'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
+            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="getNotYou(chat).avatarUrl" src="{{getNotYou(chat).avatarUrl}}" >
+            <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="!getNotYou(chat).avatarUrl" src="{{defaultAvatar}}">
+          </div>
+          <div *ngIf="chat.chatType=='chat'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
+            <img style="width: 45px; height: 45px; " src="assets/images/c.png" >
           </div>
 
+          <div *ngIf="chat.chatType=='meeting'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
+            <img style="width: 45px; height: 45px; " src="assets/images/m.png" ></div>
+
           <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px;">
-            <h3 style="color: #282828;">{{cutLine(chat.chatName)}}</h3>
+            <h3 *ngIf="chat.chatType!=='dialogue'" style="color: #282828;">{{cutLine(chat.chatName)}}</h3>
+            <h3 *ngIf="chat.chatType=='dialogue'" style="color: #282828;">
+              {{getNotYou(chat).firstName}} {{getNotYou(chat).lastName}}</h3>
             <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;">
               <div style="float: left; width: 30px; height: 30px; border-radius: 30px;">
                 <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
@@ -51,7 +51,8 @@
 
 
           </div>
-        </ng-template>
+
+      </ng-template>
         </p-dataView>
 
 
@@ -71,69 +72,4 @@
   </div>
 
   </div>
-
-
-
-  <!--<mat-sidenav-container class="container">-->
-  <!--<mat-sidenav mode="side" opened>-->
-    <!--<mat-card>-->
-      <!--<mat-tab-group>-->
-        <!--<mat-tab>-->
-          <!--<ng-template mat-tab-label>-->
-            <!--<mat-icon matListIcon>forum</mat-icon>-->
-          <!--</ng-template>-->
-          <!--<mat-list class="conversations">-->
-            <!--<mat-list-item *ngFor="let chat of chats"  (click)="startChat(chat.id, chat.chatName,chat)">-->
-              <!--<mat-icon matListIcon>forum</mat-icon>-->
-              <!--<p>{{chat.chatName}}</p>-->
-            <!--</mat-list-item>-->
-          <!--</mat-list>-->
-        <!--</mat-tab>-->
-      <!--</mat-tab-group>-->
-    <!--</mat-card>-->
-  <!--</mat-sidenav>-->
-
-  <!--<mat-sidenav position="end" mode="side" opened *ngIf="selectedConversation">-->
-    <!--<mat-card>-->
-      <!--&lt;!&ndash;&lt;!&ndash;<mat-list class="members">&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<mat-list-item *ngFor="let member of selectedConversation.members | keys">&ndash;&gt;&ndash;&gt;-->
-          <!--&lt;!&ndash;&lt;!&ndash;<p>{{member.value.user.name}}</p>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;</mat-list-item>&ndash;&gt;&ndash;&gt;-->
-      <!--&lt;!&ndash;</mat-list>&ndash;&gt;-->
-    <!--</mat-card>-->
-
-  <!--</mat-sidenav>-->
-  <!--<section class="empty-conversation" *ngIf="!selectedConversation">-->
-    <!--<h1 class="mat-display-1">Select a conversation from the left to start chatting</h1>-->
-  <!--</section>-->
-  <!--<section *ngIf="selectedConversation">-->
-    <!--<div class="mat-typography conversation-header">-->
-      <!--<h2>-->
-        <!--<mat-icon>forum</mat-icon>-->
-        <!--{{selectedConversation.chatName}}</h2>-->
-      <!--&lt;!&ndash;<p>&ndash;&gt;-->
-        <!--&lt;!&ndash;<mat-icon>account_circle</mat-icon>&ndash;&gt;-->
-        <!--&lt;!&ndash;{{(selectedConversation.members | keys).length}} Members</p>&ndash;&gt;-->
-    <!--</div>-->
-
-    <!--<mat-divider></mat-divider>-->
-    <!--<mat-list dense class="conversation-history mat-typography">-->
-      <!--&lt;!&ndash;<mat-list-item *ngFor="let event of events; index as i" [dir]="event.from === selectedConversation.me.id ? 'rtl' : 'ltr'">&ndash;&gt;-->
-        <!--&lt;!&ndash;<img *ngIf="event.type == 'text'" matListAvatar matTooltip="{{selectedConversation.members[event.from].user.name}}" src="https://randomuser.me/api/portraits/thumb/lego/{{i}}.jpg"&ndash;&gt;-->
-        <!--&lt;!&ndash;/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<p *ngIf="event.type == 'text'" [dir]="'ltr'">{{event.body.text}}</p>&ndash;&gt;-->
-        <!--&lt;!&ndash;<p *ngIf="event.type == 'member:joined'" class="text-center">&ndash;&gt;-->
-          <!--&lt;!&ndash;<b>{{selectedConversation.members[event.from].user.name}}</b> has joined the conversation</p>&ndash;&gt;-->
-      <!--&lt;!&ndash;</mat-list-item>&ndash;&gt;-->
-    <!--</mat-list>-->
-
-    <!--<div class="conversation-input">-->
-      <!--<mat-divider></mat-divider>-->
-      <!--<mat-form-field class="full-width">-->
-        <!--<input matInput placeholder="Start chatting..." name="text" [(ngModel)]="newMessage">-->
-        <!--<mat-icon matSuffix (click)="sendMessage()">send</mat-icon>-->
-      <!--</mat-form-field>-->
-    <!--</div>-->
-  <!--</section>-->
-<!--</mat-sidenav-container>-->
 

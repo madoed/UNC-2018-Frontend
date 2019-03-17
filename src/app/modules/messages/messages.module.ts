@@ -12,20 +12,13 @@ import {
     MatSnackBarModule
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
+import {VirtualScrollerModule} from 'primeng/virtualscroller';
 
 //import { StompService } from 'ng2-stomp-service';
 
 @NgModule({
     imports: [
-        UiModule,
-        /*MatGridListModule,
-        MatInputModule,
-        MatButtonModule,
-        MatListModule,
-        MatIconModule,
-        MatSnackBarModule,
-        MatCardModule,
-        NgxAutoScrollModule*/
+        UiModule
     ],
     declarations: [MessagesComponent]
 })
