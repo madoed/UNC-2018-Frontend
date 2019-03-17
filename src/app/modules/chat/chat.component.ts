@@ -70,7 +70,7 @@ export class ChatComponent implements OnInit {
                 const str = value.split('-');
                 const year = str[0];
                 const month = str[1];
-                const date = (Number(str[2].split('T')[0]) + 1).toString();
+                const date = (Number(str[2].split('T')[0])).toString();
                 return date + '/ ' + month + '/ ' + year;
             }
             return '';

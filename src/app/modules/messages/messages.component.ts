@@ -149,18 +149,35 @@ export class MessagesComponent implements OnInit {
             console.log(mymes);
             this.filteredMessages.push(mymes);
             this.scrollToBottom();
+              this.delay(600).then(any => {
+                  this.scrollToBottom();
+              });
           }
         });
       });
     }
 
+    parser(value: any): String | '' {
+        if ((typeof value === 'string')) {
+            const str = value.split('-');
+            const year = str[0];
+            const month = str[1];
+            const date = (Number(str[2].split('T')[0])).toString();
+            return date + '/ ' + month + '/ ' + year;
+        }
+        return '';
+    }
+
     checkIfNew(mes: Message): boolean {
-        return true;
+            if ( this.newMessages === undefined) {
+                return false;
+            }
+            return this.newMessages.includes(mes);
     }
 
     scrollToBottom() {
         const msgContainer = document.getElementById('msg-container');
-        msgContainer.scrollBy(0, 2000);
+        msgContainer.scrollBy(0, 5000);
         //msgContainer.scrollTop = msgContainer.scrollHeight;
     }
 
@@ -175,11 +192,11 @@ export class MessagesComponent implements OnInit {
     getAmountOfRows(str: String): number {
         let amount = Math.round(str.length / 50) + 1;
         let sub = str;
-        while (sub.indexOf('\n', 0) > 0) {
+        while (sub.indexOf('\n', 0) >= 0) {
             amount = amount + 1;
-            sub = sub.substr(sub.indexOf('\n', 0) + 1);
+            sub = sub.substr(sub.indexOf('\n', 0) + 1 );
         }
-        return amount;
+        return amount + 1;
     }
 
    /* sendMessage() {
