@@ -57,6 +57,10 @@ export class MessageService {
         return result;
     }
 
+    cleanReserve (channel: number, user: number) {
+        this.apiService.delete('http://127.0.0.1:8000/clean-reserve/' + user + '/' + channel);
+    }
+
 //    initMessages(channel: string): any {
 //        return this.http.get(settings.baseUrl + '/messages/' + channel).subscribe(res => {
 //            this.pushMessages(res.data);

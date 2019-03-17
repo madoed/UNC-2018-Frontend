@@ -134,4 +134,10 @@ export class MeetingService {
     confirmParticipation(participantId: number) {
         return this.http.post('http://127.0.0.1:8000/participant-confirm/', participantId);
     }
+
+    declineParticipation(participantId: number) {
+        return this.http.post('http://127.0.0.1:8000/participant-decline/', participantId);
+    }
+
+
 }

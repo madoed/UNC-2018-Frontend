@@ -2,7 +2,7 @@
 
     <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
 
-        <p-dataView #dv [value]="meetings" [paginator]="false" [rows]="20"
+        <p-dataView #dv *ngIf="index===0" [value]="meetings" [paginator]="false" [rows]="20"
                     [sortField]="sortField" [sortOrder]="sortOrder" filterBy="participantOfMeeting.name">
             <p-header>
                 <div style="position:relative">
@@ -12,172 +12,148 @@
             </p-header>
             <ng-template let-meeting pTemplate="listItem">
 
-                <div class="ui-g" [style.background-color]="checkIfNew(chat)?'#f4f5f7':'white'"
-                     style=" padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openChat(chat.id)">
+                <div class="ui-g" style=" padding: 2em;border-bottom: 1px solid #d9d9d9"  (click)="openMeeting(meeting)">
 
-                    <div style="float: left; margin-left: -10px; border-style: solid;  height: 70px; width: 70px; border-radius: 70px;">
+                    <div style="float: left; margin-left: -10px; height: 70px; width: 70px; border-radius: 70px;">
                         <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="meeting.participantOfMeeting.avatarUrl" src="{{meeting.participantOfMeeting.avatarUrl}}" >
                         <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="!meeting.participantOfMeeting.avatarUrl" src="{{defaultMeeting}}">
                     </div>
+
+                    <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px;">
+                        <h3 style="color: #282828;">{{meeting.participantOfMeeting.meetingName}}</h3>
+                        <div style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
+                            {{meeting.participantOfMeeting.amountOfParticipants}}
+                            {{meeting.participantOfMeeting.amountOfParticipants>1?'participants':'participant'}}
+                        </div>
+
+                    </div>
+                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+
                 </div>
             </ng-template>
         </p-dataView>
 
+        <p-dataView #dv *ngIf="index===1" [value]="meetingsPast" [paginator]="false" [rows]="20"
+                    [sortField]="sortField" [sortOrder]="sortOrder" filterBy="participantOfMeeting.name">
+            <p-header>
+                <div style="position:relative">
+                    <input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">
+                </div>
+
+            </p-header>
+            <ng-template let-meeting pTemplate="listItem">
+
+                <div class="ui-g" style=" padding: 2em;border-bottom: 1px solid #d9d9d9"  (click)="openMeeting(meeting)">
+
+                    <div style="float: left; margin-left: -10px; height: 70px; width: 70px; border-radius: 70px;">
+                        <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="meeting.participantOfMeeting.avatarUrl" src="{{meeting.participantOfMeeting.avatarUrl}}" >
+                        <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="!meeting.participantOfMeeting.avatarUrl" src="{{defaultMeeting}}">
+                    </div>
+
+                    <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px;">
+                        <h3 style="color: #282828;">{{meeting.participantOfMeeting.meetingName}}</h3>
+                        <div style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
+                            {{meeting.participantOfMeeting.amountOfParticipants}}
+                            {{meeting.participantOfMeeting.amountOfParticipants>1?'participants':'participant'}}
+                        </div>
+
+                    </div>
+                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+
+                </div>
+            </ng-template>
+        </p-dataView>
+
+        <p-dataView #dv *ngIf="index===2" [value]="meetingsNew" [paginator]="false" [rows]="20"
+                    [sortField]="sortField" [sortOrder]="sortOrder" filterBy="participantOfMeeting.name">
+            <p-header>
+                <div style="position:relative">
+                    <input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">
+                </div>
+
+            </p-header>
+            <ng-template let-meeting pTemplate="listItem">
+
+                <div class="ui-g" style="cursor: default!important;  background-color: white!important; padding: 2em;border-bottom: 1px solid #d9d9d9">
+
+                    <div style="float: left; margin-left: -10px; height: 70px; width: 70px; border-radius: 70px;">
+                        <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="meeting.participantOfMeeting.avatarUrl" src="{{meeting.participantOfMeeting.avatarUrl}}" >
+                        <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="!meeting.participantOfMeeting.avatarUrl" src="{{defaultMeeting}}">
+                    </div>
+
+                    <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px; cursor: pointer;" (click)="openMeeting(meeting)">
+                        <h3 style="color: #282828;">{{meeting.participantOfMeeting.meetingName}}</h3>
+                        <div style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
+                            {{meeting.participantOfMeeting.amountOfParticipants}}
+                            {{meeting.participantOfMeeting.amountOfParticipants>1?'participants':'participant'}}
+                        </div>
+
+                    </div>
+                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+
+
+                <div style="margin-left: 100px; width: 300px; height: 50px; color: #828282;">
+
+                    <button mat-raised-button color="primary"(click)="confirm(meeting)">
+                        Confirm
+                    </button>
+                    <button mat-raised-button style="margin-left: 30px; background: #f4f5f7!important; color: #6D6D6D!important" color="primary" (click)="decline(meeting)">
+                        Decline
+                    </button>
+                </div>
+                </div>
+            </ng-template>
+        </p-dataView>
     </div>
 
 
+    <div style="margin-left: 72.5%;">
+        <p-card [style]="{width: '310px'}" styleClass="ui-card-shadow">
+            <p-header >
+                <img src="Card" src="assets/images/meeting.png" style="height: 130px;">
+            </p-header>
 
-  <!--<mat-card>-->
-    <!--<mat-card-header background-color="accent">-->
-      <!--<h1 class = "myFont" >Meetings</h1>-->
-      <!--<span class="toolbar-filler"></span>-->
-      <!--<mat-card-actions>-->
-        <!--<button mat-raised-button color="primary" [routerLink]="['/meeting-list/create']" style="margin-right: 20px"><mat-icon>add_circle_outline</mat-icon></button>-->
-      <!--</mat-card-actions>-->
-    <!--</mat-card-header>-->
-    <!--<mat-card-content >-->
-            <!--<mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"-->
-                           <!--style="height: auto; width: 100%" (selectedTabChange)="loadMeetings($event)">-->
-                <!--<mat-tab label="Future" >-->
-        <!--<div class="basic-container">-->
-            <!--<mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">-->
-                <!--<mat-grid-tile *ngFor="let meeting of meetings"-->
-                               <!--style="border-style: ridge; height: 40px;" >-->
-                    <!--&lt;!&ndash;<mat-card [style.width]="'100%'" [style.height]="'50px'" (click)="openMeeting(meeting)" style="cursor: pointer;">&ndash;&gt;-->
+            <button mat-button [routerLink]="['/meeting-list/create']" style="margin-right: 20px;
+     height: 40px; width: 284px!important; border-top-style: solid; border-bottom-style: solid; border-color: #6D6D6D;">
+                <span style="color: #007ad9;">Create meeting</span>
+            </button>
 
-                    <!--<div  >-->
-                        <!--<div style="height: 40px; width: 600px;" >-->
-                            <!--<a >-->
-                                <!--<h3 class="title" (click)="openMeeting(meeting)"-->
-                                    <!--style="float: left; margin-left: 150px; cursor: pointer;">-->
-                                    <!--{{meeting.participantOfMeeting.name}}-->
-                                <!--</h3>-->
-                            <!--</a>-->
-                        <!--</div>-->
+            <button mat-button *ngIf="index===0" style="border-left-style: solid; border-color: #00539b;
+            border-width: thick; background: #f4f5f7!important; margin-right: 20px;
+     height: 40px; width: 284px!important; " (click)="openList(0)" >
+                <span style="color: #007ad9;">Future meetings</span>
+            </button>
+            <button mat-button *ngIf="index!==0" style="margin-right: 20px;
+     height: 40px; width: 284px!important; ">
+                <span style="color: #007ad9;" (click)="openList(0)" >Future meetings</span>
+            </button>
 
-                        <!--<mat-divider></mat-divider>-->
-                        <!--<br />-->
-                        <!--&lt;!&ndash;<div  >&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div style="height: 40px;">&ndash;&gt;-->
+            <button mat-button *ngIf="index===1" style="border-left-style: solid; border-color: #00539b;
+            border-width: thick; background: #f4f5f7!important; margin-right: 20px;
+     height: 40px; width: 284px!important; ">
+                <span style="color: #007ad9;" (click)="openList(1)" >Past meetings</span>
+            </button>
+            <button mat-button *ngIf="index!==1" style="margin-right: 20px;
+     height: 40px; width: 284px!important; ">
+                <span style="color: #007ad9;" (click)="openList(1)" >Past meetings</span>
+            </button>
 
-                            <!--&lt;!&ndash;<h3 class="title">&ndash;&gt;-->
-                                <!--&lt;!&ndash;{{meeting.participantOfMeeting.name}}&ndash;&gt;-->
-                            <!--&lt;!&ndash;</h3>&ndash;&gt;-->
+            <button mat-button *ngIf="index===2"  style="border-left-style: solid; border-color: #00539b;
+            border-width: thick; background: #f4f5f7!important; margin-right: 20px;
+     height: 40px; width: 284px!important; ">
+                <span style="color: #007ad9;" (click)="openList(2)" >New meetings</span>
+            </button>
+            <button mat-button *ngIf="index!==2"  style="margin-right: 20px;
+     height: 40px; width: 284px!important; ">
+                <span style="color: #007ad9;" (click)="openList(2)" >New meetings</span>
+            </button>
 
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-                        <!--<h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">-->
-                            <!--Data: </span>-->
-                            <!--{{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}-->
-                            <!--<span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>-->
-                            <!--{{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}-->
-                            <!--&lt;!&ndash;Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>&ndash;&gt;-->
-                            <!--<span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">-->
-                                <!--Status:-->
-                                <!--<span style="color: #989898">-->
-                                <!--{{meeting.participantOfMeeting.status}}-->
-                                <!--</span>-->
-                            <!--</span>-->
-                        <!--</h3>-->
-
-
-                    <!--</div>-->
-                    <!--&lt;!&ndash;</mat-card>&ndash;&gt;-->
-                <!--</mat-grid-tile>-->
-            <!--</mat-grid-list>-->
-        <!--</div>-->
-                <!--</mat-tab>-->
-
-                <!--<mat-tab label="Past" >-->
-                    <!--<div class="basic-container">-->
-                        <!--<mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">-->
-                            <!--<mat-grid-tile *ngFor="let meeting of meetingsPast" style="border-style: ridge;-->
-                            <!--height: 40px;" >-->
-                                <!--&lt;!&ndash;<mat-card [style.width]="'100%'" (click)="openMeeting(meeting)" style="cursor: pointer;">&ndash;&gt;-->
-
-                                <!--<div  >-->
-                                    <!--<div style="height: 40px; width: 600px;" >-->
-                                        <!--<a >-->
-                                            <!--<h3 class="title" (click)="openMeeting(meeting)"-->
-                                                <!--style="float: left; margin-left: 150px;  cursor: pointer;">-->
-                                                <!--{{meeting.participantOfMeeting.name}}-->
-                                            <!--</h3>-->
-
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                    <!--<mat-divider></mat-divider>-->
-                                    <!--<br />-->
-                                    <!---->
-                                    <!--<h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">-->
-                            <!--Data: </span>-->
-                                        <!--{{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}-->
-                                        <!--<span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>-->
-                                        <!--{{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}-->
-                                        <!--<span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">-->
-                                <!--Status:-->
-                                <!--<span style="color: #989898">-->
-                                <!--{{meeting.participantOfMeeting.status}}-->
-                                <!--</span>-->
-                            <!--</span>-->
-                                    <!--</h3>-->
-                                    <!--</div>-->
-                                <!--&lt;!&ndash;</mat-card>&ndash;&gt;-->
-                            <!--</mat-grid-tile>-->
-                        <!--</mat-grid-list>-->
-                    <!--</div>-->
-                <!--</mat-tab>-->
-
-                <!--<mat-tab label="New" >-->
-                    <!--<div class="basic-container">-->
-                        <!--<mat-grid-list cols="1" rowHeight="140px" gutterSize="10px" [style.height]="'fit'">-->
-                            <!--<mat-grid-tile *ngFor="let meeting of meetingsNew" style="border-style: ridge;-->
-                            <!--height: 40px;" >-->
-                                <!--<div  >-->
-                                    <!--<div style="height: 40px; width: 600px;" >-->
-                                        <!--<a >-->
-                                            <!--<h3 class="title" (click)="openMeeting(meeting)"-->
-                                                <!--style="float: left; margin-left: 150px; cursor: pointer;">-->
-                                                <!--{{meeting.participantOfMeeting.name}}-->
-                                            <!--</h3>-->
-                                            <!--<button mat-raised-button color="primary"(click)="confirm(meeting)"-->
-                                                    <!--style="float: right; margin-right: -150px; float: top; margin-top: 10px;">-->
-                                                <!--Confirm-->
-                                            <!--</button>-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                    <!--<mat-divider></mat-divider>-->
-                                    <!--<br />-->
-
-                                    <!--&lt;!&ndash;<div  fxLayout="row" align="center">&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<a class="title">&ndash;&gt;-->
-                                            <!--&lt;!&ndash;<h3 class="meeting-title">&ndash;&gt;-->
-                                                <!--&lt;!&ndash;{{meeting.participantOfMeeting.name}}</h3>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;</a>&ndash;&gt;-->
-                                    <!--<h3 style="color: #989898"  ><span align="left" class="meeting-title" style="color:steelblue">-->
-                            <!--Data: </span>-->
-                                        <!--{{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): "-"}}-->
-                                        <!--<span align="left" class="meeting-title" style="color:steelblue; margin-left: 50px;" >Place: </span>-->
-                                        <!--{{meeting.participantOfMeeting.meetingLocation? meeting.participantOfMeeting.meetingLocation.placeName: "-"}}-->
-                                        <!--&lt;!&ndash;Place: <span>{{meeting.participantOfMeeting.place.placeName}}</span>&ndash;&gt;-->
-                                        <!--<span align="right" class="meeting-title" style="color:steelblue; float: right; margin-right: 30px;">-->
-                                <!--Status:-->
-                                <!--<span style="color: #989898">-->
-                                <!--{{meeting.participantOfMeeting.status}}-->
-                                <!--</span>-->
-                            <!--</span>-->
-                                    <!--</h3>-->
-                                    <!--</div>-->
-                              <!---->
-                            <!--</mat-grid-tile>-->
-                        <!--</mat-grid-list>-->
-                    <!--</div>-->
-                <!--</mat-tab>-->
-            <!--</mat-tab-group>-->
-
-
-      <!---->
-    <!--</mat-card-content>-->
-
-
-  <!--</mat-card>-->
+        </p-card>
+    </div>
 </div>

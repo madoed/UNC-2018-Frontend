@@ -47,8 +47,9 @@
         </span></h3>
 
       <mat-card-actions *ngIf="check!==null&&check.checkStatus!='payed'">
-        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id!==myId" color="primary" type="button" style="margin-left: 700px" (click)="markAsPayed()">Pay</button>
-        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id===myId" color="primary" type="button" style="margin-left: 700px" (click)="markAsPayed()">Mark as payed</button>
+        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id!==myId" color="primary" type="button" style="margin-left: 700px" (click)="markAsPayed()">Mark as payed</button>
+        <button mat-raised-button *ngIf="check.checkOwner.meetingParticipant.id===myId" color="primary" type="button" style="margin-left: 700px"
+                [routerLink]="['/check-list/check-pay', check.id]">Pay</button>
       </mat-card-actions>
 
     </mat-card-content>

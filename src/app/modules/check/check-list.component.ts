@@ -14,6 +14,7 @@ import { MessageService as mes} from 'primeng/api';
 })
 export class CheckListComponent implements OnInit {
 
+    index: number = 0;
     myId: number;
     checksToPay: Check[] = [];
     checksHistory: Check[] = [];
@@ -46,6 +47,61 @@ export class CheckListComponent implements OnInit {
           }
       });
   }
+
+    openList(num: number) {
+        if (num === 1 && !this.checksFromOwners.length) {
+            this.checkService.getOwedChecks('notpayed').subscribe( data => {
+                if (data !== null) {
+                    this.checksFromOwners = data;
+                    this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    console.log(data);
+                }
+            });
+        }
+        if (num === 2 && !this.checksHistory.length) {
+            this.checkService.getAll('payed').subscribe( data => {
+                if (data !== null) {
+                    this.checksHistory = data;
+                    this.checkService.getOwedChecks('payed').subscribe(res => {
+                        res.forEach(item => {this.checksHistory.push(item); });
+                        this.checksHistory = this.checksHistory.sort((a, b): number => {
+                            if (a.id > b.id) {
+                                return -1;
+                            }
+                            if (a.id < b.id) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                    });
+                } else {
+                    this.checkService.getOwedChecks('payed').subscribe(res => {
+                        if (res !== null) {
+                            this.checksHistory = res;
+                            this.checksHistory = this.checksHistory.sort((a, b): number => {
+                                if (a.id > b.id) {
+                                    return -1;
+                                }
+                                if (a.id < b.id) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        this.index = num;
+    }
 
     parse(value: any): String | null {
         if ((typeof value === 'string')) {

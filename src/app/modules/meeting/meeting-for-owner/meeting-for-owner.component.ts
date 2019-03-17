@@ -218,6 +218,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                   if (meeting) {
                       console.log(meeting);
                       this.meeting = meeting;
+                      this.meetingService.setMeeting(meeting);
                       if (this.meeting.meetingLocation) {
                           this.markerTitle = this.meeting.meetingLocation.placeName;
                           this.overlays.push(new google.maps.Marker({

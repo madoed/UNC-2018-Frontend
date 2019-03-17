@@ -148,6 +148,7 @@ export class MessagesComponent implements OnInit {
             let mymes = JSON.parse(mes.body);
             console.log(mymes);
             this.filteredMessages.push(mymes);
+            this.messageService.cleanReserve(this.channel.id, this.authService.user.id);
             this.scrollToBottom();
               this.delay(600).then(any => {
                   this.scrollToBottom();

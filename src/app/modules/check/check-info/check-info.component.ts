@@ -7,6 +7,7 @@ import {Check} from '@app/core/models/check.model';
 import {Subscription} from 'rxjs';
 import {ItemAmount} from '@app/core/models/itemamount.model';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Card} from '@app/core/models/card.model';
 
 @Component({
   selector: 'app-check-info',
@@ -19,6 +20,7 @@ export class CheckInfoComponent implements OnInit {
     items: ItemAmount[] = [];
     myId: number;
     cols: any[];
+
 
   constructor(private authService: AuthService,
               private router: Router,

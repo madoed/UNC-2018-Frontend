@@ -18,6 +18,7 @@ import {environment} from '@env';
 })
 export class MeetingListComponent implements OnInit {
 
+  index: number = 0;
   defaultMeeting = environment.defaultMeeting;
   private date = new Date();
   panelOpenState = false;
@@ -47,6 +48,43 @@ export class MeetingListComponent implements OnInit {
         }
     });
   }
+
+    openList(num: number) {
+        if (num === 1 && !this.meetingsPast.length) {
+            this.meetingService.getAll(1).subscribe( data => {
+                if (data !== null) {
+                    this.meetingsPast = data;
+                    this.meetingsPast.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    console.log(data);
+                }
+            });
+        }
+        if (num === 2 && !this.meetingsNew.length) {
+            this.meetingService.getAll(2).subscribe( data => {
+                if (data !== null) {
+                    this.meetingsNew = data;
+                    this.meetingsNew.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                }
+            });
+        }
+        this.index = num;
+    }
 
     loadMeetings(tab: MatTabChangeEvent) {
         if (tab.index === 1 && !this.meetingsPast.length) {
@@ -124,5 +162,13 @@ export class MeetingListComponent implements OnInit {
           });
           });
   }
+
+    decline(part: Participant) {
+        this.meetingService.declineParticipation(part.id).subscribe( res => {
+            this.delay(600).then(any => {
+                window.location.reload();
+            });
+        });
+    }
 
 }
