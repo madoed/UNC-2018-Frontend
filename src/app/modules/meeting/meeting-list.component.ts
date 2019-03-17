@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {Participant} from '@app/core/models/participant.model';
 import {MatTabChangeEvent} from '@angular/material';
 import {MessageService as mes} from 'primeng/api';
+import {environment} from '@env';
 
 @Component({
   selector: 'app-meeting-list',
@@ -17,6 +18,7 @@ import {MessageService as mes} from 'primeng/api';
 })
 export class MeetingListComponent implements OnInit {
 
+  defaultMeeting = environment.defaultMeeting;
   private date = new Date();
   panelOpenState = false;
   meetings: Participant[] = [];
