@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import {ApiService, AuthService, Meeting, Participant, Place} from '@app/core';
+import {Place} from '../models';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Meetinglocation} from '@app/core/models/meetinglocation';

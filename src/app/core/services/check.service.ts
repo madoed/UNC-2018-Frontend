@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {ApiService, AuthService, Participant} from '@app/core';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Check} from '@app/core/models/check.model';
 import {ItemAmount} from '@app/core/models/itemamount.model';

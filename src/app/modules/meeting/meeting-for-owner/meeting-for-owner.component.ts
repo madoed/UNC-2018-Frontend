@@ -1,28 +1,32 @@
 import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Meeting} from '@app/core/models/meeting.model';
-import {MeetingService} from '@app/core/services/meeting.service';
-import {AuthService, Participant, Place, User} from '@app/core';
-import {FormControl} from '@angular/forms';
 import {MessagesComponent} from '@app/modules/messages/messages.component';
-import {MetadataOverride} from '@angular/core/testing';
-import {MessageService} from '@app/core/services/message.service';
-import {ChatService} from '@app/core/services/chat.service';
 import {MatPaginator, MatTableDataSource, MatSort, MatCheckbox} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {Subscription} from 'rxjs';
-import {Chat} from '@app/core/models/chat.model';
-import {Item} from '@app/core/models/item.model';
-import {ItemAmount} from '@app/core/models/itemamount.model';
-import {Message} from 'primeng/api';
 import {MessageService as mes} from 'primeng/api';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Bill} from '@app/core/models/bill.model';
-import {CheckService} from '@app/core/services/check.service';
-import {Meetinglocation} from '@app/core/models/meetinglocation';
-import {PollService} from '@app/core/services/poll.service';
-import {DatePoll} from '@app/core/models/datepoll.model';
 import {environment} from '@env';
+import {
+    Meeting,
+    MeetingService,
+    AuthService,
+    Participant,
+    Place,
+    User,
+    MessageService,
+    ChatService,
+    Item,
+    ItemAmount,
+    Bill,
+    CheckService,
+    Meetinglocation,
+    PollService,
+    DatePoll,
+    FnsReceipt,
+    FnsCheckInfo,
+    FnsCheckService
+} from '@app/core';
 
 
 /** Constants used to fill up our data base. */
@@ -86,7 +90,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     selectedCar: Item;
     newCar: boolean;
     cols: any[];
-    billItems: Item[];
+    billItems: Item[] = [];
 
     sourceCars: Item[];
     targetCars: Item[];
@@ -96,6 +100,9 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     private show_bill;
     private edit_bill;
     private changed_bill;
+
+    displayFnsDialog: boolean = false;
+    fnsCheckInfo: FnsCheckInfo = {} as FnsCheckInfo;
 
   private participant = {} as Participant;
   private meeting = {} as Meeting;
@@ -185,7 +192,9 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
               messageService: MessageService,
               public chatService: ChatService,
               private checkService: CheckService,
-              private pollService: PollService) {
+              private pollService: PollService,
+              private fnsCheckService: FnsCheckService
+        ) {
     super(messageService, router, chatService, authService, route);
     const users: UserData[] = [];
     for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
@@ -1125,6 +1134,37 @@ ngAfterViewInit() {
                 }
             });
             this.dateForVote = null;
+        });
+    }
+
+    // FNS
+    showFnsDialog() {
+        this.newCar = true;
+        this.fnsCheckInfo = {} as FnsCheckInfo;
+        this.displayFnsDialog = true;
+    }
+
+    hideFnsDialog() {
+        this.displayFnsDialog = false;
+    }
+
+    getFnsCheck() {
+        this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
+        data => {
+            const fnsReceipt: FnsReceipt = data;
+            fnsReceipt.items.forEach(item => {
+                this.newCar = true;
+                this.car = {} as Item;
+                this.car.itemTitle = item.name;
+                this.car.itemAmount = item.quantity || 1;
+                this.car.price = item.price / 100;
+                this.save();
+            });
+            this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
+            this.hideFnsDialog();
+        },
+        error => {
+            this.messService.add({severity:'error', summary:'Error', detail: 'Unable to get check details; please make sure the codes you provided are correct.'});
         });
     }
 }

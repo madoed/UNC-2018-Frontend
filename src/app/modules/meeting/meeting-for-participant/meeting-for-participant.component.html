@@ -335,6 +335,8 @@
                     <ng-template pTemplate="summary" let-rowData>
                       <div style="text-align:left">
                         <button mat-raised-button color="primary" type="button"  (click)="showDialogToAdd()">Add</button>
+                        <!--Button to open FNS dialog-->
+                        <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">FNS</button>
                       </div>
                     </ng-template>
                   </p-table>
@@ -375,6 +377,47 @@
                                 [disabled]="!car||!car.itemAmount||!car.price||!car.itemTitle">Save</button>
                       </div>
                     </p-footer>
+                  </p-dialog>
+
+                  <!--FNS dialog-->
+                  <p-dialog header="Enter FNS COdes" [(visible)]="displayFnsDialog" [responsive]="true"  [style]="{width: '400px'}">
+                      <div class="ui-g ui-fluid">
+                          <div class="ui-g-12">
+                              <b>Disclaimer:</b> This feature depends on an external public API, and therefore is not guaranteed to work.
+                              <br>
+                          </div>
+                          <div class="ui-g-12">
+                              <div class="ui-g-2">
+                                  <label for="title">FN</label>
+                              </div>
+                              <div class="ui-g-10">
+                                  <input pInputText id="fn" minLength="16" maxLength="16" [(ngModel)]="fnsCheckInfo.fn" type="number" required/>
+                              </div>
+                          </div>
+                          <div class="ui-g-12">
+                              <div class="ui-g-2">
+                                  <label for="price">FD</label>
+                              </div>
+                              <div class="ui-g-10">
+                                  <input pInputText id="fd" maxlength="10" [(ngModel)]="fnsCheckInfo.fd" type="number" required/>
+                              </div>
+                          </div>
+                          <div class="ui-g-12">
+                              <div class="ui-g-2">
+                                  <label for="amount">FPD</label>
+                              </div>
+                              <div class="ui-g-10">
+                                  <input pInputText id="fpd" maxlength="10" [(ngModel)]="fnsCheckInfo.fpd" type="number" required/>
+                              </div>
+                          </div>
+                      </div>
+                      <p-footer>
+                          <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                              <button mat-raised-button color="primary" type="button" (click)="hideFnsDialog()">Cancel</button>
+                              <button mat-raised-button color="primary" type="button" (click)="getFnsCheck()"
+                              [disabled]="!fnsCheckInfo||!fnsCheckInfo.fn||!fnsCheckInfo.fd||!fnsCheckInfo.fpd">OK</button>
+                          </div>
+                      </p-footer>
                   </p-dialog>
 
                   <br />

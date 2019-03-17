@@ -9,3 +9,6 @@ export * from './meeting.service';
 export * from './message.service';
 export * from './web-socket.service';
 export * from './storage.service';
+export * from './fns-check.service';
+export * from './poll.service';
+export * from './check.service';
