@@ -25,8 +25,10 @@ import {
     DatePoll,
     FnsReceipt,
     FnsCheckInfo,
-    FnsCheckService
+    FnsCheckService, CardService
 } from '@app/core';
+import {environment} from '@env';
+import {Card} from '@app/core/models/card.model';
 
 declare var google: any;
 
@@ -37,6 +39,20 @@ declare var google: any;
     providers: [mes]
 })
 export class MeetingForParticipantComponent extends MessagesComponent implements OnInit {
+    defaultMeeting = environment.defaultMeeting;
+    defaultAvatar = environment.defaultAvatar;
+
+    showAddCardForFNS: boolean = false;
+    showNewCard: boolean = false;
+
+    card = {} as Card;
+    cards: Array<Card> = null;
+    showAddCard: boolean = false;
+    CVV: number;
+    lastFourNumbers: number;
+    fixedCardId: number = null;
+
+    meetingDescript: string = '';
     dateForVote: Date;
 
     showAddParticipants: boolean = false;
@@ -44,6 +60,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     fixedUserId;
     fixedUser: User;
 
+    overlaysPollPopUp: any[];
     me = {} as User;
     placePoll: Meetinglocation[];
     datePoll: DatePoll[];
@@ -60,7 +77,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     infoWindow: any;
 
 
-    private bill = {} as Bill;
+    public bill = {} as Bill;
     displayDialogDescription: boolean = false;
     editDescription: boolean = false;
     displayDialog: boolean;
@@ -68,7 +85,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     selectedCar: Item;
     newCar: boolean;
     cols: any[];
-    billItems: Item[];
+    billItems: Item[] = [];
 
     sourceCars: Item[];
     targetCars: Item[];
@@ -83,7 +100,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     fnsCheckInfo: FnsCheckInfo = {} as FnsCheckInfo;
 
     private participant = {} as Participant;
-    private meeting = {} as Meeting ;
+    private meeting = {} as Meeting;
     private date: Date;
     time: Date;
     private minDate: Date;
@@ -113,7 +130,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         return isNaN(timestamp) ? null : new Date(timestamp);
     }
 
-    parser(value: any): String | '' {
+    parserMeeting(value: any): String | '' {
         if ((typeof value === 'string')) {
             const str = value.split(' ');
             const year = str[5];
@@ -170,9 +187,15 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                 public chatService: ChatService,
                 private checkService: CheckService,
                 private pollService: PollService,
-                private fnsCheckService: FnsCheckService
+                private fnsCheckService: FnsCheckService,
+                private cardService: CardService
             ) {
         super(messageService, router, chatService, authService, route);
+        const users: UserData[] = [];
+        //for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
+
+        // Assign the data to the data source for the table to render
+        this.dataSource = new MatTableDataSource(users);
 
         this.placePoll = null;
         this.datePoll = null;
@@ -190,6 +213,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                             if (meeting) {
                                 console.log(meeting);
                                 this.meeting = meeting;
+                                this.meetingService.setMeeting(meeting);
                                 if (this.meeting.meetingLocation) {
                                     this.markerTitle = this.meeting.meetingLocation.placeName;
                                     this.overlays.push(new google.maps.Marker({
@@ -200,6 +224,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                 }
                                 this.meetingService.setMeeting(meeting);
                                 this.overlaysPoll = [];
+                                this.overlaysPollPopUp = [];
                                 if (this.meeting.pollForPlaceOpen === 1) {
                                     this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                                         if (poll) {
@@ -214,6 +239,11 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                             //     return 0;
                                             // });
                                             this.placePoll.forEach(item => {
+                                                this.overlaysPollPopUp.push(new google.maps.Marker({
+                                                    position:
+                                                        {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                                                    title: item.oneLocation.placeName
+                                                }));
                                                 this.overlaysPoll.push(new google.maps.Marker({
                                                     position:
                                                         {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
@@ -327,12 +357,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                     }
                                 });
                                 this.route.params = this.chatService.getChannel(this.meeting.meetingChat.id);
-                                if (this.participant.statusOfConfirmation === 'confirmed') {
-                                    super.ngOnInit();
-                                    this.delay(2000).then(any => {
-                                        super.scrollToBottom();
-                                    });
-                                }
+                                super.ngOnInit();
+                                this.delay(2000).then(any => {
+                                    super.scrollToBottom();
+                                });
                             }
                         });
                     }
@@ -362,10 +390,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
 
 
         this.cols = [
-            { field: 'itemTitle', header: 'item' },
-            { field: 'price', header: 'price' },
-            { field: 'itemAmount', header: 'amount' },
-            { field: 'itemCurrentAmount', header: 'left' },
+            { field: 'itemTitle', header: 'Item' },
+            { field: 'price', header: 'Price' },
+            { field: 'itemAmount', header: 'Amount' },
+            { field: 'itemCurrentAmount', header: 'Left' },
         ];
         // this.chatService.setChannel(this.meeting.meetingChat);
 
@@ -616,6 +644,81 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         this.displayDialog = true;
     }
 
+    markAsPayed() {
+        this.cardService.setBillCard(this.fixedCardId, this.meeting.id).subscribe( val => {
+            this.bill.billOwner = this.participant.meetingParticipant;
+            this.showAddCard = false;
+            let cars = [...this.billItems];
+            this.meetingService.addItem(this.car).subscribe(
+                res => {
+                    cars.push(res);
+                    console.log(res);
+                    this.billItems.push(res);
+                    let tmpItem = {} as Item;
+                    tmpItem.itemAmount = res.itemCurrentAmount;
+                    tmpItem.itemTitle = res.itemTitle;
+                    tmpItem.itemCurrentAmount = 0;
+                    tmpItem.id = res.id;
+                    tmpItem.price = res.price;
+                    tmpItem.itemBill = res.itemBill;
+                    this.sourceCars.push(tmpItem);
+                    this.sourceCars = this.sourceCars.sort((a, b): number => {
+                        if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                            return -1;
+                        }
+                        if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    this.car = null;
+                    this.displayDialog = false;
+                    this.meetingService.getBill(this.meeting.id).subscribe(item => {
+                        console.log(item);
+                        this.bill = item;
+                    });
+                    this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                },
+                // (err: any) => {
+                //     if (err instanceof HttpErrorResponse) {
+                //         this.messService.add({severity: 'error', summary: 'Error Message', detail: ''});
+                //     }
+                // }
+                (err: HttpErrorResponse) => {
+                    console.log(err.error);
+                    console.log(err.name);
+                    console.log(err.message);
+                    console.log(err.status);
+                    this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+                    this.car = null;
+                    this.displayDialog = false;
+                    return;
+                }
+            );
+        });
+
+    }
+
+    saveCard() {
+        if ((this.lastFourNumbers.toString().length !== 16) || (this.lastFourNumbers.toString().includes('.'))) {
+            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid card number'});
+        } else if (!this.card.nameSurname.includes(' ') || (this.card.nameSurname.indexOf(' ') ===
+            (this.card.nameSurname.length - 1))) {
+            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid name on card'});
+        } else if (this.CVV.toString().length !== 3) {
+            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid CVV'});
+        } else {
+            this.card.lastFourNumbers = this.lastFourNumbers.toString();
+            this.card.owner = this.participant.meetingParticipant;
+            this.cardService.save(this.card).subscribe(result => {
+                //this.card = null;
+                this.cards.push(result);
+                this.showNewCard = false;
+                this.messService.add({severity: 'success', summary: 'Success Message', detail:'Card added'});
+            }, error => console.error(error));
+        }
+    }
+
     save() {
         this.car.itemCurrentAmount = 0;
         if (this.car.price < 0) {
@@ -628,51 +731,63 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         } else {
             let cars = [...this.billItems];
             if (this.newCar) {
-                this.meetingService.addItem(this.car).subscribe(
-                    res => {
-                        cars.push(res);
-                        console.log(res);
-                        this.billItems.push(res);
-                        let tmpItem = {} as Item;
-                        tmpItem.itemAmount = res.itemCurrentAmount;
-                        tmpItem.itemTitle = res.itemTitle;
-                        tmpItem.itemCurrentAmount = 0;
-                        tmpItem.id = res.id;
-                        tmpItem.price = res.price;
-                        tmpItem.itemBill = res.itemBill;
-                        this.sourceCars.push(tmpItem);
-                        this.sourceCars = this.sourceCars.sort((a, b): number => {
-                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
-                                return -1;
-                            }
-                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
-                                return 1;
-                            }
-                            return 0;
-                        });
-                        this.car = null;
-                        this.displayDialog = false;
-                        this.meetingService.getBill(this.meeting.id).subscribe(item => {
-                            console.log(item);
-                            this.bill = item;
-                        });
-                    },
-                    // (err: any) => {
-                    //     if (err instanceof HttpErrorResponse) {
-                    //         this.messService.add({severity: 'error', summary: 'Error Message', detail: ''});
-                    //     }
-                    // }
-                    (err: HttpErrorResponse) => {
-                        console.log(err.error);
-                        console.log(err.name);
-                        console.log(err.message);
-                        console.log(err.status);
-                        this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
-                        this.car = null;
-                        this.displayDialog = false;
-                        return;
-                    }
-                );
+                if (this.bill.billOwner === null) {
+                    this.showAddCard = true;
+                    this.cardService.getAll(this.participant.meetingParticipant.id).subscribe(data => {
+                        if (data) {
+                            this.cards = data;
+                        } else {
+                            this.cards = [];
+                        }
+                    });
+                } else {
+                    this.meetingService.addItem(this.car).subscribe(
+                        res => {
+                            cars.push(res);
+                            console.log(res);
+                            this.billItems.push(res);
+                            let tmpItem = {} as Item;
+                            tmpItem.itemAmount = res.itemCurrentAmount;
+                            tmpItem.itemTitle = res.itemTitle;
+                            tmpItem.itemCurrentAmount = 0;
+                            tmpItem.id = res.id;
+                            tmpItem.price = res.price;
+                            tmpItem.itemBill = res.itemBill;
+                            this.sourceCars.push(tmpItem);
+                            this.sourceCars = this.sourceCars.sort((a, b): number => {
+                                if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                    return -1;
+                                }
+                                if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                            this.car = null;
+                            this.displayDialog = false;
+                            this.meetingService.getBill(this.meeting.id).subscribe(item => {
+                                console.log(item);
+                                this.bill = item;
+                            });
+                            this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                        },
+                        // (err: any) => {
+                        //     if (err instanceof HttpErrorResponse) {
+                        //         this.messService.add({severity: 'error', summary: 'Error Message', detail: ''});
+                        //     }
+                        // }
+                        (err: HttpErrorResponse) => {
+                            console.log(err.error);
+                            console.log(err.name);
+                            console.log(err.message);
+                            console.log(err.status);
+                            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+                            this.car = null;
+                            this.displayDialog = false;
+                            return;
+                        }
+                    );
+                }
             } else {
                 console.log(this.car);
                 this.meetingService.updateItem(this.car).subscribe(
@@ -743,6 +858,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         }
     }
 
+    setCard(card: any) {
+        this.fixedCardId = card.id;
+    }
+
     delete() {
         if (!this.newCar) {
             this.meetingService.deleteItem(this.selectedCar.id).subscribe(
@@ -808,7 +927,8 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         place.lat = this.selectedPosition.lat();
         place.lng = this.selectedPosition.lng();
         place.placeName = this.markerTitle2;
-        //this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
+        this.overlaysPollPopUp.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: false}));
+        this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: true}));
         this.pollService.addPlaceInPoll(place, this.participant.id).subscribe(res => {
             this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
                 if (places) {
@@ -874,6 +994,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                         this.overlaysPoll.push(item.oneLocation);
 
                     });
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
                 }
             });
         });
@@ -899,6 +1020,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         return checkOut;
     }
 
+
     fix(user: User) {
         this.fixedUserId = user.id;
         this.fixedUser = user;
@@ -915,21 +1037,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         });
     }
 
-    voteForDate(dateId: number) {
-        this.pollService.voteForDate(dateId).subscribe(res => {
-            this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
-                if (dates) {
-                    this.datePoll = dates;
-                    // this.datePoll = this.datePoll.sort((a, b): number => {
-                    //     if (a.id > b.id) {
-                    //         return 1;
-                    //     }
-                    //     if (a.id < b.id) {
-                    //         return -1;
-                    //     }
-                    //     return 0;
-                    // });
-                }
+    decline(part: Participant) {
+        this.meetingService.declineParticipation(part.id).subscribe( res => {
+            this.delay(600).then(any => {
+                window.location.reload();
             });
         });
     }
@@ -948,15 +1059,37 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                     //     }
                     //     return 0;
                     // });
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail: 'new date added'});
                 }
             });
             this.dateForVote = null;
         });
     }
 
+    voteForDate(dateId: number) {
+        this.pollService.voteForDate(dateId).subscribe(res => {
+            this.pollService.getDatePoll(this.meeting.id).subscribe(dates => {
+                if (dates) {
+                    this.datePoll = dates;
+                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                    //     if (a.id > b.id) {
+                    //         return 1;
+                    //     }
+                    //     if (a.id < b.id) {
+                    //         return -1;
+                    //     }
+                    //     return 0;
+                    // });
+                    this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
+                }
+            });
+        });
+    }
+
 
     // FNS
     showFnsDialog() {
+        this.car = {} as Item;
         this.newCar = true;
         this.fnsCheckInfo = {} as FnsCheckInfo;
         this.displayFnsDialog = true;
@@ -966,23 +1099,34 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         this.displayFnsDialog = false;
     }
 
-    getFnsCheck() {
-        this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
-        data => {
-            const fnsReceipt: FnsReceipt = data;
-            fnsReceipt.items.forEach(item => {
-                this.newCar = true;
-                this.car = {} as Item;
-                this.car.itemTitle = item.name;
-                this.car.itemAmount = item.quantity || 1;
-                this.car.price = item.price / 100;
-                this.save();
-            });
-            this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
-            this.hideFnsDialog();
-        },
-        error => {
-            this.messService.add({severity:'error', summary:'Error', detail: 'Unable to get check details; please make sure the codes you provided are correct.'});
+    markAsPayedForFNS() {
+        this.cardService.setBillCard(this.fixedCardId, this.meeting.id).subscribe(val => {
+            this.bill.billOwner = this.participant.meetingParticipant;
+            this.showAddCardForFNS = false;
+            this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
+                data => {
+                    const fnsReceipt: FnsReceipt = data;
+                    fnsReceipt.items.forEach(item => {
+                        this.newCar = true;
+                        this.car = {} as Item;
+                        this.car.itemTitle = item.name;
+                        this.car.itemAmount = item.quantity || 1;
+                        this.car.price = item.price / 100;
+                        this.save();
+                    });
+                    this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
+                    this.hideFnsDialog();
+                },
+                error => {
+                    this.messService.add({severity:'error', summary:'Error', detail: 'Unable to get check details; please make sure the codes you provided are correct.'});
+                });
         });
+    }
+
+    getFnsCheck() {
+        if (this.bill.billOwner === null) {
+            this.showAddCardForFNS = true;
+        }
+
     }
 }

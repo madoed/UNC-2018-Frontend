@@ -41,27 +41,6 @@
     <div style="float: left; width: 810px; height: 300px;">
     <mat-card style="height: 300px;">
         <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.name}}</h1>
-            <!--<mat-expansion-panel (opened)="panelOpenState = true"-->
-                                 <!--(closed)="panelOpenState = false">-->
-        <!--<mat-expansion-panel-header>-->
-            <!--<mat-panel-title>-->
-                <!--Description-->
-            <!--</mat-panel-title>-->
-            <!--<mat-panel-description >-->
-                <!--{{panelOpenState ? 'show less' : 'take a look'}}-->
-            <!--</mat-panel-description>-->
-        <!--</mat-expansion-panel-header>-->
-        <!--<p>{{meeting.meetingDescription}}</p>-->
-        <!--</mat-expansion-panel>-->
-
-        <!--<p-panel header="Description" [toggleable]="true" [collapsed]="true" [style]="{'margin-bottom':'20px','margin-left':'25px', 'margin-right':'25px'}">-->
-            <!--<textarea [rows]="2" [cols]="106" pInputTextarea autoResize="autoResize" [disabled]="true"-->
-                      <!--[(ngModel)]="meeting.meetingDescription"> {{meeting.meetingDescription}}</textarea>-->
-
-            <!--<p-footer>-->
-                <!--<button mat-raised-button color="primary" type="button" style="margin-left: 700px" (click)="descriptionEdit()">Edit</button>-->
-            <!--</p-footer>-->
-        <!--</p-panel>-->
 
         <div style="width: 810px; margin-top: 60px; color: #6D6D6D;">
         <div style="float: left;  width: 480px; color: #6D6D6D;">
@@ -93,31 +72,6 @@
                         (onMapClick)="openMap=!openMap;" ></p-gmap>
             </div>
 
-                <!--<div style=" margin-top: 10px; margin-left: 20px;">-->
-                    <!--<h3>Date of meeting</h3>-->
-                    <!--<p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()"-->
-                                <!--[style]="{'background-color': 'black'}">-->
-                    <!--</p-calendar>-->
-                    <!--&lt;!&ndash;<span style="margin-left: 30px"></span>&ndash;&gt;-->
-                    <!--<h3>Time of meeting</h3>-->
-                    <!--<p-calendar [(ngModel)]="time" [timeOnly]="true" (onClose)="changeTime()" >-->
-                    <!--</p-calendar>-->
-
-                    <!--&lt;!&ndash;<span style="margin-left: 30px"></span>&ndash;&gt;-->
-                    <!--<h3>Place of meeting</h3>-->
-                    <!--<button mat-raised-button color="primary" (click)="openMap=!openMap;"-->
-                            <!--style="margin-left: 10px;">-->
-                        <!--Show map-->
-                    <!--</button>-->
-                    <!--<span style="margin-left: 10px;" *ngIf="meeting">{{meeting.meetingLocation?meeting.meetingLocation.placeName:"No place"}}</span>-->
-
-                <!--</div>-->
-                <!--<br />-->
-                <!--<mat-form-field style="margin-left: 40px;">-->
-                <!--<input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="date">-->
-                <!--<mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>-->
-                <!--<mat-datepicker #picker (selectedChanged)="changeDate()"></mat-datepicker>-->
-                <!--</mat-form-field>-->
         </div>
         </div>
 
@@ -301,7 +255,7 @@
     <p-dialog [(visible)]="showMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
               [maximizable]="false" [baseZIndex]="10000">
 
-        <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlaysPoll"
+        <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlaysPollPopUp"
                 (onMapClick)="handleMapClick($event)" (onOverlayDragEnd)="handleDragEnd($event)"></p-gmap>
 
         <button mat-raised-button color="primary" type="button" (click)="zoomIn(gmap.getMap())" style="margin-left: 10px">
@@ -389,7 +343,7 @@
                     <mat-list>
                         <mat-list-item *ngFor="let date of datePoll">
                             <div style="width: 300px;">
-                                {{parser(date.name)}}</div>
+                                {{parserMeeting(date.name)}}</div>
                             <div style="width: 100px;">
                                 <button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">
                                     unvote
@@ -400,7 +354,7 @@
 
                             </div>
                             <div style="width: 200px; margin-left: 100px;">
-                                <p-progressBar [class]="myClass" [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
+                                <p-progressBar  [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
                             </div>
 
                         </mat-list-item>
@@ -489,31 +443,117 @@
                         <mat-tab label="Chat" >
                             <div>
 
-                                <mat-card>
+                                <div style=" height: fit-content; float: left; width: 99%; margin-left: 0.1%;">
+                                    <mat-card>
 
 
-                                    <mat-list  id="msg-container"class="message-container" style="padding-bottom: 70px">
-                                        <mat-list-item *ngFor="let message of filteredMessages"
-                                                       class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"
-                                                       [style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"
-                                                       [style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">
-                                            <mat-icon mat-list-icon>chat</mat-icon>
-                                            <h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>
-                                        </mat-list-item>
-                                    </mat-list>
+                                        <mat-list  id="msg-container"class="message-container" style="  border-color: #bebebe;
+     padding-bottom: 70px">
+                                            <!--<mat-list-item *ngFor="let message of filteredMessages"-->
+                                            <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
+                                            <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
+                                            <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
+                                            <!--&lt;!&ndash;<mat-icon mat-list-icon>chat</mat-icon>&ndash;&gt;-->
+                                            <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
+                                            <!--</mat-list-item>-->
+                                            <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
+                                                <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
+                                                    <div style="margin-top:5px; float: left;   height: 5px; width: 5px; border-radius: 5px;">
+                                                        <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                                                        <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                                                    </div>
+                                                    <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 1px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
+                                                        <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
+                                                    </div>
+                                                    <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 1px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
+                                                        <span>{{message.sender.firstName}}</span>
+                                                    </div>
 
 
-                                </mat-card>
+                                                    <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
+            <textarea class="textareaMessage"
+                      rows="{{getAmountOfRows(message.content)}}" readonly="true">
+              {{message.content}}
+            </textarea>
+                                                    </div>
+                                                </div>
 
-                                <div id="wrapper" style="margin-top: 30px; margin-bottom: 20px;margin-left: 100px; float: left;">
-                                    <div id="c1" style="float: left; margin-left: 30px">
-                                        <input type="text"  [(ngModel)]="newMessage"
-                                        (keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>
+                                                <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
+                                                    <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
+                                                        <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                                                        <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                                                    </div>
+                                                    <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
+                                                        <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
+                                                    </div>
+                                                    <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
+                                                        <span>{{message.sender.firstName}}</span>
+                                                    </div>
+
+
+                                                    <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
+            <textarea class="textareaMessage"
+                      rows="{{getAmountOfRows(message.content)}}" readonly="true">
+              {{message.content}}
+            </textarea>
+                                                    </div>
+                                                </div>
+                                            </mat-list-item>
+
+                                        </mat-list>
+
+
+                                    </mat-card>
+
+                                    <div style="float: left; width: 100%;">
+                                        <div style="height: 105px; width: 100%; background-color: rgba(0,94,171,0.11);
+         border-style: solid; border-color: #bebebe; border-top-style: none; ">
+          <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
+
+          </textarea>
+
+                                            <div (click)="sendMessage()" *ngIf = "newMessage&&newMessage.length>0&&newMessage!==''"
+                                                 style="margin-top: 20px; margin-right: 20px; float: right;
+               height: 30px;width: 30px; cursor: pointer;">
+                                                <img style="width: 30px; height: 30px; border-radius: 30px;" src="assets/images/send.png">
+
+                                            </div>
+                                            <!--<input  type="text"  [(ngModel)]="newMessage"-->
+                                            <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
+
+                                        </div>
                                     </div>
-                                    <div id="c2"  style="margin-left: 10px; float: right;"><button mat-raised-button color="primary" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>
                                 </div>
-
                             </div>
+
+
+                            <!--<div>-->
+
+                                <!--<mat-card>-->
+
+
+                                    <!--<mat-list  id="msg-container"class="message-container" style="padding-bottom: 70px">-->
+                                        <!--<mat-list-item *ngFor="let message of filteredMessages"-->
+                                                       <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
+                                                       <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
+                                                       <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
+                                            <!--<mat-icon mat-list-icon>chat</mat-icon>-->
+                                            <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
+                                        <!--</mat-list-item>-->
+                                    <!--</mat-list>-->
+
+
+                                <!--</mat-card>-->
+
+                                <!--<div id="wrapper" style="margin-top: 30px; margin-bottom: 20px;margin-left: 100px; float: left;">-->
+                                    <!--<div id="c1" style="float: left; margin-left: 30px">-->
+                                        <!--<input type="text"  [(ngModel)]="newMessage"-->
+                                        <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
+                                    <!--</div>-->
+                                    <!--<div id="c2"  style="margin-left: 10px; float: right;"><button mat-raised-button color="primary" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>-->
+                                <!--</div>-->
+
+                            <!--</div>-->
                         </mat-tab>
 
 
@@ -703,14 +743,14 @@
             </mat-card>
         </div>
 
-        <div flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
+        <div  flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
         <mat-card >
 
             <mat-card-header >Participants</mat-card-header>
             <br />
             <mat-divider></mat-divider>
             <mat-card-actions>
-                <button mat-raised-button color="primary"  style="
+                <button mat-raised-button color="primary" *ngIf="bill.billTotalSum>0" style="
                          float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
                     <mat-icon>add_circle_outline</mat-icon>
                 </button>

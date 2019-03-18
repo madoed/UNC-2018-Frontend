@@ -226,13 +226,13 @@ export class MeetingCreateComponent implements OnInit {
             place.placeName = this.markerTitle;
             this.meeting.meetingLocation = place;
         }
+        let participant = {} as Participant;
+        participant.statusOfConfirmation = 'confirmed';
+        participant.meetingParticipant = this.authService.user;
+        this.participants.push(participant);
         this.meetingService.createMeeting(this.meeting).subscribe(data => {
             this.meeting = data;
             this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
-            let participant = {} as Participant;
-            participant.statusOfConfirmation = 'confirmed';
-            participant.meetingParticipant = this.authService.user;
-            this.participants.push(participant);
             this.meetingService.addParticipants(this.participants, this.meeting.id).subscribe( res => {
                 this.router.navigate(['/meeting-list']);
                     this.messService.add({severity: 'success', summary: 'Success Message', detail:'Meeting Created'});

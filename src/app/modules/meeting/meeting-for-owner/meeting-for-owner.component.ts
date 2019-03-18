@@ -61,7 +61,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
     showAddCardForFNS: boolean = false;
     showNewCard: boolean = false;
-    showAddCard: boolean = false;
+
     card = {} as Card;
     cards: Array<Card> = null;
     showAddCard: boolean = false;
@@ -78,6 +78,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     fixedUser: User;
 
     me = {} as User;
+    overlaysPollPopUp: Meetinglocation[];
     placePoll: Meetinglocation[];
     datePoll: DatePoll[];
     showMap: boolean = false;
@@ -167,7 +168,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     //     return '';
     // }
 
-    parser(value: any): String | '' {
+    parserMeeting(value: any): String | '' {
         if ((typeof value === 'string')) {
             const str = value.split(' ');
             const year = str[5];
@@ -209,7 +210,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
         ) {
     super(messageService, router, chatService, authService, route);
     const users: UserData[] = [];
-    for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
+    //for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
@@ -241,6 +242,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       }
                       this.meetingService.setMeeting(meeting);
                       this.overlaysPoll = [];
+                      this.overlaysPollPopUp = [];
                       if (this.meeting.pollForPlaceOpen === 1) {
                           this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                               if (poll) {
@@ -255,6 +257,11 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                                   //     return 0;
                                   // });
                                   this.placePoll.forEach(item => {
+                                      this.overlaysPollPopUp.push(new google.maps.Marker({
+                                          position:
+                                              {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                                          title: item.oneLocation.placeName
+                                      }));
                                       this.overlaysPoll.push(new google.maps.Marker({
                                           position:
                                               {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
@@ -1022,6 +1029,7 @@ ngAfterViewInit() {
         place.lat = this.selectedPosition.lat();
         place.lng = this.selectedPosition.lng();
         place.placeName = this.markerTitle2;
+        this.overlaysPollPopUp.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: false}));
         this.overlaysPoll.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title: this.markerTitle2, draggable: false}));
         this.pollService.addPlaceInPoll(place, this.participant.id).subscribe(res => {
           this.pollService.getPlacePoll(this.meeting.id).subscribe(places => {
@@ -1036,6 +1044,7 @@ ngAfterViewInit() {
                   //     }
                   //     return 0;
                   // });
+                  //this.showMap = false;
                   this.markerTitle2 = null;
               }
           });

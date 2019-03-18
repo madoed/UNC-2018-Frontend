@@ -31,6 +31,7 @@ export class MessagesComponent implements OnInit {
     private channel = {}as Chat;
     private user: User;
     private stompClient;
+    timer: number = 60000;
 
     sub: Subscription;
 
@@ -50,14 +51,47 @@ export class MessagesComponent implements OnInit {
     }
 
     sendMessage() {
-        this.stompClient.send('/app/messages' , {},
-            JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
-        //$('#input').val('');
-        //this.filteredMessages.push({'sender': this.username, 'content': this.newMessage});
-        //this.messageService.save({'sender': this.authService.getCurrentUser(), 'content': this.newMessage, 'chat': this.chatService.getChannelId()}).subscribe(result => {this.gotoList(); },
-         //   error => console.error(error));
-        this.newMessage = '';
-        this.scrollToBottom();
+
+        if (!this.stompClient.connected) {
+            let ws = new SockJS(this.serverUrl);
+            this.stompClient = Stomp.over(ws);
+            let that = this;
+            this.stompClient.connect({}, frame => {
+                that.stompClient.subscribe('/channel/' + this.channel.id, mes => {
+                    if(mes.body) {
+                        let mymes = JSON.parse(mes.body);
+                        console.log(mymes);
+                        this.filteredMessages.push(mymes);
+                        this.messageService.cleanReserve(this.channel.id, this.authService.user.id);
+                        this.scrollToBottom();
+                        this.delay(600).then(any => {
+                            this.scrollToBottom();
+                        });
+                        this.timer += 60000;
+                    }
+                });
+            });
+            this.delay(700).then(any => {
+                this.user.friends = [];
+                this.stompClient.send('/app/messages', {},
+                    JSON.stringify({'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+                this.newMessage = '';
+                this.scrollToBottom();
+                this.timer += 60000;
+            });
+
+        } else {
+            this.user.friends = [];
+            this.stompClient.send('/app/messages' , {},
+                JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+            //$('#input').val('');
+            //this.filteredMessages.push({'sender': this.username, 'content': this.newMessage});
+            //this.messageService.save({'sender': this.authService.getCurrentUser(), 'content': this.newMessage, 'chat': this.chatService.getChannelId()}).subscribe(result => {this.gotoList(); },
+            //   error => console.error(error));
+            this.newMessage = '';
+            this.scrollToBottom();
+            this.timer += 60000;
+        }
     }
 
     async delay(ms: number) {
@@ -161,10 +195,18 @@ export class MessagesComponent implements OnInit {
               this.delay(600).then(any => {
                   this.scrollToBottom();
               });
+              this.timer += 60000;
           }
         });
       });
 
+      this.delay(this.timer).then( res => {
+              //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+              this.stompClient.disconnect(frame => {
+                  that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+              console.log('unsub');
+      }
+      );
     }
 
     parser(value: any): String | '' {
