@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="meeting.id&&participant.statusOfConfirmation !== 'confirmed'">
+  <div *ngIf="meeting.id&&participant.statusOfConfirmation === 'confirmed'">
 
     <p-dialog header="Choose card" [(visible)]="showAddCard" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
               [maximizable]="false" [baseZIndex]="10000">
@@ -227,7 +227,7 @@
 
   <p-toast [style]="{marginTop: '80px'}"></p-toast>
 
-    <div style="width: 1160px; height: 300px; ">
+    <div style="width: 1160px; height: 300px; margin-bottom: 10px;">
       <div style="float: left; width: 810px; height: 300px;">
         <mat-card style="height: 300px;">
           <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.name}}</h1>
@@ -318,11 +318,58 @@
     </div>
   <div style="margin-top: 20px;">
     <div flex style="float: left; width: 530px; ">
-      <mat-card *ngIf="meeting.pollForPlaceOpen===1" style="height: fit-content">
+      <mat-card *ngIf="meeting.pollForPlaceOpen===1" style="height: fit-content; margin-bottom: 10px;">
         <mat-card-header >Vote for Place</mat-card-header>
         <br />
         <mat-divider></mat-divider>
+        <mat-card-content *ngIf="meeting.pollForPlaceOpen===1">
+          <br />
+          <p-gmap #gmap [style]="{'width':'485px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlaysPoll">
 
+          </p-gmap>
+
+          <br />
+          <mat-list style="margin-top: 10px; ">
+            <mat-list-item *ngFor="let place of placePoll">
+              <div style="width: 300px;">
+                <button mat-raised-button style="background-color: white!important;
+                                        color: black!important;" >
+                  {{place.oneLocation.placeName}}
+                </button>
+              </div>
+              <div style="width: 100px;">
+                <button mat-raised-button *ngIf="voted(place)" class="voted" (click)="voteForPlace(place.id)">
+                  unvote
+                </button>
+                <button mat-raised-button *ngIf="!voted(place)" class="notvoted" (click)="voteForPlace(place.id)">
+                  vote
+                </button>
+              </div>
+              <div style="width: 200px; margin-left: 100px;">
+                <p-progressBar [showValue]="true" [value]="place.percentageForPlace"></p-progressBar>
+              </div>
+
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+        <mat-card-content *ngIf="meeting.pollForPlaceOpen===0">
+          <br />
+        </mat-card-content>
+        <mat-card-footer *ngIf="meeting.pollForPlaceOpen===1"style="height: 80px;">
+          <mat-divider></mat-divider>
+          <br />
+          <button mat-raised-button color="primary" (click)="addPlace()"
+                  style="margin-right: 120px; float: right; margin-bottom: 10px; width: 300px!important;
+                             height: 40px!important;">
+            Add place
+          </button>
+        </mat-card-footer>
+      </mat-card>
+
+      <mat-card *ngIf="meeting.pollForDateOpen===1" style="height: fit-content;margin-bottom: 10px;">
+        <mat-card-header >Vote for Date</mat-card-header>
+        <br />
+        <mat-divider></mat-divider>
         <mat-card-content *ngIf="meeting.pollForDateOpen===1">
           <br />
           <br />
@@ -359,55 +406,6 @@
             </p-calendar>
           </div>
         </mat-card-footer>
-      </mat-card>
-
-      <mat-card *ngIf="meeting.pollForDateOpen===1" style="height: fit-content;margin-top: 40px;">
-        <mat-card-header >Vote for Date</mat-card-header>
-        <br />
-        <mat-divider></mat-divider>
-
-        <mat-card-content *ngIf="meeting.pollForPlaceOpen===1">
-          <br />
-          <p-gmap #gmap [style]="{'width':'485px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlaysPoll">
-
-          </p-gmap>
-
-          <br />
-          <mat-list style="margin-top: 10px; ">
-            <mat-list-item *ngFor="let place of placePoll">
-              <div style="width: 300px;">
-                <button mat-raised-button style="background-color: white!important;
-                                        color: black!important;" (click)="setAsMain(place.oneLocation)">
-                  {{place.oneLocation.placeName}}
-                </button>
-              </div>
-              <div style="width: 100px;">
-                <button mat-raised-button *ngIf="voted(place)" class="voted" (click)="voteForPlace(place.id)">
-                  unvote
-                </button>
-                <button mat-raised-button *ngIf="!voted(place)" class="notvoted" (click)="voteForPlace(place.id)">
-                  vote
-                </button>
-              </div>
-              <div style="width: 200px; margin-left: 100px;">
-                <p-progressBar [showValue]="true" [value]="place.percentageForPlace"></p-progressBar>
-              </div>
-
-            </mat-list-item>
-          </mat-list>
-        </mat-card-content>
-        <mat-card-content *ngIf="meeting.pollForPlaceOpen===0">
-          <br />
-        </mat-card-content>
-        <mat-card-footer *ngIf="meeting.pollForPlaceOpen===1"style="height: 80px;">
-          <mat-divider></mat-divider>
-          <br />
-          <button mat-raised-button color="primary" (click)="addPlace()"
-                  style="margin-right: 120px; float: right; margin-bottom: 10px; width: 300px!important;
-                             height: 40px!important;">
-            Add place
-          </button>
-        </mat-card-footer>
 
       </mat-card>
 
@@ -416,8 +414,8 @@
         <mat-card-header >Participants</mat-card-header>
         <br />
         <mat-divider></mat-divider>
-        <mat-card-actions>
-          <button mat-raised-button color="primary"  *ngIf="bill.billTotalSum > 0"  style="
+        <mat-card-actions  *ngIf="bill.billTotalSum == 0" >
+          <button mat-raised-button color="primary" style="
                          float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
             <mat-icon>add_circle_outline</mat-icon>
           </button>
@@ -444,7 +442,7 @@
       </mat-card>
     </div>
 
-    <div flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto;">
+    <div flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-bottom: 30px;">
       <mat-card >
         <mat-card-content>
           <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4"
@@ -727,7 +725,7 @@
   </div>
   </div>
 
-  <div *ngIf="meeting.id&&participant.statusOfConfirmation === 'confirmed'">
+  <div *ngIf="meeting.id&&participant.statusOfConfirmation !== 'confirmed'">
 
     <div style="width: 1160px; height: 300px; ">
       <div style="float: left; width: 810px; height: 300px;">

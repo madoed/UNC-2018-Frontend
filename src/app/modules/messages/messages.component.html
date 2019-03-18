@@ -4,7 +4,7 @@
  <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
   <mat-card>
     <mat-card-header background-color="accent" style="height: 30px;">
-      <button mat-button [routerLink]="['/chat']" style="margin-top: -15px; height: 30px;">
+      <button mat-button (click)="back()" style="margin-top: -15px; height: 30px;">
         <img style="margin-top: -5px; height: 25px; width: 30px;" src="assets/images/back.png">
         <span style="margin-top: -5px; color: #007ad9;">Back</span>
       </button>

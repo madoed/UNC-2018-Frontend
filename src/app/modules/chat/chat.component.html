@@ -13,7 +13,7 @@
         </p-header>
       <ng-template let-chat pTemplate="listItem">
 
-        <div class="ui-g" [style.background-color]="checkIfNew(chat)?'#f4f5f7':'white'"
+        <div class="ui-g"
              style=" padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openChat(chat.id)">
 
           <div *ngIf="chat.chatType=='dialogue'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
@@ -31,7 +31,7 @@
             <h3 *ngIf="chat.chatType!=='dialogue'" style="color: #282828;">{{cutLine(chat.chatName)}}</h3>
             <h3 *ngIf="chat.chatType=='dialogue'" style="color: #282828;">
               {{getNotYou(chat).firstName}} {{getNotYou(chat).lastName}}</h3>
-            <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;">
+            <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;" [style.background-color]="checkIfNew(chat)?'#e7e8ea':'none'">
               <div style="float: left; width: 30px; height: 30px; border-radius: 30px;">
                 <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
                 <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">

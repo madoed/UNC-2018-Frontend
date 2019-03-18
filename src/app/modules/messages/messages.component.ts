@@ -50,6 +50,19 @@ export class MessagesComponent implements OnInit {
         });*/
     }
 
+    back() {
+        //let ws = new SockJS(this.serverUrl);
+        //this.stompClient = Stomp.over(ws);
+        let that = this;
+        this.stompClient.disconnect(frame => {
+            that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+        console.log('unsub');
+        this.delay(100).then( res => {
+                this.router.navigate(['/chat']);
+            }
+        );
+    }
+
     sendMessage() {
 
         if (!this.stompClient.connected) {
@@ -79,6 +92,14 @@ export class MessagesComponent implements OnInit {
                 this.scrollToBottom();
                 this.timer += 60000;
             });
+            this.timer = 60000;
+            this.delay(this.timer).then( res => {
+                    //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+                    this.stompClient.disconnect(frame => {
+                        that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+                    console.log('unsub');
+                }
+            );
 
         } else {
             this.user.friends = [];
@@ -170,7 +191,7 @@ export class MessagesComponent implements OnInit {
             });
         }
 
-          this.delay(6000).then(any => {
+          this.delay(4000).then(any => {
               this.newMessages = [];
           });
       });
