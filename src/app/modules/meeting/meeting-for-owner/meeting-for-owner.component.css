@@ -52,12 +52,12 @@ ui-picklist-buttons{
     height: 70%;
     width: 50%;
 }
-input{
-    float: right;
-    height: 30px;
-    border-radius: 15px;
-    font-size: 1.5em;
-}
+/*input{*/
+    /*float: right;*/
+    /*height: 30px;*/
+    /*border-radius: 15px;*/
+    /*font-size: 1.5em;*/
+/*}*/
 .send{
     float: right;
     height: 30px;

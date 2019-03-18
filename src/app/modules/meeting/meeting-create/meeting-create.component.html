@@ -198,7 +198,7 @@
                         <mat-icon>arrow_back</mat-icon>
                     </button>
                     </mat-card-actions>
-                    <div flex style="margin-left: 100px; margin-top: 10px; height: fit-content;">
+                    <div flex style="margin-left: 300px; margin-top: 10px; height: fit-content;">
                     <div style="float: left; width: 300px;">
                         <mat-card style="  height: fit-content">
                         <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
@@ -223,42 +223,43 @@
                         </mat-card>
 
                     </div>
-                        <div style="float: right; width: 300px; margin-right: 200px; border-color: black">
-                            <mat-card>
-                                <mat-card-header background-color="accent">
-                                    <h3>Attach card to meeting</h3>
-                                </mat-card-header>
-                                <h4 *ngIf="cards!==null"><span style="color: #989898">
-                                    (add new card or choose from existed)
-                                </span>
-                                </h4>
-                                <h4 *ngIf="cards==null"><span style="color: #989898">
-                                    (add card)
-                                </span>
-                                </h4>
-                                <mat-card-content >
-                                    <mat-list >
-                                        <mat-list-item *ngFor="let card of cards">
-                                            <button style="width: 250px!important; background-color: white!important;
-                                                    color: black!important;"
-                                                    mat-raised-button [style.border-style]="card.id === fixedCardId? 'solid':'ridge'"
-                                                    (click)="setCard(card)">**** **** **** {{card.lastFourNumbers}}</button>
-                                        </mat-list-item>
-                                    </mat-list>
-                                </mat-card-content>
-                                <mat-card-actions>
-                                    <button mat-raised-button color="primary" (click)="showAddCard=true"
-                                    style="margin-left: 180px;">
-                                        Add new</button>
-                                </mat-card-actions>
+                        <button mat-raised-button color="primary" type="button"
+                                (click)="createMeeting()" style="margin-left: 200px; margin-top: 300px;"
+                        >Create</button>
+                        <!--<div style="float: right; width: 300px; margin-right: 200px; border-color: black">-->
+                            <!--<mat-card>-->
+                                <!--<mat-card-header background-color="accent">-->
+                                    <!--<h3>Attach card to meeting</h3>-->
+                                <!--</mat-card-header>-->
+                                <!--<h4 *ngIf="cards!==null"><span style="color: #989898">-->
+                                    <!--(add new card or choose from existed)-->
+                                <!--</span>-->
+                                <!--</h4>-->
+                                <!--<h4 *ngIf="cards==null"><span style="color: #989898">-->
+                                    <!--(add card)-->
+                                <!--</span>-->
+                                <!--</h4>-->
+                                <!--<mat-card-content >-->
+                                    <!--<mat-list >-->
+                                        <!--<mat-list-item *ngFor="let card of cards">-->
+                                            <!--<button style="width: 250px!important; background-color: white!important;-->
+                                                    <!--color: black!important;"-->
+                                                    <!--mat-raised-button [style.border-style]="card.id === fixedCardId? 'solid':'ridge'"-->
+                                                    <!--(click)="setCard(card)">**** **** **** {{card.lastFourNumbers}}</button>-->
+                                        <!--</mat-list-item>-->
+                                    <!--</mat-list>-->
+                                <!--</mat-card-content>-->
+                                <!--<mat-card-actions>-->
+                                    <!--<button mat-raised-button color="primary" (click)="showAddCard=true"-->
+                                    <!--style="margin-left: 180px;">-->
+                                        <!--Add new</button>-->
+                                <!--</mat-card-actions>-->
 
 
-                            </mat-card>
-                        </div>
+                            <!--</mat-card>-->
+                        <!--</div>-->
                     </div>
-                    <button mat-raised-button color="primary" type="button" [disabled]="fixedCardId===null"
-                            (click)="createMeeting()" style="margin-left: 700px; margin-top: 50px;"
-                    >Create</button>
+
                 </mat-card-content>
 
 

@@ -89,7 +89,8 @@ export class MeetingService {
     }
 
     addItem(item: Item): Observable<any> {
-        return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id, item);
+        return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id +
+            '/' + this.authService.user.id, item);
     }
 
     deleteItem(item: number): Observable<any>  {

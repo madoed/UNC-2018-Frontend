@@ -104,12 +104,14 @@ export class MessagesComponent implements OnInit {
                         this.filteredMessages.push(mes);
                     });
                     this.newMessages = newmes;
-                    this.delay(1000).then(any => {
+                    this.delay(600).then(any => {
+                        this.scrollToBottom();
                         this.scrollToBottom();
                     });
                 } else {
                     this.newMessages = [];
-                    this.delay(1000).then(any => {
+                    this.delay(600).then(any => {
+                        this.scrollToBottom();
                         this.scrollToBottom();
                     });
                 }
@@ -119,18 +121,24 @@ export class MessagesComponent implements OnInit {
                 if (newmes) {
                     this.filteredMessages = newmes;
                     this.newMessages = newmes;
-                    this.delay(1000).then(any => {
+                    this.delay(600).then(any => {
+                        this.scrollToBottom();
                         this.scrollToBottom();
                     });
                 } else {
                     this.newMessages = [];
                     this.filteredMessages = [];
-                    this.delay(1000).then(any => {
+                    this.delay(600).then(any => {
+                        this.scrollToBottom();
                         this.scrollToBottom();
                     });
                 }
             });
         }
+
+          this.delay(6000).then(any => {
+              this.newMessages = [];
+          });
       });
 
         // this.delay(10000).then(any => {
@@ -156,6 +164,7 @@ export class MessagesComponent implements OnInit {
           }
         });
       });
+
     }
 
     parser(value: any): String | '' {
