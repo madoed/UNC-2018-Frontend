@@ -743,14 +743,14 @@
             </mat-card>
         </div>
 
-        <div  flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
+        <div  flex style="padding: 0px; margin-bottom: 30px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
         <mat-card >
 
             <mat-card-header >Participants</mat-card-header>
             <br />
             <mat-divider></mat-divider>
-            <mat-card-actions>
-                <button mat-raised-button color="primary" *ngIf="bill.billTotalSum>0" style="
+            <mat-card-actions  *ngIf="bill.billTotalSum == 0">
+                <button mat-raised-button color="primary" style="
                          float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
                     <mat-icon>add_circle_outline</mat-icon>
                 </button>
