@@ -11,4 +11,26 @@
     width: 25%;
 }
 
+.meeting-img {
+    object-fit: cover;
+    background: #ffffff;
+    width: 200px;
+    height: 200px;
+    border-radius: 3px;
+    /*border: 1px solid #a6a6a6;*/
+    box-shadow: 0 3px 3px 0 #a6a6a6, 0 3px 3px 0 #a6a6a6;
+    margin-right: 10px;
+}
+
+.inputfile {
+    display: none;
+}
+.custom-inputfile {
+    font: 400 13.3333px Arial;
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
 

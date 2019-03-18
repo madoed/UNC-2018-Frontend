@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MenuItem, MessageService as mes} from 'primeng/api';
-import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService} from '@app/core';
+import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService, StorageService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
-import {NgForm} from '@angular/forms';
 import {Card} from '@app/core/models/card.model';
+import { environment } from '@env';
+import { MessageService } from 'primeng/api';
 
 declare var google: any;
 
@@ -48,12 +49,17 @@ export class MeetingCreateComponent implements OnInit {
 
     infoWindow: any;
 
+    avatar: any;
+    currentAvatarUrl: any;
+
     constructor(private messService: mes,
               private meetingService: MeetingService,
               public route: ActivatedRoute,
               private authService: AuthService,
               public router: Router,
-              private cardService: CardService) {
+              private cardService: CardService,
+              private messageService: MessageService,
+              private storageService: StorageService) {
         const today = new Date();
         const month = today.getMonth();
         const year = today.getFullYear();
@@ -65,6 +71,7 @@ export class MeetingCreateComponent implements OnInit {
             this.users = data;
             console.log(data);
         });
+        this.currentAvatarUrl = environment.defaultMeeting;
     }
 
   ngOnInit() {
@@ -219,6 +226,20 @@ export class MeetingCreateComponent implements OnInit {
     }
 
     createMeeting() {
+        if (this.avatar) {
+            const filename = this.meeting.meetingName + '-' + this.avatar.name;
+            this.storageService.upload(this.avatar, filename).subscribe(
+                data => {
+                    this.meeting.avatarUrl = data.fileDownloadUri;
+                    this.internalCreate();
+                },
+                error => {
+                    this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
+                })
+        }
+    }
+
+    private internalCreate() {
         if (this.selectedPosition) {
             let place = {} as Place;
             place.lat = this.selectedPosition.lat();
@@ -247,4 +268,23 @@ export class MeetingCreateComponent implements OnInit {
             });
     }
 
+    // Meeting avatar selection
+    clearAvatar() {
+        this.currentAvatarUrl = environment.defaultMeeting;
+      }
+    
+    onSelectFile(files) {
+        var mimeType = files[0].type;
+        if (mimeType.match(/image\/*/) == null) {
+            this.messageService.add({severity:'error', summary:'Error', detail: 'Please select an image file'});
+            return;
+        }
+
+        this.avatar = files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(this.avatar); 
+        reader.onload = (_event) => { 
+            this.currentAvatarUrl = reader.result; 
+        }
+    }
 }

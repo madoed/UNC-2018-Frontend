@@ -198,34 +198,7 @@
                         <mat-icon>arrow_back</mat-icon>
                     </button>
                     </mat-card-actions>
-                    <div flex style="margin-left: 300px; margin-top: 10px; height: fit-content;">
-                    <div style="float: left; width: 300px;">
-                        <mat-card style="  height: fit-content">
-                        <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
-                            {{meeting.meetingName}}</span>
-                        </h3>
-                        <br />
-                        <h3 style="color: steelblue;">Meeting date: <span style="font-size: small; color: black">
-                            {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()): "No date"}}
-                        </span>
-                        </h3>
-                        <br />
-                        <h3 style="color: steelblue;">Meeting time: <span style="font-size: small; color: black">
-                            {{meeting.timeOfMeeting? meeting.timeOfMeeting.getHours(): "No time"}}
-                            {{meeting.timeOfMeeting? ":": ""}}
-                            {{meeting.timeOfMeeting? meeting.timeOfMeeting.getMinutes(): ""}} </span>
-                        </h3>
-                        <br />
-                        <h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">
-                            {{markerTitle? markerTitle: "No location"}}</span>
-                        </h3>
-                        <br />
-                        </mat-card>
-
-                    </div>
-                        <button mat-raised-button color="primary" type="button"
-                                (click)="createMeeting()" style="margin-left: 200px; margin-top: 300px;"
-                        >Create</button>
+                    <div flex style="margin-left: 100px; margin-top: 10px; height: fit-content;">
                         <!--<div style="float: right; width: 300px; margin-right: 200px; border-color: black">-->
                             <!--<mat-card>-->
                                 <!--<mat-card-header background-color="accent">-->
@@ -258,10 +231,53 @@
 
                             <!--</mat-card>-->
                         <!--</div>-->
+
+                        <div class="ui-g">
+                            <div style="float: left; width: 300px;" class="ui-g-8">
+                                <mat-card style="  height: fit-content">
+                                    <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
+                                        {{meeting.meetingName}}</span>
+                                    </h3>
+                                    <br />
+                                    <h3 style="color: steelblue;">Meeting date: <span style="font-size: small; color: black">
+                                        {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()): "No date"}}
+                                    </span>
+                                    </h3>
+                                    <br />
+                                    <h3 style="color: steelblue;">Meeting time: <span style="font-size: small; color: black">
+                                        {{meeting.timeOfMeeting? meeting.timeOfMeeting.getHours(): "No time"}}
+                                        {{meeting.timeOfMeeting? ":": ""}}
+                                        {{meeting.timeOfMeeting? meeting.timeOfMeeting.getMinutes(): ""}} </span>
+                                    </h3>
+                                    <br />
+                                    <h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">
+                                        {{markerTitle? markerTitle: "No location"}}</span>
+                                    </h3>
+                                    <br />
+                                </mat-card>
+                            </div>
+
+                            <!--Add meeting picture-->
+                            <div class="ui-g-4">
+                                <div>
+                                    <img src="{{currentAvatarUrl}}" class="meeting-img">
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <input #file id="file" type="file" accept='image/*' (change)="onSelectFile(file.files)" style="vertical-align: top; margin-right: 10px;" 
+                                    class="inputfile"/>
+                                    <label for="file" style="vertical-align: top; margin-right: 10px;" class="custom-inputfile">
+                                        Change...
+                                    </label>
+                                    <label style="vertical-align: top;" class="custom-inputfile" (click)="clearAvatar()">Clear</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+                    <button mat-raised-button color="primary" type="button"
+                    (click)="createMeeting()" style="margin-left: 800px;"
+                    >Create</button>
                 </mat-card-content>
-
 
             </div>
 
