@@ -115,8 +115,10 @@ ui-picklist-buttons{
 }
 
 .textareaDescription {
-    width: 241px;
-    height: 156px;
+    /*width: 241px;*/
+    /*height: 156px;*/
+    width: 455px;
+    height: 55px;
     cursor: pointer;
     border: none;
     resize: none;
@@ -131,8 +133,8 @@ ui-picklist-buttons{
 }
 
 .divDescription {
-    width: 250px;
-    height: 158px;
+    /*width: 250px;*/
+    /*height: 158px;*/
     border-color: #edeef0;
 }
 

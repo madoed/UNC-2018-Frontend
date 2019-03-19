@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
     private channel = {}as Chat;
     private user: User;
     private stompClient;
-    timer: number = 60000;
+    timer: number = 120000;
 
     sub: Subscription;
 
@@ -92,7 +92,7 @@ export class MessagesComponent implements OnInit {
                 this.scrollToBottom();
                 this.timer += 60000;
             });
-            this.timer = 60000;
+            this.timer = 120000;
             this.delay(this.timer).then( res => {
                     //this.stompClient.unsubscribe('/channel/' + this.channel.id);
                     this.stompClient.disconnect(frame => {

@@ -232,8 +232,8 @@
         <mat-card style="height: 300px;">
           <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.name}}</h1>
 
-          <div style="width: 810px; margin-top: 60px; color: #6D6D6D;">
-            <div style="float: left;  width: 480px; color: #6D6D6D;">
+          <div style="width: 610px; margin-top: 60px; color: #6D6D6D;">
+            <div style="float: left;  width: 380px; color: #6D6D6D;">
               <div style="float: left; margin-left: 20px; width: 170px; height: 130px; color: #6D6D6D;">
                 <h3>Date of meeting</h3>
 
@@ -243,7 +243,7 @@
 
 
               </div>
-              <div style="float: right;  width: 280px; height: 130px; color: black;">
+              <div style="float: right;  width: 170px; height: 130px; color: black;">
                 <div style="margin-top: 15px; margin-bottom: 7px;">
                   <h3 style="margin-left: 10px;margin-top: 10px;" *ngIf="meeting">
                     {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()).getDay():"No date"}}
@@ -263,35 +263,60 @@
 
 
               </div>
-              <div style="margin-left: 15px;">
+              <div style="margin-left: 15px; width: 455px; height: 55px; ">
+                <div style=" border-color: #edeef0;">
+                  <!--<h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>-->
+
+                  <div class="divDescription">
+               <textarea class="textareaDescription"
+                         readonly="true">
+                   {{meeting.meetingDescription?meeting.meetingDescription:'No description'}}
+                   </textarea>
+                  </div>
 
 
-                <p-gmap #gmap [style]="{'width':'455px','height':'55px', 'margin-bottom': '1em'}" [options]="options"
-                (onMapClick)="openMap=!openMap;" ></p-gmap>
+                  <!--<div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;-->
+                  <!--border-left-style: dotted; border-color: #edeef0;"-->
+                  <!--&gt;-->
+                  <!--<h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>-->
+
+                  <!--<div class="divDescription">-->
+                  <!--<textarea class="textareaDescription"-->
+                  <!--readonly="true">-->
+                  <!--{{meeting.meetingDescription?meeting.meetingDescription:'No description'}}-->
+                  <!--</textarea>-->
+                  <!--</div>-->
+                  <!---->
+                  <!--</div>-->
+
+                </div>
               </div>
 
             </div>
           </div>
 
-          <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
-        border-left-style: dotted; border-color: #edeef0;"
-          >
-            <h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>
-
-            <div class="divDescription">
-               <textarea class="textareaDescription"
-                         readonly="true">
-                   {{meeting.meetingDescription?meeting.meetingDescription:'No description'}}
-                   </textarea>
+          <div style="float: right; margin-right: 10px; width: 280px; margin-top: 0px; height: 184px;
+        border-color: #edeef0;">
+            <div >
+              <p-gmap #gmap [style]="{'width':'280px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays"
+                      (onMapClick)="openMap=!openMap;" ></p-gmap>
             </div>
 
-            <!--<textarea [rows]="4" [cols]="30" pInputTextarea  [disabled]="true" (onclick)="descriptionEdit()"-->
-            <!--[(ngModel)]="meeting.meetingDescription"  > {{meeting.meetingDescription}}</textarea>-->
-
-            <!--<button mat-raised-button color="primary" type="button" style="margin-right: 40px;-->
-            <!--float: right; margin-top: 10px; margin-bottom: 10px;"-->
-            <!--(click)="descriptionEdit()">Edit</button>-->
           </div>
+
+          <!--<div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;-->
+        <!--border-left-style: dotted; border-color: #edeef0;"-->
+          <!--&gt;-->
+            <!--<h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>-->
+
+            <!--<div class="divDescription">-->
+               <!--<textarea class="textareaDescription"-->
+                         <!--readonly="true">-->
+                   <!--{{meeting.meetingDescription?meeting.meetingDescription:'No description'}}-->
+                   <!--</textarea>-->
+            <!--</div>-->
+            <!---->
+          <!--</div>-->
 
         </mat-card>
       </div>
@@ -319,6 +344,50 @@
     </div>
   <div style="margin-top: 20px;">
     <div flex style="float: left; width: 530px; ">
+
+      <mat-card *ngIf="meeting.pollForDateOpen===1" style="height: fit-content;margin-bottom: 10px;">
+        <mat-card-header >Vote for Date</mat-card-header>
+        <br />
+        <mat-divider></mat-divider>
+        <mat-card-content *ngIf="meeting.pollForDateOpen===1">
+          <br />
+          <br />
+          <mat-list>
+            <mat-list-item *ngFor="let date of datePoll">
+              <div style="width: 300px;">
+                {{parserMeeting(date.name)}}</div>
+              <div style="width: 100px;">
+                <button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">
+                  unvote
+                </button>
+                <button mat-raised-button *ngIf="!votedDate(date)" class="notvoted" (click)="voteForDate(date.id)">
+                  vote
+                </button>
+
+              </div>
+              <div style="width: 200px; margin-left: 100px;">
+                <p-progressBar  [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
+              </div>
+
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+        <mat-card-content *ngIf="meeting.pollForDateOpen===0">
+          <br />
+        </mat-card-content>
+        <mat-card-footer *ngIf="meeting.pollForDateOpen===1" style="height: 80px;">
+          <mat-divider></mat-divider>
+          <div style="margin-top: 10px; float: top; float: left; margin-left: 90px; height: 60px;">
+            <h3 style=" color: #6D6D6D;">Add new date</h3>
+          </div>
+          <div style="margin-right: 90px; float: right; margin-top: 20px;">
+            <p-calendar [(ngModel)]="dateForVote" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="addDate()" >
+            </p-calendar>
+          </div>
+        </mat-card-footer>
+
+      </mat-card>
+
       <mat-card *ngIf="meeting.pollForPlaceOpen===1" style="height: fit-content; margin-bottom: 10px;">
         <mat-card-header >Vote for Place</mat-card-header>
         <br />
@@ -365,49 +434,6 @@
             Add place
           </button>
         </mat-card-footer>
-      </mat-card>
-
-      <mat-card *ngIf="meeting.pollForDateOpen===1" style="height: fit-content;margin-bottom: 10px;">
-        <mat-card-header >Vote for Date</mat-card-header>
-        <br />
-        <mat-divider></mat-divider>
-        <mat-card-content *ngIf="meeting.pollForDateOpen===1">
-          <br />
-          <br />
-          <mat-list>
-            <mat-list-item *ngFor="let date of datePoll">
-              <div style="width: 300px;">
-                {{parserMeeting(date.name)}}</div>
-              <div style="width: 100px;">
-                <button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">
-                  unvote
-                </button>
-                <button mat-raised-button *ngIf="!votedDate(date)" class="notvoted" (click)="voteForDate(date.id)">
-                  vote
-                </button>
-
-              </div>
-              <div style="width: 200px; margin-left: 100px;">
-                <p-progressBar  [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
-              </div>
-
-            </mat-list-item>
-          </mat-list>
-        </mat-card-content>
-        <mat-card-content *ngIf="meeting.pollForDateOpen===0">
-          <br />
-        </mat-card-content>
-        <mat-card-footer *ngIf="meeting.pollForDateOpen===1" style="height: 80px;">
-          <mat-divider></mat-divider>
-          <div style="margin-top: 10px; float: top; float: left; margin-left: 90px; height: 60px;">
-            <h3 style=" color: #6D6D6D;">Add new date</h3>
-          </div>
-          <div style="margin-right: 90px; float: right; margin-top: 20px;">
-            <p-calendar [(ngModel)]="dateForVote" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="addDate()" >
-            </p-calendar>
-          </div>
-        </mat-card-footer>
-
       </mat-card>
 
       <mat-card  style="margin-top: 3px; height: fit-content">
@@ -571,7 +597,7 @@
                       <div style="text-align:left">
                         <button mat-raised-button color="primary" type="button"  (click)="showDialogToAdd()">Add</button>
                         <!--Button to open FNS dialog-->
-                        <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">FNS</button>
+                        <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">Import bill</button>
                       </div>
                     </ng-template>
                   </p-table>
@@ -781,6 +807,15 @@
           </div>
 
           <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
+        border-color: #edeef0;">
+            <div >
+              <p-gmap #gmap [style]="{'width':'250px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays2"
+                      (onMapClick)="openMap=!openMap;" ></p-gmap>
+            </div>
+
+          </div>
+
+          <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
         border-left-style: dotted; border-color: #edeef0;"
                >
             <h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>
@@ -792,12 +827,7 @@
                    </textarea>
             </div>
 
-            <!--<textarea [rows]="4" [cols]="30" pInputTextarea  [disabled]="true" (onclick)="descriptionEdit()"-->
-            <!--[(ngModel)]="meeting.meetingDescription"  > {{meeting.meetingDescription}}</textarea>-->
 
-            <!--<button mat-raised-button color="primary" type="button" style="margin-right: 40px;-->
-            <!--float: right; margin-top: 10px; margin-bottom: 10px;"-->
-            <!--(click)="descriptionEdit()">Edit</button>-->
           </div>
 
         </mat-card>

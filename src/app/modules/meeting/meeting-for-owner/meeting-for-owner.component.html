@@ -1,7 +1,7 @@
 
 <div class="container">
 
-    <p-dialog [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+    <p-dialog header="Click to add the place" [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
               [maximizable]="false" [baseZIndex]="10000">
 
         <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays"
@@ -67,32 +67,32 @@
 
 
             </div>
-            <div style="margin-left: 15px;">
-                <p-gmap #gmap [style]="{'width':'455px','height':'55px', 'margin-bottom': '1em'}" [options]="options"
-                        (onMapClick)="openMap=!openMap;" ></p-gmap>
+
+            <div style="margin-left: 15px; width: 455px; height: 55px; ">
+                <div style=" border-color: #edeef0;"
+                     (click)="descriptionEdit()">
+                    <!--<h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>-->
+
+                    <div class="divDescription">
+               <textarea class="textareaDescription"
+                         readonly="true">
+                   {{meeting.meetingDescription?meeting.meetingDescription:'Add description'}}
+                   </textarea>
+                    </div>
+
+                </div>
             </div>
 
         </div>
         </div>
 
         <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
-        border-left-style: dotted; border-color: #edeef0;"
-             (click)="descriptionEdit()">
-        <h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>
-
-            <div class="divDescription">
-               <textarea class="textareaDescription"
-                         readonly="true">
-                   {{meeting.meetingDescription?meeting.meetingDescription:'Add description'}}
-                   </textarea>
+        border-color: #edeef0;">
+            <div >
+            <p-gmap #gmap [style]="{'width':'250px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays2"
+            (onMapClick)="openMap=!openMap;" ></p-gmap>
             </div>
 
-            <!--<textarea [rows]="4" [cols]="30" pInputTextarea  [disabled]="true" (onclick)="descriptionEdit()"-->
-            <!--[(ngModel)]="meeting.meetingDescription"  > {{meeting.meetingDescription}}</textarea>-->
-
-            <!--<button mat-raised-button color="primary" type="button" style="margin-right: 40px;-->
-            <!--float: right; margin-top: 10px; margin-bottom: 10px;"-->
-                <!--(click)="descriptionEdit()">Edit</button>-->
         </div>
 
     </mat-card>
@@ -592,7 +592,7 @@
                                             <div style="text-align:left">
                                                 <button mat-raised-button color="primary" type="button"  (click)="showDialogToAdd()">Add</button>
                                                 <!--Button to open FNS dialog-->
-                                                <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">FNS</button>
+                                                <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">Import bill</button>
                                             </div>
                                         </ng-template>
                                     </p-table>

@@ -16,6 +16,7 @@
   <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
 
     <p-dataView #dv *ngIf="index===0" [value]="checksToPay" [paginator]="false" [rows]="20"
+                [emptyMessage] = "'No checks to pay'"
                 [sortField]="sortField" [sortOrder]="sortOrder" filterBy="name">
       <p-header>
         <div style="position:relative">
@@ -58,7 +59,8 @@
     </p-dataView>
 
     <p-dataView #dv *ngIf="index===1" [value]="checksFromOwners" [paginator]="false" [rows]="20"
-                [sortField]="sortField" [sortOrder]="sortOrder" filterBy="checkOwner.name">
+                [sortField]="sortField" [sortOrder]="sortOrder" filterBy="checkOwner.name"
+                [emptyMessage] = "'No checks found'">
       <p-header>
         <div style="position:relative">
           <input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">
@@ -100,13 +102,13 @@
     </p-dataView>
 
     <p-dataView #dv *ngIf="index===2" [value]="checksHistory" [paginator]="false" [rows]="20"
-                [sortField]="sortField" [sortOrder]="sortOrder" filterBy="name">
-      <p-header>
-        <div style="position:relative">
-          <input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">
-        </div>
+                [emptyMessage]="'No checks in history found'">
+      <!--<p-header>-->
+        <!--<div style="position:relative">-->
+          <!--<input type="search" style="width: 100%;" pInputText placeholder="Search" (keyup)="dv.filter($event.target.value)">-->
+        <!--</div>-->
 
-      </p-header>
+      <!--</p-header>-->
       <ng-template let-check pTemplate="listItem">
 
         <div class="ui-g" style="padding: 2em;border-bottom: 1px solid #d9d9d9" (click)="openCheck(check)">
@@ -117,7 +119,10 @@
           <!--</div>-->
 
           <div style="margin-left: 0px;  height: 90px; width: 400px; margin-top: -20px;">
-            <h3 style="color: #282828;">{{check.name}}</h3>
+            <h3 *ngIf="check.checkOwner&&(check.checkOwner.meetingParticipant.id === myId)" style="color: #282828;">
+              To {{check.name}}</h3>
+            <h3 *ngIf="check.checkOwner&&(check.checkOwner.meetingParticipant.id !== myId)" style="color: #282828;">
+              From {{check.checkOwner.name}}</h3>
             <div style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
               Meeting: {{check.checkOwner.participantOfMeeting.name}}
             </div>

@@ -49,6 +49,8 @@ export class CheckListComponent implements OnInit {
   }
 
     openList(num: number) {
+        this.index = num;
+
         if (num === 1 && !this.checksFromOwners.length) {
             this.checkService.getOwedChecks('notpayed').subscribe( data => {
                 if (data !== null) {
@@ -71,16 +73,20 @@ export class CheckListComponent implements OnInit {
                 if (data !== null) {
                     this.checksHistory = data;
                     this.checkService.getOwedChecks('payed').subscribe(res => {
-                        res.forEach(item => {this.checksHistory.push(item); });
-                        this.checksHistory = this.checksHistory.sort((a, b): number => {
-                            if (a.id > b.id) {
-                                return -1;
-                            }
-                            if (a.id < b.id) {
-                                return 1;
-                            }
-                            return 0;
-                        });
+                        if (res !== null) {
+                            res.forEach(item => {
+                                this.checksHistory.push(item);
+                            });
+                            this.checksHistory = this.checksHistory.sort((a, b): number => {
+                                if (a.id > b.id) {
+                                    return -1;
+                                }
+                                if (a.id < b.id) {
+                                    return 1;
+                                }
+                                return 0;
+                            });
+                        }
                     });
                 } else {
                     this.checkService.getOwedChecks('payed').subscribe(res => {
@@ -100,7 +106,7 @@ export class CheckListComponent implements OnInit {
                 }
             });
         }
-        this.index = num;
+
     }
 
     parse(value: any): String | null {
@@ -115,63 +121,63 @@ export class CheckListComponent implements OnInit {
         return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
     }
 
-    loadChecks(tab: MatTabChangeEvent) {
-        if (tab.index === 1 && !this.checksFromOwners.length) {
-            this.checkService.getOwedChecks('notpayed').subscribe( data => {
-                if (data !== null) {
-                    this.checksFromOwners = data;
-                    this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return -1;
-                        }
-                        if (a.id < b.id) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                    console.log(data);
-                }
-            });
-        }
-        if (tab.index === 2 && !this.checksHistory.length) {
-            this.checkService.getAll('payed').subscribe( data => {
-                if (data !== null) {
-                    this.checksHistory = data;
-                    this.checkService.getOwedChecks('payed').subscribe(res => {
-                        if (res !== null) {
-                            res.forEach(item => {
-                                this.checksHistory.push(item);
-                            });
-                        }
-                        this.checksHistory = this.checksHistory.sort((a, b): number => {
-                            if (a.id > b.id) {
-                                return -1;
-                            }
-                            if (a.id < b.id) {
-                                return 1;
-                            }
-                            return 0;
-                        });
-                    });
-                } else {
-                    this.checkService.getOwedChecks('payed').subscribe(res => {
-                        if (res !== null) {
-                            this.checksHistory = res;
-                            this.checksHistory = this.checksHistory.sort((a, b): number => {
-                                if (a.id > b.id) {
-                                    return -1;
-                                }
-                                if (a.id < b.id) {
-                                    return 1;
-                                }
-                                return 0;
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    }
+    // loadChecks(tab: MatTabChangeEvent) {
+    //     if (tab.index === 1 && !this.checksFromOwners.length) {
+    //         this.checkService.getOwedChecks('notpayed').subscribe( data => {
+    //             if (data !== null) {
+    //                 this.checksFromOwners = data;
+    //                 this.checksFromOwners = this.checksFromOwners.sort((a, b): number => {
+    //                     if (a.id > b.id) {
+    //                         return -1;
+    //                     }
+    //                     if (a.id < b.id) {
+    //                         return 1;
+    //                     }
+    //                     return 0;
+    //                 });
+    //                 console.log(data);
+    //             }
+    //         });
+    //     }
+    //     if (tab.index === 2 && !this.checksHistory.length) {
+    //         this.checkService.getAll('payed').subscribe( data => {
+    //             if (data !== null) {
+    //                 this.checksHistory = data;
+    //                 this.checkService.getOwedChecks('payed').subscribe(res => {
+    //                     if (res !== null) {
+    //                         res.forEach(item => {
+    //                             this.checksHistory.push(item);
+    //                         });
+    //                     }
+    //                     this.checksHistory = this.checksHistory.sort((a, b): number => {
+    //                         if (a.id > b.id) {
+    //                             return -1;
+    //                         }
+    //                         if (a.id < b.id) {
+    //                             return 1;
+    //                         }
+    //                         return 0;
+    //                     });
+    //                 });
+    //             } else {
+    //                 this.checkService.getOwedChecks('payed').subscribe(res => {
+    //                     if (res !== null) {
+    //                         this.checksHistory = res;
+    //                         this.checksHistory = this.checksHistory.sort((a, b): number => {
+    //                             if (a.id > b.id) {
+    //                                 return -1;
+    //                             }
+    //                             if (a.id < b.id) {
+    //                                 return 1;
+    //                             }
+    //                             return 0;
+    //                         });
+    //                     }
+    //                 });
+    //             }
+    //         });
+    //     }
+    // }
 
     openCheck(check: Check) {
         this.router.navigate(['/check-list/check-info', check.id])
@@ -187,7 +193,7 @@ export class CheckListComponent implements OnInit {
       this.checkService.confirmParticipation(this.check.id).subscribe(res => {
           this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Check added to payed'});
           this.delay(600).then(any => {
-              window.location.reload();
+              this.router.navigate(['/check-list']);
           });
          });
       }

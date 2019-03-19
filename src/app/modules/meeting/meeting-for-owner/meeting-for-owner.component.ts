@@ -87,6 +87,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
     openMap: boolean;
     options: any;
+    overlays2: any[];
     overlays: any[];
     dialogVisible: boolean;
     markerTitle: string;
@@ -235,6 +236,11 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       if (this.meeting.meetingLocation) {
                           this.markerTitle = this.meeting.meetingLocation.placeName;
                           this.overlays.push(new google.maps.Marker({
+                              position:
+                                  {lat: Number(this.meeting.meetingLocation.lat), lng: Number(this.meeting.meetingLocation.lng)},
+                              title: this.meeting.meetingLocation.placeName
+                          }));
+                          this.overlays2.push(new google.maps.Marker({
                               position:
                                   {lat: Number(this.meeting.meetingLocation.lat), lng: Number(this.meeting.meetingLocation.lng)},
                               title: this.meeting.meetingLocation.placeName
@@ -405,6 +411,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
       this.infoWindow = new google.maps.InfoWindow();
       if (!this.overlays || !this.overlays.length) {
           this.overlays = [];
+          this.overlays2 = [];
       }
 
 
@@ -1007,9 +1014,11 @@ ngAfterViewInit() {
 
     addMarker() {
         if (this.overlays) {
+            this.overlays2.pop();
             this.overlays.pop();
         }
         this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: false}));
+        this.overlays2.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: false}));
         //this.markerTitle = null;
         this.dialogVisible = false;
         let place = {} as Place;
@@ -1140,10 +1149,32 @@ ngAfterViewInit() {
     }
 
     setAsMain(place: Place) {
+
       this.meeting.meetingLocation = place;
         this.meetingService.setLocation(place, this.meeting.id).subscribe( loc => {
                 this.messService.add({severity: 'success', summary: 'Success Message', detail: 'place changed'});
+            if (this.overlays) {
+                this.overlays2.pop();
+                this.overlays.pop();
+            }
+            if (this.meeting.meetingLocation) {
+                this.markerTitle = this.meeting.meetingLocation.placeName;
+                this.overlays.push(new google.maps.Marker({
+                    position:
+                        {lat: Number(this.meeting.meetingLocation.lat), lng: Number(this.meeting.meetingLocation.lng)},
+                    title: this.meeting.meetingLocation.placeName
+                }));
+                this.overlays2.push(new google.maps.Marker({
+                    position:
+                        {lat: Number(this.meeting.meetingLocation.lat), lng: Number(this.meeting.meetingLocation.lng)},
+                    title: this.meeting.meetingLocation.placeName
+                }));
+            }
         });
+
+        // this.overlays.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: false}));
+        // this.overlays2.push(new google.maps.Marker({position:{lat: this.selectedPosition.lat(), lng: this.selectedPosition.lng()}, title:this.markerTitle, draggable: false}));
+
     }
 
     voted(place: Meetinglocation): boolean {
