@@ -236,6 +236,8 @@ export class MeetingCreateComponent implements OnInit {
                 error => {
                     this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
                 });
+        } else {
+            this.internalCreate();
         }
     }
 

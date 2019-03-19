@@ -1126,6 +1126,24 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     getFnsCheck() {
         if (this.bill.billOwner === null) {
             this.showAddCardForFNS = true;
+        } else {
+            this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
+                data => {
+                    const fnsReceipt: FnsReceipt = data;
+                    fnsReceipt.items.forEach(item => {
+                        this.newCar = true;
+                        this.car = {} as Item;
+                        this.car.itemTitle = item.name;
+                        this.car.itemAmount = item.quantity || 1;
+                        this.car.price = item.price / 100;
+                        this.save();
+                    });
+                    this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
+                    this.hideFnsDialog();
+                },
+                error => {
+                    this.messService.add({severity:'error', summary:'Error', detail: 'Unable to get check details; please make sure the codes you provided are correct.'});
+                });
         }
 
     }

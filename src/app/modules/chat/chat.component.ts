@@ -20,9 +20,6 @@ export class ChatComponent implements OnInit {
     constructor(private chatService: ChatService,
                 private authService: AuthService,
                 private router:  Router) {
-    }
-
-    ngOnInit() {
         this.chatService.getNew().subscribe(data => {
             if (data) {
                 console.log(this.newChats);
@@ -43,9 +40,13 @@ export class ChatComponent implements OnInit {
                         this.chats = [];
                     }
                 });
-                this.newChats = [];
+                this.newChats = null;
             }
         });
+    }
+
+    ngOnInit() {
+
     }
 
     getNotYou(chat: Chat): User {
@@ -59,10 +60,26 @@ export class ChatComponent implements OnInit {
     }
 
     checkIfNew(chat: Chat): boolean {
-        if ( this.newChats === undefined) {
+        if ( this.newChats === null || !this.newChats || this.newChats.length === 0) {
             return false;
         }
         return this.newChats.includes(chat);
+        // let check = false;
+        // let tmp;
+        // this.newChats.forEach(t => {
+        //     tmp = this.newChats.pop();
+        //     if (tmp && tmp.id === chat.id) {
+        //         check = true;
+        //         this.newChats.push(tmp);
+        //     }
+        //     if (tmp && tmp.id !== chat.id) {
+        //         this.newChats.push(tmp);
+        //     }
+        //     // if (t.id === chat.id) {
+        //     //     check = true;
+        //     // }
+        // });
+        // return check;
     }
 
     parser(value: any): String | '' {

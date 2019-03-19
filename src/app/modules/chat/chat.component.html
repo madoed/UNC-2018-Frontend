@@ -31,7 +31,8 @@
             <h3 *ngIf="chat.chatType!=='dialogue'" style="color: #282828;">{{cutLine(chat.chatName)}}</h3>
             <h3 *ngIf="chat.chatType=='dialogue'" style="color: #282828;">
               {{getNotYou(chat).firstName}} {{getNotYou(chat).lastName}}</h3>
-            <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;" [style.background-color]="checkIfNew(chat)?'#e7e8ea':'none'">
+            <div *ngIf="chat.lastMessage" style="float: bottom; width: 400px; height: 30px;"
+            [style.background] = "checkIfNew(chat)?'white':'#f4f5f7'">
               <div style="float: left; width: 30px; height: 30px; border-radius: 30px;">
                 <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >
                 <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">
@@ -40,6 +41,15 @@
                 {{chat.lastMessage?cutLine(chat.lastMessage):''}}
               </div>
             </div>
+            <!--<div *ngIf="chat.lastMessage&&!checkIfNew(chat)" style="float: bottom; width: 400px; height: 30px; background-color: white;">-->
+              <!--<div style="float: left; width: 30px; height: 30px; border-radius: 30px;">-->
+                <!--<img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&chat.lastSender.avatarUrl" src="{{chat.lastSender.avatarUrl}}" >-->
+                <!--<img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="chat.lastSender&&!chat.lastSender.avatarUrl" src="{{defaultAvatar}}" class="user-img">-->
+              <!--</div>-->
+              <!--<div style="float: left; margin-left: 2px; width: 360px; color: #6D6D6D">-->
+                <!--{{chat.lastMessage?cutLine(chat.lastMessage):''}}-->
+              <!--</div>-->
+            <!--</div>-->
             <div *ngIf="!chat.lastMessage" style="color: #6D6D6D; float: bottom; width: 400px; height: 30px;">
               No messages yet
             </div>

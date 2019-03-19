@@ -12,19 +12,22 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const tokenPromise: Promise<string> = this.auth.getToken();
-        const tokenObservable: Observable<string> = from(tokenPromise);
+    const tokenPromise: Promise<string> = this.auth.getToken();
+    const tokenObservable: Observable<string> = from(tokenPromise);
 
-        return tokenObservable.pipe(
-            map(authToken => {
-                req = req.clone({setHeaders: {
-                        'Authorization': 'Bearer ' + authToken,
-                        'Content-type': 'application/json',
-                        'Access-Control-Allow-Origin': environment.api_url
-                    }});
-            }),
-            concatMap(request => {
-                return next.handle(req);
-            }));
-    }
+    return tokenObservable.pipe(
+        map(authToken => {
+    const headersConfig = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + authToken
+    };
+    if (!req.headers.has('Do-Not-Set-Content-Type')) {
+    headersConfig['Content-Type'] = 'application/json';
+}
+req = req.clone({setHeaders: headersConfig});
+}),
+concatMap(request => {
+    return next.handle(req);
+}));
+}
 }

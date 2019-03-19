@@ -138,7 +138,11 @@ export class CheckListComponent implements OnInit {
                 if (data !== null) {
                     this.checksHistory = data;
                     this.checkService.getOwedChecks('payed').subscribe(res => {
-                        res.forEach(item => {this.checksHistory.push(item); });
+                        if (res !== null) {
+                            res.forEach(item => {
+                                this.checksHistory.push(item);
+                            });
+                        }
                         this.checksHistory = this.checksHistory.sort((a, b): number => {
                             if (a.id > b.id) {
                                 return -1;
