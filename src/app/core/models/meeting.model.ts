@@ -17,4 +17,5 @@ export interface Meeting {
   timeOfMeeting: Date;
   pollForPlaceOpen: number;
   pollForDateOpen: number;
+  avatarUrl: string;
 }

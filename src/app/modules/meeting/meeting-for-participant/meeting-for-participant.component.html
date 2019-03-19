@@ -297,7 +297,8 @@
       </div>
       <div style="float: right; width: 320px; height: 300px; ">
         <mat-card style="height: 300px;">
-          <img src="{{defaultMeeting}}" style="margin-left: 30px; width: 210px; height: 180px;">
+          <img src="{{meeting.avatarUrl||defaultMeeting}}" style="margin-left: 30px; width: 210px; height: 180px; object-fit: cover;">
+
           <br />
           <br />
           <!--<h4 style=" color: #6D6D6D;text-align: center; margin-top:5px;" >-->
@@ -803,7 +804,7 @@
       </div>
       <div style="float: right; width: 320px; height: 300px; ">
         <mat-card style="height: 300px;">
-          <img src="{{defaultMeeting}}" style="margin-left: 30px; width: 210px; height: 180px;">
+          <img src="{{meeting.avatarUrl||defaultMeeting}}" style="margin-left: 30px; width: 210px; height: 180px; object-fit: cover;">
           <br />
           <br />
           <!--<h4 style=" color: #6D6D6D;text-align: center; margin-top:5px;" >-->
