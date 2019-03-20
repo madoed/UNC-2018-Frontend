@@ -25,22 +25,33 @@ export class ProfileComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
-    this.getCurrentUser();
+  async ngOnInit() {
+    await this.getCurrentUser();
     this.getUser();
   }
 
-  getCurrentUser() {
-    this.currentUser = this.authService.user;
+  async getCurrentUser() {
+    this.currentUser = await this.authService.userPromise;
   }
 
   getUser() {
     this.route.params.forEach(params => {
       const id = params['id'];
-      this.userService.get(id).subscribe(user => {
-        this.user = user;
+      if (id == 'profile') {
+        this.user = this.authService.user;
         this.setUserInfo(this.user);
-      });
+      } else {
+        this.userService.get(id).subscribe(
+          user => {
+            this.user = user;
+            this.setUserInfo(this.user);
+          },
+          error => {
+            console.log(error);
+            this.router.navigate(["/"]);
+          }
+        );
+      }
     });
   }
 

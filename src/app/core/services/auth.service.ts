@@ -8,6 +8,7 @@ import { UserDetails } from '../models';
 @Injectable()
 export class AuthService {
     userDetails: UserDetails;
+    userPromise: Promise<User>;
     user: User;
 
     constructor(
@@ -25,7 +26,8 @@ export class AuthService {
                 lastName: keycloakDetails.lastName,
                 email: keycloakDetails.email
             };
-            this.user = await this.getCurrentUser();
+            this.userPromise = this.getCurrentUser();
+            this.user = await this.userPromise;
         }
     }
 

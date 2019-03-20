@@ -9,9 +9,17 @@
   width: 80%;
   margin: 0 auto;
   padding-top: 12px;
+  margin-top: 60px;
 }
 
 button {
     margin-right: 10px;
+}
+
+#topbar {
+  position: fixed;
+  width: 100%;
+  z-index: 99 !important;
+  top: 0;
 }
 

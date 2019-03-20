@@ -77,8 +77,10 @@ export class ProfileEditComponent implements OnInit {
               console.log(error);
               this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
           })
-    } else if (this.currentAvatarUrl == this.defaultAvatarUrl) {
-      this.user.avatarUrl = null;
+    } else  {
+      if (this.currentAvatarUrl == this.defaultAvatarUrl) {
+        this.user.avatarUrl = null;
+      }
       this.saveUser();
     }
   }

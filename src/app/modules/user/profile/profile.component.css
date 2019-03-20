@@ -14,8 +14,10 @@
 
 .friend-card {
   max-width: 150px;
+  height: 250px;
   display: inline-block;
   padding: 10px;
+  margin-bottom: 15px;
 }
 
 .friend-img {

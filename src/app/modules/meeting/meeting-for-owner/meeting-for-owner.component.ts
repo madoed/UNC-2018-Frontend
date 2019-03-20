@@ -389,6 +389,10 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           super.scrollToBottom();
                       });
                   }
+              },
+              error => {
+                console.log(error);
+                this.router.navigate(["/"]);
               });
               }
           });

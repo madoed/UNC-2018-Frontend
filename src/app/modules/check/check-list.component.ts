@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService, MessageService} from '@app/core';
+import {AuthService, MessageService, User} from '@app/core';
 import {Router} from '@angular/router';
 import {Check} from '@app/core/models/check.model';
 import {CheckService} from '@app/core/services/check.service';
@@ -15,7 +15,7 @@ import { MessageService as mes} from 'primeng/api';
 export class CheckListComponent implements OnInit {
 
     index: number = 0;
-    myId: number;
+    //myId: number;
     checksToPay: Check[] = [];
     checksHistory: Check[] = [];
     checksFromOwners: Check[] = [];
@@ -27,7 +27,7 @@ export class CheckListComponent implements OnInit {
               private checkService: CheckService,
               private messService: mes) {
       this.displayDialogToMarkAsPayed = false;
-      this.myId = this.authService.user.id;
+      //this.myId = this.authService.user.id;
   }
 
   ngOnInit() {

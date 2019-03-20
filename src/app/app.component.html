@@ -1,9 +1,9 @@
 <div class="wrapper">
-  <p-toolbar [class]="'bl'">
+  <p-toolbar [class]="'bl'" id="topbar">
     <div class="ui-toolbar-group-left">
         <b style="margin-right: 15px; font-size: 20px; color: white;" routerLink="/">{{title}}</b>
         <button pButton pTooltip="My Profile" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-home"
-        [routerLink]="['/user', authService.user.id]" style="background-color: #00539B!important; border-color: #00539B!important;"></button>
+        routerLink="/user/profile" style="background-color: #00539B!important; border-color: #00539B!important;"></button>
         <button *ngIf="mes===0" pButton pTooltip="My Messages" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-envelope"
         routerLink="/chat" style="background-color: #00539B!important; border-color: #00539B!important;" ></button>
         <button *ngIf="mes!==0" pButton pTooltip="My Messages" tooltipPosition="bottom" type="button" class="ui-button-primary" icon="pi pi-envelope"

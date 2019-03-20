@@ -364,6 +364,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                             }
                         });
                     }
+                },
+                error => {
+                  console.log(error);
+                  this.router.navigate(["/"]);
                 });
             } else {
                 console.log(`Card with id '${id}' not found, returning to list`);

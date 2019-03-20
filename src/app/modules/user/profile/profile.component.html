@@ -24,7 +24,7 @@
             </p-footer>
             <p-footer *ngIf="currentUser.id == user.id">
               <button pButton class="card-button ui-button-primary"
-              type="button" label="Edit" [routerLink]="['/user', authService.user.id, 'edit']"></button>
+              type="button" label="Edit" [routerLink]="['/user', currentUser.id, 'edit']"></button>
             </p-footer>
           </p-card>
       </div>
