@@ -16,20 +16,23 @@ export class ChatService {
     // private channel_name: string;
     // private channel_id: number;
     private channel: Chat;
+    private user: User;
 
     constructor(
         private apiService: ApiService,
         private authService: AuthService 
-    ) {}
+    ) {
+        this.user = this.authService.user;
+    }
 
     getOld(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.user.id);
     }
 
     getNew(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.user.id);
     }
 
     setChannel(channel: Chat) {
@@ -41,7 +44,7 @@ export class ChatService {
 
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.user.id);
     }
 
     createChat(card: any): Observable<any> {

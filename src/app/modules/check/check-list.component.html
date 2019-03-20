@@ -157,9 +157,9 @@
      height: 40px; width: 284px!important; ">
         <span style="color: #007ad9;">Checks you owe</span>
       </button>
-      <button mat-button *ngIf="index!==0" style="margin-right: 20px;
+      <button mat-button *ngIf="index!==0" (click)="openList(0)"  style="margin-right: 20px;
      height: 40px; width: 284px!important; ">
-        <span style="color: #007ad9;" (click)="openList(0)" >Checks you owe</span>
+        <span style="color: #007ad9;">Checks you owe</span>
       </button>
 
       <button mat-button *ngIf="index===1" style="border-left-style: solid; border-color: #00539b;

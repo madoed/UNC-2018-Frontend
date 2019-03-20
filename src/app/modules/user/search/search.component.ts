@@ -23,8 +23,8 @@ export class SearchComponent implements OnInit {
     private userService: UserService
   ) { }
 
-  ngOnInit() {
-    this.currentUser = this.authService.user;
+  async ngOnInit() {
+    this.currentUser = await this.authService.userPromise;
     this.userService.getAll().subscribe(
       data => this.users = data.filter(u => u.id !== this.currentUser.id)
     );

@@ -21,12 +21,12 @@
             <img style="width: 65px; height: 65px; border-radius: 65px;" *ngIf="!getNotYou(chat).avatarUrl" src="{{defaultAvatar}}">
           </div>
           <div *ngIf="chat.chatType==='chat'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
-            <img style="width: 45px; height: 45px; " src="assets/images/c.png" >
+            <img style="width: 45px; height: 45px;  border-radius: 25px;" src="assets/images/c.png" >
           </div>
 
           <div *ngIf="chat.chatType==='meeting'" style="float: left; margin-left: -10px;  height: 70px; width: 70px; border-radius: 70px;">
-            <img *ngIf="chat.avatarUrl" style="width: 45px; height: 45px; " src="{{chat.avatarUrl}}" >
-            <img *ngIf="!chat.avatarUrl" style="width: 45px; height: 45px; " src="assets/images/m.png" >
+            <img *ngIf="chat.avatarUrl" style="width: 45px; height: 45px; border-radius: 25px;" src="{{chat.avatarUrl}}" >
+            <img *ngIf="!chat.avatarUrl" style="width: 45px; height: 45px; border-radius: 25px;" src="assets/images/m.png" >
           </div>
 
           <div style="margin-left: 40px;  height: 90px; width: 400px; margin-top: -20px;">
