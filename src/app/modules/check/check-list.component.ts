@@ -67,8 +67,7 @@ export class CheckListComponent implements OnInit {
                     console.log(data);
                 }
             });
-        }
-        if (num === 2 && !this.checksHistory.length) {
+        } else if (num === 2 && !this.checksHistory.length) {
             this.checkService.getAll('payed').subscribe( data => {
                 if (data !== null) {
                     this.checksHistory = data;

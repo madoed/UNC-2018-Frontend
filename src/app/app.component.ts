@@ -10,6 +10,7 @@ import { AuthService, User } from '@app/core';
 })
 export class AppComponent {
   title = 'meetup';
+  mes: number = 0;
 
   constructor(
     private authService: AuthService,

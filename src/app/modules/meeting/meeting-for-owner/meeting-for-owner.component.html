@@ -562,6 +562,10 @@
 
                             <div *ngIf="show_bill">
                                 <br />
+                                <button mat-raised-button color="primary" style="float: right; margin-right: 20px;
+                                    margin-bottom: 20px;" (click)="showShareItems()" type="button">
+                                    Share items
+                                </button>
 
                                     <button mat-raised-button color="primary" style="float: right; margin-right: 50px;
                                     margin-bottom: 20px;" (click)="showYourList()" type="button">
@@ -736,6 +740,24 @@
                                 Save
                             </button>
                         </div>
+
+                            <div *ngIf="share_items">
+                                <br />
+                                <button mat-raised-button color="primary" [disabled]="changed_shared" style="float: bottom;
+                             float: left; margin-left: 50px; margin-bottom: 30px;" (click)="backToBill()">
+                                    <mat-icon color="white">arrow_back</mat-icon>
+                                </button>
+
+                                <button mat-raised-button color="primary" [disabled]="!choosed_participant" style="float: bottom;
+                             float: right; margin-right: 50px; margin-bottom: 30px;" (click)="share()">
+                                    Share
+                                </button>
+
+
+
+
+
+                            </div>
                         </mat-tab>
 
 

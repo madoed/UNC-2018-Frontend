@@ -113,6 +113,9 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     private show_bill;
     private edit_bill;
     private changed_bill;
+    share_items;
+    changed_shared;
+    choosed_participant;
 
     displayFnsDialog: boolean = false;
     fnsCheckInfo: FnsCheckInfo = {} as FnsCheckInfo;
@@ -397,7 +400,9 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
 
   ngOnInit() {
-
+      this.choosed_participant = false;
+      this.changed_shared = false;
+      this.share_items = false;
       this.your_list = false;
       this.edit_bill = false;
       this.show_bill = true;
@@ -675,10 +680,11 @@ ngAfterViewInit() {
     }
 
     backToBill() {
-      if (!this.changed_bill) {
+      if (!this.changed_bill && !this.changed_shared) {
           this.show_bill = true;
           this.edit_bill = false;
           this.your_list = false;
+          this.share_items = false;
       } else {
 
       }
@@ -709,6 +715,11 @@ ngAfterViewInit() {
     showYourList() {
         this.show_bill = false;
         this.your_list = true;
+    }
+
+    showShareItems() {
+        this.show_bill = false;
+        this.share_items = true;
     }
 
 
@@ -1339,6 +1350,10 @@ ngAfterViewInit() {
                     this.messService.add({severity:'error', summary:'Error', detail: 'Unable to get check details; please make sure the codes you provided are correct.'});
                 });
         }
+
+    }
+
+    share() {
 
     }
 }

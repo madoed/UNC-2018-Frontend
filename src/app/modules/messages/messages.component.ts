@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MessageService} from '@app/core/services/message.service';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -20,7 +20,7 @@ import {environment} from '@env';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit, OnDestroy{
 
     public opponent: User;
     defaultAvatar = environment.defaultAvatar;
@@ -120,6 +120,16 @@ export class MessagesComponent implements OnInit {
             console.log("fired"));
     }
 
+    ngOnDestroy() {
+        let that = this;
+        this.stompClient.disconnect(frame => {
+            that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+        console.log('unsub');
+        this.delay(100).then( res => {
+                this.router.navigate(['/chat']);
+            }
+        );
+    }
 
     ngOnInit() {
       this.sub = this.route.params.subscribe(params => {
