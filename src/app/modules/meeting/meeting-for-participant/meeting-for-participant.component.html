@@ -492,9 +492,9 @@
                       <!--</mat-list-item>-->
                       <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
                         <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
-                          <div style="margin-top:5px; float: left;   height: 5px; width: 5px; border-radius: 5px;">
-                            <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-                            <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                          <div style="margin-top:5px; float: left;   height: 25px; width: 25px; border-radius: 25px;">
+                            <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                            <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
                           </div>
                           <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 1px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
                             <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
@@ -513,9 +513,9 @@
                         </div>
 
                         <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
-                          <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
-                            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-                            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                          <div style="margin-top:5px; float: left;   height: 25px; width: 25px; border-radius: 25px;">
+                            <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                            <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
                           </div>
                           <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
                             <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
@@ -541,7 +541,7 @@
 
                   <div style="float: left; width: 100%;">
                     <div style="height: 105px; width: 100%; background-color: #f6f7f9;;
-         border-style: solid; border-color: #bebebe; border-top-style: none; ">
+        border-bottom-style: solid; border-color: #bebebe; border-top-style: none; ">
           <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
 
           </textarea>
@@ -806,14 +806,14 @@
             </div>
           </div>
 
-          <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
-        border-color: #edeef0;">
-            <div >
-              <p-gmap #gmap [style]="{'width':'250px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays2"
-                      (onMapClick)="openMap=!openMap;" ></p-gmap>
-            </div>
+          <!--<div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;-->
+        <!--border-color: #edeef0;">-->
+            <!--<div >-->
+              <!--<p-gmap #gmap [style]="{'width':'250px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays2"-->
+                      <!--(onMapClick)="openMap=!openMap;" ></p-gmap>-->
+            <!--</div>-->
 
-          </div>
+          <!--</div>-->
 
           <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
         border-left-style: dotted; border-color: #edeef0;"

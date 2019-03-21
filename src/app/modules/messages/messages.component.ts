@@ -71,7 +71,7 @@ export class MessagesComponent implements OnInit, OnDestroy{
             let that = this;
             this.stompClient.connect({}, frame => {
                 that.stompClient.subscribe('/channel/' + this.channel.id, mes => {
-                    if(mes.body) {
+                    if (mes.body) {
                         let mymes = JSON.parse(mes.body);
                         console.log(mymes);
                         this.filteredMessages.push(mymes);
@@ -79,6 +79,9 @@ export class MessagesComponent implements OnInit, OnDestroy{
                         this.scrollToBottom();
                         this.delay(600).then(any => {
                             this.scrollToBottom();
+                            this.delay(600).then(any2 => {
+                                this.scrollToBottom();
+                            });
                         });
                         this.timer += 60000;
                     }
@@ -87,24 +90,26 @@ export class MessagesComponent implements OnInit, OnDestroy{
             this.delay(700).then(any => {
                 this.user.friends = [];
                 this.stompClient.send('/app/messages', {},
-                    JSON.stringify({'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+                    JSON.stringify({'content': this.newMessage,
+                        'from_chat': {'id': this.channel.id, 'chatName': this.channel.chatName}, 'sender': this.user}));
                 this.newMessage = '';
                 this.scrollToBottom();
                 this.timer += 60000;
             });
             this.timer = 120000;
-            this.delay(this.timer).then( res => {
-                    //this.stompClient.unsubscribe('/channel/' + this.channel.id);
-                    this.stompClient.disconnect(frame => {
-                        that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
-                    console.log('unsub');
-                }
-            );
+            // this.delay(this.timer).then( res => {
+            //         //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+            //         this.stompClient.disconnect(frame => {
+            //             that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+            //         console.log('unsub');
+            //     }
+            // );
 
         } else {
             this.user.friends = [];
             this.stompClient.send('/app/messages' , {},
-                JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+                JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id,
+                        'chatName': this.channel.chatName}, 'sender': this.user}));
             //$('#input').val('');
             //this.filteredMessages.push({'sender': this.username, 'content': this.newMessage});
             //this.messageService.save({'sender': this.authService.getCurrentUser(), 'content': this.newMessage, 'chat': this.chatService.getChannelId()}).subscribe(result => {this.gotoList(); },
@@ -171,13 +176,17 @@ export class MessagesComponent implements OnInit, OnDestroy{
                     this.newMessages = newmes;
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 } else {
                     this.newMessages = [];
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 }
             });
@@ -188,14 +197,18 @@ export class MessagesComponent implements OnInit, OnDestroy{
                     this.newMessages = newmes;
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 } else {
                     this.newMessages = [];
                     this.filteredMessages = [];
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 }
             });
@@ -221,7 +234,9 @@ export class MessagesComponent implements OnInit, OnDestroy{
             let mymes = JSON.parse(mes.body);
             console.log(mymes);
             this.filteredMessages.push(mymes);
-            this.messageService.cleanReserve(this.channel.id, this.authService.user.id);
+            this.messageService.cleanReserve(this.channel.id, this.authService.user.id).subscribe(p => {
+                console.log('cleaned');
+            });
             this.scrollToBottom();
               this.delay(600).then(any => {
                   this.scrollToBottom();
@@ -231,13 +246,13 @@ export class MessagesComponent implements OnInit, OnDestroy{
         });
       });
 
-      this.delay(this.timer).then( res => {
-              //this.stompClient.unsubscribe('/channel/' + this.channel.id);
-              this.stompClient.disconnect(frame => {
-                  that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
-              console.log('unsub');
-      }
-      );
+      // this.delay(this.timer).then( res => {
+      //         //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+      //         this.stompClient.disconnect(frame => {
+      //             that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+      //         console.log('unsub');
+      // }
+      // );
     }
 
     parser(value: any): String | '' {
@@ -260,7 +275,7 @@ export class MessagesComponent implements OnInit, OnDestroy{
 
     scrollToBottom() {
         const msgContainer = document.getElementById('msg-container');
-        msgContainer.scrollBy(0, 5000);
+        msgContainer.scrollBy(0, 6000);
         //msgContainer.scrollTop = msgContainer.scrollHeight;
     }
 

@@ -15,7 +15,7 @@ import { MessageService as mes} from 'primeng/api';
 export class CheckListComponent implements OnInit {
 
     index: number = 0;
-    //myId: number;
+    myId: number;
     checksToPay: Check[] = [];
     checksHistory: Check[] = [];
     checksFromOwners: Check[] = [];
@@ -27,7 +27,7 @@ export class CheckListComponent implements OnInit {
               private checkService: CheckService,
               private messService: mes) {
       this.displayDialogToMarkAsPayed = false;
-      //this.myId = this.authService.user.id;
+      this.myId = this.authService.user.id;
   }
 
   ngOnInit() {
@@ -192,7 +192,9 @@ export class CheckListComponent implements OnInit {
       this.checkService.confirmParticipation(this.check.id).subscribe(res => {
           this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Check added to payed'});
           this.delay(600).then(any => {
-              this.router.navigate(['/check-list']);
+              this.checksFromOwners = this.checksFromOwners.filter(c => c.id !== this.check.id);
+              this.checksHistory.push(this.check);
+              //this.router.navigate(['/check-list']);
           });
          });
       }

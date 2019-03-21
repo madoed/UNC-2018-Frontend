@@ -1,3 +1,4 @@
+
 <div class="wrapper">
   <p-toolbar [class]="'bl'" id="topbar">
     <div class="ui-toolbar-group-left">
@@ -27,6 +28,9 @@
   </p-toolbar>
 
   <div class="container">
-    <router-outlet></router-outlet>
+      <p-toast [style]="{marginTop: '80px'}" position="bottom-left"
+               hideTransitionOptions = "1000ms ease-out"></p-toast>
+
+      <router-outlet></router-outlet>
   </div>
 </div>

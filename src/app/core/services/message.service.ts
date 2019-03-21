@@ -4,6 +4,7 @@ import {ApiService} from './api.service';
 import {Message} from '../models/message.model';
 import {Chat} from '../models/chat.model';
 import {AuthService} from '@app/core';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,8 @@ export class MessageService {
     private messages: Array<Message> = [];
     private msgs = new Subject<Array<Message>>();
 
-    constructor(private apiService: ApiService ) {}
+    constructor(private apiService: ApiService,
+                private http: HttpClient) {}
 
     push(message: Message) {
         this.messages.push(message);
@@ -57,8 +59,9 @@ export class MessageService {
         return result;
     }
 
-    cleanReserve (channel: number, user: number) {
-        this.apiService.delete('http://127.0.0.1:8000/clean-reserve/' + user + '/' + channel);
+    cleanReserve (channel: number, user: number): Observable<any> {
+        console.log('clean');
+        return this.http.get('http://127.0.0.1:8000/clean-reserve/' + user + '/' + channel);
     }
 
 //    initMessages(channel: string): any {

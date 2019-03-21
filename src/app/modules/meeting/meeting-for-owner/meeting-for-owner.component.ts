@@ -104,6 +104,9 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
     newCar: boolean;
     cols: any[];
     billItems: Item[] = [];
+    billItemsForShare: Item[] = [];
+
+    selectedItem: Item;
 
     sourceCars: Item[];
     targetCars: Item[];
@@ -127,6 +130,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
   private minDate: Date;
   mark_info = true;
   private participants: Array<any>;
+  private participantsForShare: Array<any>;
+  private selectedParticipants: Array<any>;
   sub: Subscription;
 
   checked = false;
@@ -318,16 +323,17 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
                           this.meetingService.getAllItems().subscribe(items => {
                               this.billItems = items;
+                              this.billItemsForShare = items.filter(f => f.itemCurrentAmount > 0);
                               this.sourceCars = [];
-                              this.billItems.forEach(item => {
+                              this.billItems.forEach(its => {
                                   let tmpItem = {} as Item;
-                                  tmpItem.id = item.id;
+                                  tmpItem.id = its.id;
                                   tmpItem.itemCurrentAmount = 0;
-                                  tmpItem.itemAmount = item.itemCurrentAmount;
-                                  tmpItem.itemTitle = item.itemTitle;
-                                  tmpItem.price = item.price;
-                                  tmpItem.itemBill = item.itemBill;
-                                  if (item.itemCurrentAmount > 0) {
+                                  tmpItem.itemAmount = its.itemCurrentAmount;
+                                  tmpItem.itemTitle = its.itemTitle;
+                                  tmpItem.price = its.price;
+                                  tmpItem.itemBill = its.itemBill;
+                                  if (its.itemCurrentAmount > 0) {
                                       this.sourceCars.push(tmpItem);
                                   }
                               });
@@ -371,6 +377,10 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       }
                       this.meetingService.getParticipants().subscribe(data => {
                           this.participants = data;
+                          this.participantsForShare = [];
+                          this.participants.forEach(p => {
+                              this.participantsForShare.push(p);
+                          });
                           this.meetingService.getFriends().subscribe(fr => {
                               this.users = fr;
                               this.participants.forEach(part => {
@@ -515,7 +525,7 @@ ngAfterViewInit() {
       const reserv =  {} as Item;
       reserv.itemCurrentAmount = item.itemCurrentAmount;
       reserv.itemAmount = item.itemAmount;
-      console.log("out");
+      //console.log("out");
       console.log(item);
       item.itemAmount = 0;
       item.itemCurrentAmount = -1;
@@ -592,6 +602,15 @@ ngAfterViewInit() {
   deleteFromMyCheck() {
       this.changed_bill = true;
       const item = this.sourceCars.pop();
+      if (item.itemCurrentAmount < 1) {
+          this.targetCars.push(item);
+          this.targetCars = this.targetCars.sort((a, b): number => {
+              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+              if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+              return 0; });
+          this.messService.add({severity: 'error', summary: 'Error Message', detail: 'unable to delete'});
+          return;
+      }
       const reserv =  {} as Item;
       reserv.itemCurrentAmount = item.itemCurrentAmount;
       reserv.itemAmount = item.itemAmount;
@@ -668,7 +687,7 @@ ngAfterViewInit() {
                       this.targetCars.push(item);
                    }
               } else {
-                  this.messService.add({severity: 'error', summary: 'Error Message', detail: 'impossible to delete'});
+                  this.messService.add({severity: 'error', summary: 'Error Message', detail: 'unable to delete'});
                   this.targetCars.push(reserv);
                   this.targetCars = this.targetCars.sort((a, b): number => {
                       if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
@@ -684,15 +703,13 @@ ngAfterViewInit() {
     }
 
     backToBill() {
-      if (!this.changed_bill && !this.changed_shared) {
+      if (!this.changed_bill) {
           this.show_bill = true;
           this.edit_bill = false;
           this.your_list = false;
           this.share_items = false;
-      } else {
-
       }
-    }
+  }
 
     saveList() {
         this.changed_bill = false;
@@ -764,6 +781,9 @@ ngAfterViewInit() {
                     cars.push(res);
                     console.log(res);
                     this.billItems.push(res);
+                    if (res.itemCurrentAmount > 0) {
+                        this.billItemsForShare.push(res);
+                    }
                     let tmpItem = {} as Item;
                     tmpItem.itemAmount = res.itemCurrentAmount;
                     tmpItem.itemTitle = res.itemTitle;
@@ -788,6 +808,10 @@ ngAfterViewInit() {
                         this.bill = item;
                     });
                     this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                    this.meetingService.getParticipants().subscribe(data => {
+                        this.participantsForShare = data;
+                        this.participants.filter(t => t.statusOfConfirmation !== 'confirmed');
+                    });
                 },
                 // (err: any) => {
                 //     if (err instanceof HttpErrorResponse) {
@@ -856,6 +880,10 @@ ngAfterViewInit() {
                           cars.push(res);
                           console.log(res);
                           this.billItems.push(res);
+                          this.billItemsForShare = this.billItemsForShare.filter(h => h.id !== res.id);
+                          if (res.itemCurrentAmount > 0) {
+                              this.billItemsForShare.push(res);
+                          }
                           let tmpItem = {} as Item;
                           tmpItem.itemAmount = res.itemCurrentAmount;
                           tmpItem.itemTitle = res.itemTitle;
@@ -905,6 +933,10 @@ ngAfterViewInit() {
                       console.log(res);
                       cars[this.billItems.indexOf(this.selectedCar)] = res;
                       this.billItems = cars;
+                      if (res.itemCurrentAmount > 0) {
+                          this.billItemsForShare.push(res);
+                      }
+
                       this.sourceCars = this.sourceCars.filter(item => item.id !== res.id);
                       let tmpItem = {} as Item;
                       tmpItem.itemAmount = res.itemCurrentAmount;
@@ -974,6 +1006,7 @@ ngAfterViewInit() {
                 res => {
                     this.billItems = this.billItems.filter(item => item.id !== this.selectedCar.id);
                     this.sourceCars = this.sourceCars.filter(item => item.id !== this.selectedCar.id);
+                    this.billItemsForShare = this.billItemsForShare.filter(item => item.id !== this.selectedCar.id);
                     this.car = null;
                     this.displayDialog = false;
                     this.messService.add({severity: 'success', summary: 'Success Message', detail: 'item deleted'});
@@ -999,10 +1032,9 @@ ngAfterViewInit() {
                             summary: 'Error Message',
                             detail: 'can\'t delete. Someone already payed'
                         });
-                    } else {
-                        this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
-
                     }
+                    this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+
                 }
             );
         }
@@ -1086,7 +1118,7 @@ ngAfterViewInit() {
     }
 
     zoomOut(map) {
-        map.setZoom(map.getZoom()-1);
+        map.setZoom(map.getZoom()- 1);
     }
 
     clear() {
@@ -1358,7 +1390,120 @@ ngAfterViewInit() {
     }
 
     share() {
+      let amountOnItem = Math.round(1 / this.selectedParticipants.length * 100) / 100;
+        //this.selectedItem.itemAmount = 0;
+        //this.selectedItem.itemCurrentAmount = -1;
+        let tmp = {} as Item;
+        tmp.itemCurrentAmount = -1;
+        tmp.itemAmount = 0;
+        tmp.price = this.selectedItem.price;
+        tmp.id = this.selectedItem.id;
+        tmp.itemTitle = this.selectedItem.itemTitle;
+        this.meetingService.updateItem(tmp).subscribe(
+            res => {
+                console.log(res);
+                let tmp = this.billItems.find(it => it.id === res.id);
+                tmp.itemCurrentAmount = res.itemCurrentAmount;
+                tmp.itemAmount = res.itemAmount;
+                tmp.price = res.price;
+                if (res.itemCurrentAmount === 0) {
+                    this.billItemsForShare = this.billItemsForShare.filter(it => it.id !== res.id);
+                } else {
+                    let tmp2 = this.billItemsForShare.find(it => it.id === res.id);
+                    tmp2.itemCurrentAmount = res.itemCurrentAmount;
+                }
 
+                if (this.selectedParticipants.filter(p => p.meetingParticipant.id === this.participant.id)) {
+                    if (this.targetCars.find(it => it.id === res.id)) {
+                        // item.itemCurrentAmount++;
+                        this.targetCars.find(it => it.id === res.id).itemCurrentAmount
+                            = this.targetCars.find(it => it.id === res.id).itemCurrentAmount + amountOnItem;
+                        // this.targetCars = this.targetCars.filter(it => it.id !== item.id);
+                        // this.targetCars.push(item);
+                        this.targetCars = this.targetCars.sort((a, b): number => {
+                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                return -1;
+                            }
+                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                        // this.targetCars.push(item);
+                    } else {
+                        const newitem = {} as Item;
+                        newitem.itemAmount = res.itemAmount;
+                        newitem.itemCurrentAmount = amountOnItem;
+                        newitem.itemTitle = res.itemTitle;
+                        newitem.id = res.id;
+                        newitem.itemBill = res.itemBill;
+                        newitem.price = res.price;
+                        this.targetCars.push(newitem);
+                        this.targetCars = this.targetCars.sort((a, b): number => {
+                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                return -1;
+                            }
+                            if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                    }
+                }
+                this.sourceCars = this.sourceCars.filter(c => c.id !== res.id);
+                //this.billItemsForShare = this.billItemsForShare.filter(c => c.id !== res.id);
+                if (res.itemCurrentAmount > 0) {
+                    const newitem = {} as Item;
+                    newitem.itemAmount = res.itemCurrentAmount ;
+                    newitem.itemCurrentAmount = 0;
+                    newitem.itemTitle = res.itemTitle;
+                    newitem.id = res.id;
+                    newitem.itemBill = res.itemBill;
+                    newitem.price = res.price;
+                    this.sourceCars.push(newitem);
+                    this.sourceCars = this.sourceCars.sort((a, b): number => {
+                        if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return -1; }
+                        if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {return 1; }
+                        return 0; });
+                    // this.sourceCars = this.sourceCars.filter(it => it.id !== item.id);
+                }
+
+                let itemSharedPart = {} as Item;
+                itemSharedPart.itemCurrentAmount = amountOnItem;
+                itemSharedPart.id = this.selectedItem.id;
+                itemSharedPart.itemTitle = this.selectedItem.itemTitle;
+                this.selectedParticipants.forEach( r => {
+                    this.meetingService.checkUpdateForShare(itemSharedPart, r.id).subscribe(u => {
+                        this.selectedItem = null;
+                        this.selectedParticipants = null;
+                    });
+                 });
+                this.messService.add({severity:'success', summary: 'Success Message', detail:'Item shared'});
+                this.selectedParticipants = null;
+            },
+            (err: HttpErrorResponse) => {
+                console.log(err.status);
+                if (err.status === 409) {
+                    this.messService.add({
+                        severity: 'error',
+                        summary: 'Error Message',
+                        detail: 'wrong amount'
+                    });
+                    //this.targetCars.pop();
+                } else {
+                    this.messService.add({severity: 'error', summary: 'Error Message', detail: 'impossible to add'});
+                }
+            }
+        );
+
+      // this.meetingService.updateItem(this.selectedItem).subscribe( res => {
+      //
+      // });
+    }
+
+    backToBillFromShared() {
+        this.show_bill = true;
+        this.share_items = false;
     }
 }
 

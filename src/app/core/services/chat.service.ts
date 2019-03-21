@@ -15,24 +15,24 @@ export class ChatService {
     public CHAT_API = environment.api_url + '/chats';
     // private channel_name: string;
     // private channel_id: number;
-    private channel: Chat;
+    public channel: Chat;
     private user: User;
 
     constructor(
         private apiService: ApiService,
-        private authService: AuthService 
+        private authService: AuthService
     ) {
         this.user = this.authService.user;
     }
 
-    getOld(): Observable<Chat[]> {
+    getOld(id: number): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + id);
     }
 
-    getNew(): Observable<Chat[]> {
+    getNew(id: number): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + id);
     }
 
     setChannel(channel: Chat) {
@@ -67,5 +67,9 @@ export class ChatService {
     console.log(chat);
     return this.apiService.get('http://127.0.0.1:8000/chat/' + chat);
   }
+
+    getMeetingChatId (partId: number): Observable<number> {
+        return this.apiService.get('http://127.0.0.1:8000/meeting-chat-id/' + partId);
+    }
 
 }
