@@ -46,7 +46,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     showNewCard: boolean = false;
 
     card = {} as Card;
-    cards: Array<Card> = null;
+    cards: Array<Card> = new Array<Card>();
     showAddCard: boolean = false;
     CVV: number;
     lastFourNumbers: number;

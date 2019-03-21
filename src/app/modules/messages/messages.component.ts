@@ -88,7 +88,7 @@ export class MessagesComponent implements OnInit, OnDestroy{
                 });
             });
             this.delay(700).then(any => {
-                this.user.friends = [];
+                //this.user.friends = [];
                 this.stompClient.send('/app/messages', {},
                     JSON.stringify({'content': this.newMessage,
                         'from_chat': {'id': this.channel.id, 'chatName': this.channel.chatName}, 'sender': this.user}));
@@ -130,10 +130,6 @@ export class MessagesComponent implements OnInit, OnDestroy{
         this.stompClient.disconnect(frame => {
             that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
         console.log('unsub');
-        this.delay(100).then( res => {
-                this.router.navigate(['/chat']);
-            }
-        );
     }
 
     ngOnInit() {

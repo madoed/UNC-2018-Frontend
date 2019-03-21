@@ -19,8 +19,12 @@ export class ChatComponent implements OnInit {
 
     constructor(private chatService: ChatService,
                 private authService: AuthService,
-                private router:  Router) {
-        this.chatService.getNew(this.authService.user.id).subscribe(data => {
+                private router:  Router
+                ) {}
+
+    async ngOnInit() {
+        await this.chatService.init();
+        this.chatService.getNew().subscribe(data => {
             if (data) {
                 this.newChats = data;
                 console.log(this.newChats);
@@ -29,7 +33,7 @@ export class ChatComponent implements OnInit {
                     this.chats.push(t);
                 });
                 //this.chats = data;
-                this.chatService.getOld(this.authService.user.id).subscribe(oldchats => {
+                this.chatService.getOld().subscribe(oldchats => {
                     if (oldchats) {
                         oldchats.forEach(chat => {
                             this.chats.push(chat);
@@ -37,7 +41,7 @@ export class ChatComponent implements OnInit {
                     }
                 });
             } else {
-                this.chatService.getOld(this.authService.user.id).subscribe(oldchats => {
+                this.chatService.getOld().subscribe(oldchats => {
                     if (oldchats) {
                         this.chats = oldchats;
                     } else {
@@ -47,10 +51,6 @@ export class ChatComponent implements OnInit {
                 this.newChats = null;
             }
         });
-    }
-
-    async ngOnInit() {
-
     }
 
     getNotYou(chat: Chat): User {

@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
       await this.authService.init();
-      this.chatService.getNew(this.authService.user.id).subscribe( up => {
+      await this.chatService.init();
+      this.chatService.getNew().subscribe( up => {
         if (up) {
             up.forEach(u => {
                 this.mesUpdates.push(u.id);

@@ -3,10 +3,8 @@ import {environment} from '@env';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {User} from '../models/user.model';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Chat} from '../models/chat.model';
-import {Message} from '../models/message.model';
-import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +14,26 @@ export class ChatService {
     // private channel_name: string;
     // private channel_id: number;
     public channel: Chat;
-    private user: User;
+    private userId: number;
 
     constructor(
         private apiService: ApiService,
         private authService: AuthService
-    ) {
-        this.user = this.authService.user;
+    ) {}
+
+    async init() {
+        const user = await this.authService.userPromise;
+        this.userId = user.id;
     }
 
-    getOld(id: number): Observable<Chat[]> {
+    getOld(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.userId);
     }
 
-    getNew(id: number): Observable<Chat[]> {
+    getNew(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.userId);
     }
 
     setChannel(channel: Chat) {
@@ -44,7 +45,7 @@ export class ChatService {
 
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.userId);
     }
 
     createChat(card: any): Observable<any> {
