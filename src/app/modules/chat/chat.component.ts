@@ -19,15 +19,20 @@ export class ChatComponent implements OnInit {
 
     constructor(private chatService: ChatService,
                 private authService: AuthService,
-                private router:  Router) {
-    }
+                private router:  Router
+                ) {}
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.chatService.init();
         this.chatService.getNew().subscribe(data => {
             if (data) {
-                console.log(this.newChats);
                 this.newChats = data;
-                this.chats = data;
+                console.log(this.newChats);
+                this.chats = [];
+                this.newChats.forEach(t => {
+                    this.chats.push(t);
+                });
+                //this.chats = data;
                 this.chatService.getOld().subscribe(oldchats => {
                     if (oldchats) {
                         oldchats.forEach(chat => {
@@ -43,7 +48,7 @@ export class ChatComponent implements OnInit {
                         this.chats = [];
                     }
                 });
-                this.newChats = [];
+                this.newChats = null;
             }
         });
     }
@@ -58,11 +63,32 @@ export class ChatComponent implements OnInit {
         return user;
     }
 
-    checkIfNew(chat: Chat): boolean {
-        if ( this.newChats === undefined) {
+    checkIfNew(chat: number): boolean {
+        if ( this.newChats === null || !this.newChats || this.newChats.length === 0) {
             return false;
         }
-        return this.newChats.includes(chat);
+        //return this.newChats.includes(chat);
+        //let check = false;
+        let res = this.newChats.filter(t => t.id === chat);
+        if (res.pop()) {
+            return true;
+        } else {
+            return false;
+        }
+        // this.newChats.forEach(t => {
+        //     tmp = this.newChats.pop();
+        //     if (tmp && tmp.id === chat.id) {
+        //         check = true;
+        //         this.newChats.push(tmp);
+        //     }
+        //     if (tmp && tmp.id !== chat.id) {
+        //         this.newChats.push(tmp);
+        //     }
+            // if (t.id === chat.id) {
+            //     check = true;
+            // }
+        // });
+        //return check;
     }
 
     parser(value: any): String | '' {

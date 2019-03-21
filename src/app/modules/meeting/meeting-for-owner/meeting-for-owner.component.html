@@ -1,7 +1,7 @@
 
 <div class="container">
 
-    <p-dialog [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+    <p-dialog header="Click to add the place" [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
               [maximizable]="false" [baseZIndex]="10000">
 
         <p-gmap #gmap [style]="{'width':'600px','height':'320px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays"
@@ -67,32 +67,32 @@
 
 
             </div>
-            <div style="margin-left: 15px;">
-                <p-gmap #gmap [style]="{'width':'455px','height':'55px', 'margin-bottom': '1em'}" [options]="options"
-                        (onMapClick)="openMap=!openMap;" ></p-gmap>
+
+            <div style="margin-left: 15px; width: 455px; height: 55px; ">
+                <div style=" border-color: #edeef0;"
+                     (click)="descriptionEdit()">
+                    <!--<h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>-->
+
+                    <div class="divDescription">
+               <textarea class="textareaDescription"
+                         readonly="true">
+                   {{meeting.meetingDescription?meeting.meetingDescription:'Add description'}}
+                   </textarea>
+                    </div>
+
+                </div>
             </div>
 
         </div>
         </div>
 
         <div style="float: right; margin-right: 10px; width: 250px; margin-top: 0px; height: 184px;
-        border-left-style: dotted; border-color: #edeef0;"
-             (click)="descriptionEdit()">
-        <h3 style="color: #6D6D6D;margin-left: 70px; margin-top: -10px;" >Description</h3>
-
-            <div class="divDescription">
-               <textarea class="textareaDescription"
-                         readonly="true">
-                   {{meeting.meetingDescription?meeting.meetingDescription:'Add description'}}
-                   </textarea>
+        border-color: #edeef0;">
+            <div >
+            <p-gmap #gmap [style]="{'width':'250px','height':'184px', 'margin-bottom': '1em'}" [options]="options" [overlays]="overlays2"
+            (onMapClick)="openMap=!openMap;" ></p-gmap>
             </div>
 
-            <!--<textarea [rows]="4" [cols]="30" pInputTextarea  [disabled]="true" (onclick)="descriptionEdit()"-->
-            <!--[(ngModel)]="meeting.meetingDescription"  > {{meeting.meetingDescription}}</textarea>-->
-
-            <!--<button mat-raised-button color="primary" type="button" style="margin-right: 40px;-->
-            <!--float: right; margin-top: 10px; margin-bottom: 10px;"-->
-                <!--(click)="descriptionEdit()">Edit</button>-->
         </div>
 
     </mat-card>
@@ -458,9 +458,9 @@
                                             <!--</mat-list-item>-->
                                             <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
                                                 <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
-                                                    <div style="margin-top:5px; float: left;   height: 5px; width: 5px; border-radius: 5px;">
-                                                        <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-                                                        <img style="width: 5px; height: 5px; border-radius: 5px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                                                    <div style="margin-top:5px; float: left;   height: 25px; width: 25px; border-radius: 25px;">
+                                                        <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                                                        <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
                                                     </div>
                                                     <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 1px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
                                                         <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
@@ -479,9 +479,9 @@
                                                 </div>
 
                                                 <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
-                                                    <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
-                                                        <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-                                                        <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+                                                    <div style="margin-top:5px; float: left;   height: 25px; width: 25px; border-radius: 25px;">
+                                                        <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+                                                        <img style="width: 25px; height: 25px; border-radius: 25px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
                                                     </div>
                                                     <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
                                                         <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
@@ -506,8 +506,8 @@
                                     </mat-card>
 
                                     <div style="float: left; width: 100%;">
-                                        <div style="height: 105px; width: 100%; background-color: rgba(0,94,171,0.11);
-         border-style: solid; border-color: #bebebe; border-top-style: none; ">
+                                        <div style="height: 105px; width: 100%; background-color: #f6f7f9;;
+         border-bottom-style: solid; border-color: #bebebe; border-top-style: none; ">
           <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
 
           </textarea>
@@ -561,6 +561,10 @@
 
                             <div *ngIf="show_bill">
                                 <br />
+                                <button mat-raised-button color="primary" style="float: right; margin-right: 20px;
+                                    margin-bottom: 20px;" (click)="showShareItems()" type="button">
+                                    Share items
+                                </button>
 
                                     <button mat-raised-button color="primary" style="float: right; margin-right: 50px;
                                     margin-bottom: 20px;" (click)="showYourList()" type="button">
@@ -591,7 +595,7 @@
                                             <div style="text-align:left">
                                                 <button mat-raised-button color="primary" type="button"  (click)="showDialogToAdd()">Add</button>
                                                 <!--Button to open FNS dialog-->
-                                                <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">FNS</button>
+                                                <button mat-raised-button color="primary" type="button"  (click)="showFnsDialog()" style="margin-left: 10px;">Import bill</button>
                                             </div>
                                         </ng-template>
                                     </p-table>
@@ -735,6 +739,40 @@
                                 Save
                             </button>
                         </div>
+
+                            <div *ngIf="share_items">
+                                <br />
+                                <button mat-raised-button color="primary" style="float: bottom;
+                             float: left; margin-left: 50px; margin-bottom: 30px;" (click)="backToBillFromShared()">
+                                    <mat-icon color="white">arrow_back</mat-icon>
+                                </button>
+
+                                <button mat-raised-button color="primary" [disabled]="!selectedParticipants||
+                                !selectedParticipants.length||!selectedItem" style="float: bottom;
+                             float: right; margin-right: 50px; margin-bottom: 30px;" (click)="share()">
+                                    Share
+                                </button>
+                                <div flex style="margin: 20px; margin-top: 5px; height: auto; float: left; width: 92%;">
+                                    <div style="float: left;margin-left: 20px;">
+                                <h3 class="first" style="margin-left: 50px;">Items</h3>
+                                <p-listbox [options]="billItemsForShare" [(ngModel)]="selectedItem" optionLabel="name"
+                                [style]="{'width': '225px'}" ></p-listbox>
+                                    </div>
+
+                                    <div style="float: right; margin-right: 20px; ">
+                                        <h3 style="margin-left: 20px;">Participants</h3>
+                                        <p-listbox [options]="participantsForShare" [(ngModel)]="selectedParticipants"
+                                                    multiple="multiple" checkbox="checkbox" optionLabel="name" [style]="{'width': '225px'}">
+
+                                        </p-listbox>
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
                         </mat-tab>
 
 
@@ -743,14 +781,14 @@
             </mat-card>
         </div>
 
-        <div  flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
+        <div  flex style="padding: 0px; margin-bottom: 30px; margin-left: 556px; width: 604px; height: auto; margin-top: 20px;">
         <mat-card >
 
             <mat-card-header >Participants</mat-card-header>
             <br />
             <mat-divider></mat-divider>
-            <mat-card-actions>
-                <button mat-raised-button color="primary" *ngIf="bill.billTotalSum>0" style="
+            <mat-card-actions  *ngIf="bill.billTotalSum == 0">
+                <button mat-raised-button color="primary" style="
                          float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
                     <mat-icon>add_circle_outline</mat-icon>
                 </button>

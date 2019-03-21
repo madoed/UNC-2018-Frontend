@@ -20,7 +20,7 @@
                         From meeting: </span>{{check.checkOwner.participantOfMeeting.name}}
       </h3>
 
-      <div style="width: 70%; margin-left: 90px;">
+      <div *ngIf="items.length" style="width: 70%; margin-left: 90px;">
         <p-table [value]="items">
             <ng-template pTemplate="header">
               <tr>

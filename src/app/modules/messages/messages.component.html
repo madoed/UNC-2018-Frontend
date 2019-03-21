@@ -4,7 +4,7 @@
  <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
   <mat-card>
     <mat-card-header background-color="accent" style="height: 30px;">
-      <button mat-button [routerLink]="['/chat']" style="margin-top: -15px; height: 30px;">
+      <button mat-button (click)="back()" style="margin-top: -15px; height: 30px;">
         <img style="margin-top: -5px; height: 25px; width: 30px;" src="assets/images/back.png">
         <span style="margin-top: -5px; color: #007ad9;">Back</span>
       </button>
@@ -77,7 +77,7 @@
       </mat-card>
 
       <div style="float: left; width: 100%;">
-        <div style="height: 105px; width: 100%; background-color: rgba(0,94,171,0.11);
+        <div style="height: 105px; width: 100%; background-color: #f6f7f9;
          border-style: solid; border-color: #bebebe; border-top-style: none; ">
           <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
 
@@ -102,8 +102,8 @@
   <div style="margin-left: 72.5%;">
     <p-card [style]="{width: '310px'}" styleClass="ui-card-shadow">
       <p-header *ngIf="channel.chatType==='dialogue'" >
-        <img style="margin-left: 55px; margin-top: 10px; width: 200px; height: 200px; " *ngIf="opponent&&!opponent.avatarUrl" src="{{defaultAvatar}}" >
-        <img style="margin-left: 55px; margin-top: 10px; width: 200px; height: 200px; " *ngIf="opponent&&opponent.avatarUrl" src="{{opponent.avatarUrl}}" >
+        <img style="margin-left: 55px; margin-top: 10px; width: 200px; height: 200px; object-fit: cover;" *ngIf="opponent&&!opponent.avatarUrl" src="{{defaultAvatar}}" >
+        <img style="margin-left: 55px; margin-top: 10px; width: 200px; height: 200px; object-fit: cover;" *ngIf="opponent&&opponent.avatarUrl" src="{{opponent.avatarUrl}}" >
       </p-header>
       <p-header *ngIf="channel.chatType!=='dialogue'" >
         <br />

@@ -28,6 +28,7 @@
     "angular2-datetimepicker": "^1.1.1",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
+    "keycloak-angular": "^6.1.0",
     "net": "^1.0.2",
     "ngx-auto-scroll": "^1.1.0",
     "ngx-perfect-scrollbar": "^7.2.0",
@@ -43,7 +44,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.12.0",
+    "@angular-devkit/build-angular": "^0.13.6",
     "@angular/cli": "~7.2.1",
     "@angular/compiler-cli": "^7.2.7",
     "@angular/language-service": "~7.2.0",

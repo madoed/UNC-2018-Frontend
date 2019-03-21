@@ -3,6 +3,8 @@ import {MenuItem, MessageService as mes} from 'primeng/api';
 import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService, StorageService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
+import { environment } from '@env';
+import { MessageService } from 'primeng/api';
 import {Card} from '@app/core/models/card.model';
 import { environment } from '@env';
 import { MessageService } from 'primeng/api';
@@ -17,6 +19,9 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
+    avatar: any;
+    currentAvatarUrl: any;
+
     card = {} as Card;
     cards: Array<Card> = null;
     showAddCard: boolean = false;
@@ -53,13 +58,14 @@ export class MeetingCreateComponent implements OnInit {
     currentAvatarUrl: any;
 
     constructor(private messService: mes,
-              private meetingService: MeetingService,
-              public route: ActivatedRoute,
-              private authService: AuthService,
-              public router: Router,
-              private cardService: CardService,
-              private messageService: MessageService,
-              private storageService: StorageService) {
+                private meetingService: MeetingService,
+                public route: ActivatedRoute,
+                private authService: AuthService,
+                public router: Router,
+                private cardService: CardService,
+                private messageService: MessageService,
+                private storageService: StorageService
+                ) {
         const today = new Date();
         const month = today.getMonth();
         const year = today.getFullYear();
@@ -235,7 +241,9 @@ export class MeetingCreateComponent implements OnInit {
                 },
                 error => {
                     this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
-                })
+                });
+        } else {
+            this.internalCreate();
         }
     }
 
@@ -271,8 +279,8 @@ export class MeetingCreateComponent implements OnInit {
     // Meeting avatar selection
     clearAvatar() {
         this.currentAvatarUrl = environment.defaultMeeting;
-      }
-    
+    }
+  
     onSelectFile(files) {
         var mimeType = files[0].type;
         if (mimeType.match(/image\/*/) == null) {
@@ -282,9 +290,9 @@ export class MeetingCreateComponent implements OnInit {
 
         this.avatar = files[0];
         var reader = new FileReader();
-        reader.readAsDataURL(this.avatar); 
-        reader.onload = (_event) => { 
-            this.currentAvatarUrl = reader.result; 
+        reader.readAsDataURL(this.avatar);
+        reader.onload = (_event) => {
+            this.currentAvatarUrl = reader.result;
         }
     }
 }

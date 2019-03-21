@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MessageService} from '@app/core/services/message.service';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -20,7 +20,7 @@ import {environment} from '@env';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit, OnDestroy{
 
     public opponent: User;
     defaultAvatar = environment.defaultAvatar;
@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
     private channel = {}as Chat;
     private user: User;
     private stompClient;
-    timer: number = 60000;
+    timer: number = 120000;
 
     sub: Subscription;
 
@@ -50,6 +50,19 @@ export class MessagesComponent implements OnInit {
         });*/
     }
 
+    back() {
+        //let ws = new SockJS(this.serverUrl);
+        //this.stompClient = Stomp.over(ws);
+        let that = this;
+        this.stompClient.disconnect(frame => {
+            that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+        console.log('unsub');
+        this.delay(100).then( res => {
+                this.router.navigate(['/chat']);
+            }
+        );
+    }
+
     sendMessage() {
 
         if (!this.stompClient.connected) {
@@ -58,7 +71,7 @@ export class MessagesComponent implements OnInit {
             let that = this;
             this.stompClient.connect({}, frame => {
                 that.stompClient.subscribe('/channel/' + this.channel.id, mes => {
-                    if(mes.body) {
+                    if (mes.body) {
                         let mymes = JSON.parse(mes.body);
                         console.log(mymes);
                         this.filteredMessages.push(mymes);
@@ -66,24 +79,37 @@ export class MessagesComponent implements OnInit {
                         this.scrollToBottom();
                         this.delay(600).then(any => {
                             this.scrollToBottom();
+                            this.delay(600).then(any2 => {
+                                this.scrollToBottom();
+                            });
                         });
                         this.timer += 60000;
                     }
                 });
             });
             this.delay(700).then(any => {
-                this.user.friends = [];
+                //this.user.friends = [];
                 this.stompClient.send('/app/messages', {},
-                    JSON.stringify({'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+                    JSON.stringify({'content': this.newMessage,
+                        'from_chat': {'id': this.channel.id, 'chatName': this.channel.chatName}, 'sender': this.user}));
                 this.newMessage = '';
                 this.scrollToBottom();
                 this.timer += 60000;
             });
+            this.timer = 120000;
+            // this.delay(this.timer).then( res => {
+            //         //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+            //         this.stompClient.disconnect(frame => {
+            //             that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+            //         console.log('unsub');
+            //     }
+            // );
 
         } else {
             this.user.friends = [];
             this.stompClient.send('/app/messages' , {},
-                JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id}, 'sender': this.user}));
+                JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id,
+                        'chatName': this.channel.chatName}, 'sender': this.user}));
             //$('#input').val('');
             //this.filteredMessages.push({'sender': this.username, 'content': this.newMessage});
             //this.messageService.save({'sender': this.authService.getCurrentUser(), 'content': this.newMessage, 'chat': this.chatService.getChannelId()}).subscribe(result => {this.gotoList(); },
@@ -99,6 +125,12 @@ export class MessagesComponent implements OnInit {
             console.log("fired"));
     }
 
+    ngOnDestroy() {
+        let that = this;
+        this.stompClient.disconnect(frame => {
+            that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+        console.log('unsub');
+    }
 
     ngOnInit() {
       this.sub = this.route.params.subscribe(params => {
@@ -140,13 +172,17 @@ export class MessagesComponent implements OnInit {
                     this.newMessages = newmes;
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 } else {
                     this.newMessages = [];
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 }
             });
@@ -157,20 +193,24 @@ export class MessagesComponent implements OnInit {
                     this.newMessages = newmes;
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 } else {
                     this.newMessages = [];
                     this.filteredMessages = [];
                     this.delay(600).then(any => {
                         this.scrollToBottom();
-                        this.scrollToBottom();
+                        this.delay(600).then(any2 => {
+                            this.scrollToBottom();
+                        });
                     });
                 }
             });
         }
 
-          this.delay(6000).then(any => {
+          this.delay(4000).then(any => {
               this.newMessages = [];
           });
       });
@@ -190,7 +230,9 @@ export class MessagesComponent implements OnInit {
             let mymes = JSON.parse(mes.body);
             console.log(mymes);
             this.filteredMessages.push(mymes);
-            this.messageService.cleanReserve(this.channel.id, this.authService.user.id);
+            this.messageService.cleanReserve(this.channel.id, this.authService.user.id).subscribe(p => {
+                console.log('cleaned');
+            });
             this.scrollToBottom();
               this.delay(600).then(any => {
                   this.scrollToBottom();
@@ -200,13 +242,13 @@ export class MessagesComponent implements OnInit {
         });
       });
 
-      this.delay(this.timer).then( res => {
-              //this.stompClient.unsubscribe('/channel/' + this.channel.id);
-              this.stompClient.disconnect(frame => {
-                  that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
-              console.log('unsub');
-      }
-      );
+      // this.delay(this.timer).then( res => {
+      //         //this.stompClient.unsubscribe('/channel/' + this.channel.id);
+      //         this.stompClient.disconnect(frame => {
+      //             that.stompClient.subscribe('/channel/' + this.channel.id); }, {});
+      //         console.log('unsub');
+      // }
+      // );
     }
 
     parser(value: any): String | '' {
@@ -229,7 +271,7 @@ export class MessagesComponent implements OnInit {
 
     scrollToBottom() {
         const msgContainer = document.getElementById('msg-container');
-        msgContainer.scrollBy(0, 5000);
+        msgContainer.scrollBy(0, 6000);
         //msgContainer.scrollTop = msgContainer.scrollHeight;
     }
 

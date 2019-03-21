@@ -33,25 +33,56 @@ export class MeetingListComponent implements OnInit {
               private messService: mes) { }
 
   ngOnInit() {
-    this.meetingService.getAll(0).subscribe(data => {
-        if (data !== null) {
-            this.meetings = data;
-            this.meetings.sort((a, b): number => {
-                if (a.id > b.id) {
-                    return -1;
-                }
-                if (a.id < b.id) {
-                    return 1;
-                }
-                return 0;
-            });
-        }
-    });
+      this.meetingService.getAll(2, this.authService.user.id).subscribe( data => {
+          if (data !== null) {
+              this.index = 2;
+              this.meetingsNew = data;
+              this.meetingsNew.sort((a, b): number => {
+                  if (a.id > b.id) {
+                      return -1;
+                  }
+                  if (a.id < b.id) {
+                      return 1;
+                  }
+                  return 0;
+              });
+          } else {
+              this.meetingService.getAll(0, this.authService.user.id).subscribe(data2 => {
+                  if (data2 !== null) {
+                      this.meetings = data2;
+                      this.meetings.sort((a, b): number => {
+                          if (a.id > b.id) {
+                              return -1;
+                          }
+                          if (a.id < b.id) {
+                              return 1;
+                          }
+                          return 0;
+                      });
+                  }
+              });
+          }
+      });
   }
 
     openList(num: number) {
-        if (num === 1 && !this.meetingsPast.length) {
-            this.meetingService.getAll(1).subscribe( data => {
+        if (num === 0 && !this.meetings.length) {
+            this.meetingService.getAll(0, this.authService.user.id).subscribe(data => {
+                if (data !== null) {
+                    this.meetings = data;
+                    this.meetings.sort((a, b): number => {
+                        if (a.id > b.id) {
+                            return -1;
+                        }
+                        if (a.id < b.id) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                }
+            });
+        } else if (num === 1 && !this.meetingsPast.length) {
+            this.meetingService.getAll(1, this.authService.user.id).subscribe( data => {
                 if (data !== null) {
                     this.meetingsPast = data;
                     this.meetingsPast.sort((a, b): number => {
@@ -66,9 +97,8 @@ export class MeetingListComponent implements OnInit {
                     console.log(data);
                 }
             });
-        }
-        if (num === 2 && !this.meetingsNew.length) {
-            this.meetingService.getAll(2).subscribe( data => {
+        } else if (num === 2 && !this.meetingsNew.length) {
+            this.meetingService.getAll(2, this.authService.user.id).subscribe( data => {
                 if (data !== null) {
                     this.meetingsNew = data;
                     this.meetingsNew.sort((a, b): number => {
@@ -86,41 +116,41 @@ export class MeetingListComponent implements OnInit {
         this.index = num;
     }
 
-    loadMeetings(tab: MatTabChangeEvent) {
-        if (tab.index === 1 && !this.meetingsPast.length) {
-            this.meetingService.getAll(1).subscribe( data => {
-                if (data !== null) {
-                    this.meetingsPast = data;
-                    this.meetingsPast.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return -1;
-                        }
-                        if (a.id < b.id) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                    console.log(data);
-                }
-            });
-        }
-        if (tab.index === 2 && !this.meetingsNew.length) {
-            this.meetingService.getAll(2).subscribe( data => {
-                if (data !== null) {
-                    this.meetingsNew = data;
-                    this.meetingsNew.sort((a, b): number => {
-                        if (a.id > b.id) {
-                            return -1;
-                        }
-                        if (a.id < b.id) {
-                            return 1;
-                        }
-                        return 0;
-                    });
-                }
-            });
-        }
-    }
+    // loadMeetings(tab: MatTabChangeEvent) {
+    //     if (tab.index === 1 && !this.meetingsPast.length) {
+    //         this.meetingService.getAll(1).subscribe( data => {
+    //             if (data !== null) {
+    //                 this.meetingsPast = data;
+    //                 this.meetingsPast.sort((a, b): number => {
+    //                     if (a.id > b.id) {
+    //                         return -1;
+    //                     }
+    //                     if (a.id < b.id) {
+    //                         return 1;
+    //                     }
+    //                     return 0;
+    //                 });
+    //                 console.log(data);
+    //             }
+    //         });
+    //     }
+    //     if (tab.index === 2 && !this.meetingsNew.length) {
+    //         this.meetingService.getAll(2).subscribe( data => {
+    //             if (data !== null) {
+    //                 this.meetingsNew = data;
+    //                 this.meetingsNew.sort((a, b): number => {
+    //                     if (a.id > b.id) {
+    //                         return -1;
+    //                     }
+    //                     if (a.id < b.id) {
+    //                         return 1;
+    //                     }
+    //                     return 0;
+    //                 });
+    //             }
+    //         });
+    //     }
+    // }
 
     parse(value: any): String | null {
         if ((typeof value === 'string')) {
@@ -157,17 +187,27 @@ export class MeetingListComponent implements OnInit {
   confirm(part: Participant) {
       this.meetingService.confirmParticipation(part.id).subscribe( res => {
           this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Meeting confirmed'});
-          this.delay(600).then(any => {
-              window.location.reload();
+          this.meetingsNew = this.meetingsNew.filter(m => m.id !== part.id);
+          this.meetingService.getAll(0, this.authService.user.id).subscribe(data => {
+              if (data !== null) {
+                  this.meetings = data;
+                  this.meetings.sort((a, b): number => {
+                      if (a.id > b.id) {
+                          return -1;
+                      }
+                      if (a.id < b.id) {
+                          return 1;
+                      }
+                      return 0;
+                  });
+              }
           });
           });
   }
 
     decline(part: Participant) {
         this.meetingService.declineParticipation(part.id).subscribe( res => {
-            this.delay(600).then(any => {
-                window.location.reload();
-            });
+                this.meetingsNew = this.meetingsNew.filter(m => m.id !== part.id);
         });
     }
 

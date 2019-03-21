@@ -3,10 +3,8 @@ import {environment} from '@env';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {User} from '../models/user.model';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Chat} from '../models/chat.model';
-import {Message} from '../models/message.model';
-import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +13,27 @@ export class ChatService {
     public CHAT_API = environment.api_url + '/chats';
     // private channel_name: string;
     // private channel_id: number;
-    private channel: Chat;
+    public channel: Chat;
+    private userId: number;
 
     constructor(
         private apiService: ApiService,
-        private authService: AuthService 
+        private authService: AuthService
     ) {}
+
+    async init() {
+        const user = await this.authService.userPromise;
+        this.userId = user.id;
+    }
 
     getOld(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-old/' + this.userId);
     }
 
     getNew(): Observable<Chat[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/chats-new/' + this.userId);
     }
 
     setChannel(channel: Chat) {
@@ -41,7 +45,7 @@ export class ChatService {
 
     getFriends(): Observable<User[]> {
         // return this.apiService.get(this.CHAT_API + '/1');
-        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.authService.user.id);
+        return this.apiService.get('http://127.0.0.1:8000/friends/' + this.userId);
     }
 
     createChat(card: any): Observable<any> {
@@ -64,5 +68,9 @@ export class ChatService {
     console.log(chat);
     return this.apiService.get('http://127.0.0.1:8000/chat/' + chat);
   }
+
+    getMeetingChatId (partId: number): Observable<number> {
+        return this.apiService.get('http://127.0.0.1:8000/meeting-chat-id/' + partId);
+    }
 
 }

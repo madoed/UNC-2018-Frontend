@@ -8,4 +8,5 @@ export interface Chat {
     lastMessage: string;
     lastSender: User;
     lastUpdate: number;
+    avatarUrl: string;
 }

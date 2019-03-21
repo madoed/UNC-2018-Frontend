@@ -26,8 +26,8 @@ export class MeetingService {
               private authService: AuthService,
               private http: HttpClient) { }
 
-  getAll(type: number): Observable<Participant[]> {
-    return this.apiService.get(this.MEETING_API + '/meeting-list/' + this.authService.user.id +
+  getAll(type: number, id: number): Observable<Participant[]> {
+    return this.apiService.get(this.MEETING_API + '/meeting-list/' + id +
     '/' + type);
   }
 
@@ -85,7 +85,7 @@ export class MeetingService {
     }
 
     updateItem(item: Item): Observable<any> {
-        return this.apiService.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
+        return this.http.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
     }
 
     addItem(item: Item): Observable<any> {
@@ -104,6 +104,10 @@ export class MeetingService {
 
     checkUpdate (items: Array<Item>, participantId: number): Observable<any> {
         return this.http.post('http://127.0.0.1:8000/check-items-update/' +  participantId, items);
+    }
+
+    checkUpdateForShare (item: Item, participantId: number): Observable<any> {
+        return this.http.post('http://127.0.0.1:8000/check-items-update-for-share/' +  participantId, item);
     }
 
     deleteItemFromCheck(item: number, participantId: number): Observable<any>  {

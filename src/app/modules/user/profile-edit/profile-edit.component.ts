@@ -72,12 +72,14 @@ export class ProfileEditComponent implements OnInit {
           this.user.avatarUrl = data.fileDownloadUri;
           this.saveUser();
         },
-        error => {
-          console.log(error);
-          this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
-        })
-    } else if (this.currentAvatarUrl == this.defaultAvatarUrl) {
-      this.user.avatarUrl = null;
+          error => {
+              console.log(error);
+              this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
+          })
+    } else  {
+      if (this.currentAvatarUrl == this.defaultAvatarUrl) {
+        this.user.avatarUrl = null;
+      }
       this.saveUser();
     }
   }
