@@ -6,6 +6,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import { environment } from '@env';
 import { MessageService } from 'primeng/api';
 import {Card} from '@app/core/models/card.model';
+import { environment } from '@env';
+import { MessageService } from 'primeng/api';
 
 declare var google: any;
 
@@ -52,14 +54,18 @@ export class MeetingCreateComponent implements OnInit {
 
     infoWindow: any;
 
+    avatar: any;
+    currentAvatarUrl: any;
+
     constructor(private messService: mes,
-              private meetingService: MeetingService,
-              public route: ActivatedRoute,
-              private authService: AuthService,
-              public router: Router,
+                private meetingService: MeetingService,
+                public route: ActivatedRoute,
+                private authService: AuthService,
+                public router: Router,
                 private cardService: CardService,
                 private messageService: MessageService,
-                private storageService: StorageService) {
+                private storageService: StorageService
+                ) {
         const today = new Date();
         const month = today.getMonth();
         const year = today.getFullYear();
@@ -274,7 +280,7 @@ export class MeetingCreateComponent implements OnInit {
     clearAvatar() {
         this.currentAvatarUrl = environment.defaultMeeting;
     }
-
+  
     onSelectFile(files) {
         var mimeType = files[0].type;
         if (mimeType.match(/image\/*/) == null) {
@@ -289,5 +295,4 @@ export class MeetingCreateComponent implements OnInit {
             this.currentAvatarUrl = reader.result;
         }
     }
-
 }

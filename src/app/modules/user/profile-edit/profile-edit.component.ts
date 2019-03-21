@@ -69,7 +69,6 @@ export class ProfileEditComponent implements OnInit {
       //this.user.avatarUrl = this.IMAGES_URL + filename;
       this.storageService.upload(this.avatar, filename).subscribe(
         data => {
-          console.log(data);
           this.user.avatarUrl = data.fileDownloadUri;
           this.saveUser();
         },
