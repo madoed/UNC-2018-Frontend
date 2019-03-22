@@ -33,6 +33,7 @@ export class CardService {
     }
 
     setBillCard (cardId: number, meetingId: number): Observable<any>  {
+        console.log('ggg');
         return this.http.post(this.CARD_API + '/bill-card/' + cardId,  meetingId);
     }
 }

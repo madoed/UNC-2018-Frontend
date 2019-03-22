@@ -106,7 +106,7 @@ export class MessagesComponent implements OnInit, OnDestroy{
             // );
 
         } else {
-            this.user.friends = [];
+            //this.user.friends = [];
             this.stompClient.send('/app/messages' , {},
                 JSON.stringify( {'content': this.newMessage, 'from_chat': {'id': this.channel.id,
                         'chatName': this.channel.chatName}, 'sender': this.user}));

@@ -188,21 +188,24 @@ export class MeetingListComponent implements OnInit {
       this.meetingService.confirmParticipation(part.id).subscribe( res => {
           this.messService.add({severity: 'success', summary: 'Success Message', detail: 'Meeting confirmed'});
           this.meetingsNew = this.meetingsNew.filter(m => m.id !== part.id);
-          this.meetingService.getAll(0, this.authService.user.id).subscribe(data => {
-              if (data !== null) {
-                  this.meetings = data;
-                  this.meetings.sort((a, b): number => {
-                      if (a.id > b.id) {
-                          return -1;
-                      }
-                      if (a.id < b.id) {
-                          return 1;
-                      }
-                      return 0;
-                  });
-              }
-          });
-          });
+          if (!this.meetingsNew.length) {
+              this.meetingService.getAll(0, this.authService.user.id).subscribe(data => {
+                  if (data !== null) {
+                      this.meetings = data;
+                      this.meetings.sort((a, b): number => {
+                          if (a.id > b.id) {
+                              return -1;
+                          }
+                          if (a.id < b.id) {
+                              return 1;
+                          }
+                          return 0;
+                      });
+                  }
+              });
+              this.index = 0;
+          }
+      });
   }
 
     decline(part: Participant) {

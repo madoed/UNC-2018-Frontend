@@ -1,13 +1,12 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {MenuItem, MessageService as mes} from 'primeng/api';
-import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService, StorageService} from '@app/core';
+import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService, StorageService, MessageService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import { environment } from '@env';
-import { MessageService } from 'primeng/api';
+
 import {Card} from '@app/core/models/card.model';
-import { environment } from '@env';
-import { MessageService } from 'primeng/api';
+
 
 declare var google: any;
 
@@ -19,7 +18,7 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
-    avatar: any;
+
     currentAvatarUrl: any;
 
     card = {} as Card;
@@ -55,7 +54,7 @@ export class MeetingCreateComponent implements OnInit {
     infoWindow: any;
 
     avatar: any;
-    currentAvatarUrl: any;
+
 
     constructor(private messService: mes,
                 private meetingService: MeetingService,
@@ -240,7 +239,7 @@ export class MeetingCreateComponent implements OnInit {
                     this.internalCreate();
                 },
                 error => {
-                    this.messageService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
+                    this.messService.add({severity:'error', summary:'Error', detail:'Unable to upload image.'});
                 });
         } else {
             this.internalCreate();
@@ -261,7 +260,7 @@ export class MeetingCreateComponent implements OnInit {
         this.participants.push(participant);
         this.meetingService.createMeeting(this.meeting).subscribe(data => {
             this.meeting = data;
-            this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+            //this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
             this.meetingService.addParticipants(this.participants, this.meeting.id).subscribe( res => {
                 this.router.navigate(['/meeting-list']);
                     this.messService.add({severity: 'success', summary: 'Success Message', detail:'Meeting Created'});
@@ -284,7 +283,7 @@ export class MeetingCreateComponent implements OnInit {
     onSelectFile(files) {
         var mimeType = files[0].type;
         if (mimeType.match(/image\/*/) == null) {
-            this.messageService.add({severity:'error', summary:'Error', detail: 'Please select an image file'});
+            this.messService.add({severity:'error', summary:'Error', detail: 'Please select an image file'});
             return;
         }
 

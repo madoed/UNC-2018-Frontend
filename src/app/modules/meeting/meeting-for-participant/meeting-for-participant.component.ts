@@ -275,7 +275,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                     console.log(item);
                                     this.bill = item;
                                     if (this.bill.billStatus !== 'empty') {
-                                        this.meetingService.getParticipantItems().subscribe(items => {
+                                        this.meetingService.getParticipantItems(this.participant.id).subscribe(items => {
                                             console.log('here');
                                             this.myList = items;
                                             this.myList.forEach(itemAmount => {
@@ -289,18 +289,18 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                             console.log(items);
                                         });
 
-                                        this.meetingService.getAllItems().subscribe(items => {
+                                        this.meetingService.getAllItems(this.meeting.id).subscribe(items => {
                                             this.billItems = items;
                                             this.sourceCars = [];
-                                            this.billItems.forEach(item => {
+                                            this.billItems.forEach(item2 => {
                                                 let tmpItem = {} as Item;
-                                                tmpItem.id = item.id;
+                                                tmpItem.id = item2.id;
                                                 tmpItem.itemCurrentAmount = 0;
-                                                tmpItem.itemAmount = item.itemCurrentAmount;
-                                                tmpItem.itemTitle = item.itemTitle;
-                                                tmpItem.price = item.price;
-                                                tmpItem.itemBill = item.itemBill;
-                                                if (item.itemCurrentAmount > 0) {
+                                                tmpItem.itemAmount = item2.itemCurrentAmount;
+                                                tmpItem.itemTitle = item2.itemTitle;
+                                                tmpItem.price = item2.price;
+                                                tmpItem.itemBill = item2.itemBill;
+                                                if (item2.itemCurrentAmount > 0) {
                                                     this.sourceCars.push(tmpItem);
                                                 }
                                             });
@@ -342,7 +342,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                 if (this.meeting.timeOfMeeting) {
                                     this.time = this.parseTime(this.meeting.timeOfMeeting.toString());
                                 }
-                                this.meetingService.getParticipants().subscribe(data => {
+                                this.meetingService.getParticipants(this.meeting.id).subscribe(data => {
                                     this.participants = data;
                                     this.meetingService.getFriends().subscribe(fr => {
                                         this.users = fr;
@@ -440,7 +440,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         console.log(item);
         item.itemAmount = 0;
         item.itemCurrentAmount = -1;
-        this.meetingService.updateItem(item).subscribe(
+        this.meetingService.updateItem(item, this.meeting.id).subscribe(
             res => {
                 console.log(res);
                 let tmp = this.billItems.find(it => it.id === res.id);
@@ -520,7 +520,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         //this.billItems.find(it => it.id === item.id).itemCurrentAmount = 1;
         item.itemAmount = 0;
         item.itemCurrentAmount = 1;
-        this.meetingService.updateItem(item).subscribe(
+        this.meetingService.updateItem(item, this.meeting.id).subscribe(
             res => {
                 console.log(res);
                 let tmp = this.billItems.find(it => it.id === res.id);
@@ -653,7 +653,8 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
             this.bill.billOwner = this.participant.meetingParticipant;
             this.showAddCard = false;
             let cars = [...this.billItems];
-            this.meetingService.addItem(this.car).subscribe(
+            this.meetingService.addItem(this.car, this.participant.meetingParticipant.id,
+                this.meeting.id).subscribe(
                 res => {
                     cars.push(res);
                     console.log(res);
@@ -681,7 +682,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                         console.log(item);
                         this.bill = item;
                     });
-                    this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                    //this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
                 },
                 // (err: any) => {
                 //     if (err instanceof HttpErrorResponse) {
@@ -745,7 +746,8 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                         }
                     });
                 } else {
-                    this.meetingService.addItem(this.car).subscribe(
+                    this.meetingService.addItem(this.car, this.participant.meetingParticipant.id,
+                        this.meeting.id).subscribe(
                         res => {
                             cars.push(res);
                             console.log(res);
@@ -773,7 +775,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                 console.log(item);
                                 this.bill = item;
                             });
-                            this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                            //this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
                         },
                         // (err: any) => {
                         //     if (err instanceof HttpErrorResponse) {
@@ -794,7 +796,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                 }
             } else {
                 console.log(this.car);
-                this.meetingService.updateItem(this.car).subscribe(
+                this.meetingService.updateItem(this.car, this.meeting.id).subscribe(
                     res => {
                         console.log(res);
                         cars[this.billItems.indexOf(this.selectedCar)] = res;
@@ -995,8 +997,16 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                     //     return 0;
                     // });
                     this.placePoll.forEach(item => {
-                        this.overlaysPoll.push(item.oneLocation);
-
+                        this.overlaysPollPopUp.push(new google.maps.Marker({
+                            position:
+                                {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                            title: item.oneLocation.placeName
+                        }));
+                        this.overlaysPoll.push(new google.maps.Marker({
+                            position:
+                                {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                            title: item.oneLocation.placeName
+                        }));
                     });
                     this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
                 }

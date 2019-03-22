@@ -307,7 +307,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           console.log(item);
                          this.bill = item;
                       if (this.bill.billStatus !== 'empty') {
-                          this.meetingService.getParticipantItems().subscribe(items => {
+                          this.meetingService.getParticipantItems(this.participant.id).subscribe(items => {
                               console.log('here');
                               this.myList = items;
                               this.myList.forEach(itemAmount => {
@@ -321,7 +321,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                               console.log(items);
                           });
 
-                          this.meetingService.getAllItems().subscribe(items => {
+                          this.meetingService.getAllItems(this.meeting.id).subscribe(items => {
                               this.billItems = items;
                               this.billItemsForShare = items.filter(f => f.itemCurrentAmount > 0);
                               this.sourceCars = [];
@@ -375,7 +375,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                       if (this.meeting.timeOfMeeting) {
                           this.time = this.parseTime(this.meeting.timeOfMeeting.toString());
                       }
-                      this.meetingService.getParticipants().subscribe(data => {
+                      this.meetingService.getParticipants(this.meeting.id).subscribe(data => {
                           this.participants = data;
                           this.participantsForShare = [];
                           this.participants.forEach(p => {
@@ -529,7 +529,7 @@ ngAfterViewInit() {
       console.log(item);
       item.itemAmount = 0;
       item.itemCurrentAmount = -1;
-      this.meetingService.updateItem(item).subscribe(
+      this.meetingService.updateItem(item, this.meeting.id).subscribe(
           res => {
               console.log(res);
               let tmp = this.billItems.find(it => it.id === res.id);
@@ -618,7 +618,7 @@ ngAfterViewInit() {
       //this.billItems.find(it => it.id === item.id).itemCurrentAmount = 1;
       item.itemAmount = 0;
       item.itemCurrentAmount = 1;
-      this.meetingService.updateItem(item).subscribe(
+      this.meetingService.updateItem(item, this.meeting.id).subscribe(
           res => {
               console.log(res);
               let tmp = this.billItems.find(it => it.id === res.id);
@@ -776,7 +776,8 @@ ngAfterViewInit() {
             this.bill.billOwner = this.participant.meetingParticipant;
             this.showAddCard = false;
             let cars = [...this.billItems];
-            this.meetingService.addItem(this.car).subscribe(
+            this.meetingService.addItem(this.car, this.participant.meetingParticipant.id,
+                this.meeting.id).subscribe(
                 res => {
                     cars.push(res);
                     console.log(res);
@@ -808,7 +809,7 @@ ngAfterViewInit() {
                         this.bill = item;
                     });
                     this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
-                    this.meetingService.getParticipants().subscribe(data => {
+                    this.meetingService.getParticipants(this.meeting.id).subscribe(data => {
                         this.participantsForShare = data;
                         this.participants.filter(t => t.statusOfConfirmation !== 'confirmed');
                     });
@@ -875,7 +876,8 @@ ngAfterViewInit() {
                       }
                   });
               } else {
-                  this.meetingService.addItem(this.car).subscribe(
+                  this.meetingService.addItem(this.car, this.participant.meetingParticipant.id,
+                      this.meeting.id).subscribe(
                       res => {
                           cars.push(res);
                           console.log(res);
@@ -907,7 +909,7 @@ ngAfterViewInit() {
                               console.log(item);
                               this.bill = item;
                           });
-                          this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
+                          //this.cardService.setBillCard(this.fixedCardId, this.meeting.id);
                       },
                       // (err: any) => {
                       //     if (err instanceof HttpErrorResponse) {
@@ -928,7 +930,7 @@ ngAfterViewInit() {
               }
           } else {
               console.log(this.car);
-              this.meetingService.updateItem(this.car).subscribe(
+              this.meetingService.updateItem(this.car, this.meeting.id).subscribe(
                   res => {
                       console.log(res);
                       cars[this.billItems.indexOf(this.selectedCar)] = res;
@@ -1159,8 +1161,16 @@ ngAfterViewInit() {
                   //     return 0;
                   // });
                   this.placePoll.forEach(item => {
-                      this.overlaysPoll.push(item.oneLocation);
-
+                      this.overlaysPollPopUp.push(new google.maps.Marker({
+                          position:
+                              {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                          title: item.oneLocation.placeName
+                      }));
+                      this.overlaysPoll.push(new google.maps.Marker({
+                          position:
+                              {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                          title: item.oneLocation.placeName
+                      }));
                   });
                   this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
               }
@@ -1367,6 +1377,13 @@ ngAfterViewInit() {
     getFnsCheck() {
         if (this.bill.billOwner === null) {
             this.showAddCardForFNS = true;
+            this.cardService.getAll(this.participant.meetingParticipant.id).subscribe(data => {
+                if (data) {
+                    this.cards = data;
+                } else {
+                    this.cards = [];
+                }
+            });
         } else {
             this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
                 data => {
@@ -1399,7 +1416,7 @@ ngAfterViewInit() {
         tmp.price = this.selectedItem.price;
         tmp.id = this.selectedItem.id;
         tmp.itemTitle = this.selectedItem.itemTitle;
-        this.meetingService.updateItem(tmp).subscribe(
+        this.meetingService.updateItem(tmp, this.meeting.id).subscribe(
             res => {
                 console.log(res);
                 let tmp = this.billItems.find(it => it.id === res.id);

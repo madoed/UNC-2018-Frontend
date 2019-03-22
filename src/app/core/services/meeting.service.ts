@@ -67,30 +67,30 @@ export class MeetingService {
       return this.apiService.post('http://127.0.0.1:8000/meeting-location/' + id, place);
   }
 
-  getParticipants(): Observable<Participant[]> {
+  getParticipants(meetingId: number): Observable<Participant[]> {
     // return this.apiService.get(this.CHAT_API + '/1');
-    return this.apiService.get('http://127.0.0.1:8000/participants/' + this.meeting.id);
+    return this.apiService.get('http://127.0.0.1:8000/participants/' + meetingId);
   }
 
     getByParticipant(id: Number): Observable<any> {
         return this.apiService.get('http://127.0.0.1:8000/participant/' + id);
     }
 
-    getAllItems(): Observable<Item[]> {
-        return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
+    getAllItems(meetingId: number): Observable<Item[]> {
+        return this.apiService.get('http://127.0.0.1:8000/bill-items/' + meetingId);
     }
 
-    getParticipantItems(): Observable<ItemAmount[]> {
-        return this.apiService.get('http://127.0.0.1:8000/participant-items/' + this.participant.id);
+    getParticipantItems(id: number): Observable<ItemAmount[]> {
+        return this.apiService.get('http://127.0.0.1:8000/participant-items/' + id);
     }
 
-    updateItem(item: Item): Observable<any> {
-        return this.http.put('http://127.0.0.1:8000/item-update/' + this.meeting.id, item);
+    updateItem(item: Item, meetingId: number): Observable<any> {
+        return this.http.put('http://127.0.0.1:8000/item-update/' + meetingId, item);
     }
 
-    addItem(item: Item): Observable<any> {
-        return this.apiService.post('http://127.0.0.1:8000/item-add/' + this.meeting.id +
-            '/' + this.authService.user.id, item);
+    addItem(item: Item, id: number, meetingId: number): Observable<any> {
+        return this.apiService.post('http://127.0.0.1:8000/item-add/' + meetingId +
+            '/' + id, item);
     }
 
     deleteItem(item: number): Observable<any>  {
@@ -116,7 +116,6 @@ export class MeetingService {
 
     getBill (meetingId: number): Observable<any> {
     return this.apiService.get('http://127.0.0.1:8000/bill/' + meetingId);
-    //return this.apiService.get('http://127.0.0.1:8000/bill-items/' + this.meeting.id);
     }
 
     getFriends(): Observable<User[]> {

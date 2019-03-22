@@ -344,17 +344,26 @@
                         <mat-list-item *ngFor="let date of datePoll">
                             <div style="width: 300px;">
                                 {{parserMeeting(date.name)}}</div>
-                            <div style="width: 100px;">
-                                <button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">
-                                    unvote
-                                </button>
-                                <button mat-raised-button *ngIf="!votedDate(date)" class="notvoted" (click)="voteForDate(date.id)">
-                                    vote
-                                </button>
-
-                            </div>
-                            <div style="width: 200px; margin-left: 100px;">
+                            <div style="width: 300px;">
                                 <p-progressBar  [showValue]="true" [value]="date.percentageForDate"></p-progressBar>
+                            </div>
+                            <div style="width: 100px; margin-left: 50px;">
+                                <div *ngIf="votedDate(date)" style="color: steelblue;
+                                  cursor: pointer;"
+                                        (click)="voteForDate(date.id)">
+                                    <span style="font-size: 29px;">&#9745;</span>
+                                </div>
+                                <div *ngIf="!votedDate(date)" style="color: #9b9b9b;
+                                 cursor: pointer;"
+                                     (click)="voteForDate(date.id)">
+                                    <span style="font-size: 29px;">&#9744;</span>
+                                </div>
+                                <!--<button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">-->
+                                    <!--unvote-->
+                                <!--</button>-->
+                                <!--<button mat-raised-button *ngIf="!votedDate(date)" class="notvoted" (click)="voteForDate(date.id)">-->
+                                    <!--vote-->
+                                <!--</button>-->
                             </div>
 
                         </mat-list-item>
@@ -445,17 +454,8 @@
 
                                 <div style=" height: fit-content; float: left; width: 99%; margin-left: 0.1%;">
                                     <mat-card>
-
-
                                         <mat-list  id="msg-container"class="message-container" style="  border-color: #bebebe;
      padding-bottom: 70px">
-                                            <!--<mat-list-item *ngFor="let message of filteredMessages"-->
-                                            <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
-                                            <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
-                                            <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
-                                            <!--&lt;!&ndash;<mat-icon mat-list-icon>chat</mat-icon>&ndash;&gt;-->
-                                            <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
-                                            <!--</mat-list-item>-->
                                             <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
                                                 <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
                                                     <div style="margin-top:5px; float: left;   height: 25px; width: 25px; border-radius: 25px;">
@@ -526,34 +526,6 @@
                                 </div>
                             </div>
 
-
-                            <!--<div>-->
-
-                                <!--<mat-card>-->
-
-
-                                    <!--<mat-list  id="msg-container"class="message-container" style="padding-bottom: 70px">-->
-                                        <!--<mat-list-item *ngFor="let message of filteredMessages"-->
-                                                       <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
-                                                       <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
-                                                       <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
-                                            <!--<mat-icon mat-list-icon>chat</mat-icon>-->
-                                            <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
-                                        <!--</mat-list-item>-->
-                                    <!--</mat-list>-->
-
-
-                                <!--</mat-card>-->
-
-                                <!--<div id="wrapper" style="margin-top: 30px; margin-bottom: 20px;margin-left: 100px; float: left;">-->
-                                    <!--<div id="c1" style="float: left; margin-left: 30px">-->
-                                        <!--<input type="text"  [(ngModel)]="newMessage"-->
-                                        <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
-                                    <!--</div>-->
-                                    <!--<div id="c2"  style="margin-left: 10px; float: right;"><button mat-raised-button color="primary" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>-->
-                                <!--</div>-->
-
-                            <!--</div>-->
                         </mat-tab>
 
 
