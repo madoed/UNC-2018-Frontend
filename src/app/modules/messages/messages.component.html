@@ -4,11 +4,12 @@
  <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
   <mat-card>
     <mat-card-header background-color="accent" style="height: 30px;">
-      <button mat-button (click)="back()" style="margin-top: -15px; height: 30px;">
-        <img style="margin-top: -5px; height: 25px; width: 30px;" src="assets/images/back.png">
-        <span style="margin-top: -5px; color: #007ad9;">Back</span>
+      <button mat-button (click)="back()" style="margin-top: -15px; height: 40px;">
+        <span style="margin-top: -5px; color: #007ad9;">
+          <span style="margin-top: -10px; color: #007ad9; font-size: 30px;">&#8592;</span>
+          Back</span>
       </button>
-      <div style="width: 700px; text-align: center;">
+      <div style="width: 700px;margin-left: -100px; text-align: center;">
       <h3 class = "myFont" *ngIf="channel.chatType==='dialogue'"
           style="color: #0e0e0e; margin-top: -8px;  align-content: center;">
         {{opponent?opponent.firstName:''}} {{opponent?opponent.lastName:''}}</h3>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService, User, UserService} from '@app/core';
+import {AuthService, Participant, User, UserService} from '@app/core';
 import {ChatService} from '@app/core/services/chat.service';
 import {Chat} from '@app/core/models/chat.model';
 import {Router} from '@angular/router';
@@ -40,9 +40,24 @@ export class ChatAddComponent implements OnInit {
     this.fixedUser = user;
     }
 
-    add() {
-        this.newChat.subscribers.push({'id': this.fixedUser.id});
-        this.users = this.users.filter(item => item.id !== this.fixedUser.id);
+    delete(userToAdd: User) {
+        this.newChat.subscribers = this.newChat.subscribers.filter(item => item.id !== userToAdd.id);
+        if (!this.newChat.subscribers.length) {
+            this.newChat.subscribers = [];
+            this.empty = true;
+        }
+    }
+
+    checkIfAdded(userToAdd: User): boolean {
+        if (this.newChat.subscribers.filter(item => item.id === userToAdd.id).length) {
+            return true;
+        }
+        return false;
+    }
+
+    add(userToAdd: User) {
+        this.newChat.subscribers.push({'id': userToAdd.id});
+        //this.users = this.users.filter(item => item.id !== this.fixedUser.id);
         console.log(this.users);
         this.empty = false;
     }

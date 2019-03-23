@@ -18,6 +18,7 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
+    defaultAvatar = environment.defaultAvatar;
 
     currentAvatarUrl: any;
 
@@ -209,14 +210,28 @@ export class MeetingCreateComponent implements OnInit {
         this.fixedUser = user;
     }
 
-    add() {
+    add(userToAdd: User) {
         let participant = {} as Participant;
         participant.statusOfConfirmation = 'not confirmed';
-        participant.meetingParticipant = this.fixedUser;
+        participant.meetingParticipant = userToAdd;
         this.participants.push(participant);
-        this.users = this.users.filter(item => item.id !== this.fixedUser.id);
-        console.log(this.users);
+        //this.users = this.users.filter(item => item.id !== userToAdd.id);
         this.empty = false;
+    }
+
+    delete(userToAdd: User) {
+        this.participants = this.participants.filter(item => item.meetingParticipant.id !== userToAdd.id);
+        if (!this.participants.length) {
+            this.participants = [];
+            this.empty = true;
+        }
+    }
+
+    checkIfAdded(userToAdd: User): boolean {
+        if (this.participants.filter(item => item.meetingParticipant.id === userToAdd.id).length) {
+            return true;
+        }
+        return false;
     }
 
     parse(value: any): String | '' {

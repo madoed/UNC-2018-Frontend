@@ -1,7 +1,10 @@
-
-ui-picklist-buttons{
-    visibility: hidden !important;
+.participantItem:hover {
+    background-color: #f4f5f7;
 }
+
+/*.ui-picklist-buttons{*/
+    /*visibility: hidden !important;*/
+/*}*/
 
 .example-container {
     display: flex;

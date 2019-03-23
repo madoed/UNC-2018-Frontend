@@ -97,11 +97,17 @@
     <mat-card>
         <mat-card-header background-color="accent">
             <mat-card-actions>
-                <button mat-raised-button color="primary" (click)="backToList()"
-                        style="margin-right: 20px"><mat-icon>subdirectory_arrow_left</mat-icon>
+                <!--<button mat-raised-button color="primary" (click)="backToList()"-->
+                        <!--style="margin-right: 20px"><mat-icon>subdirectory_arrow_left</mat-icon>-->
+                <!--</button>-->
+
+                <button mat-button (click)="backToList()" style="margin-right: 20px; height: 40px;">
+        <span style="margin-top: -5px; color: #007ad9;">
+          <span style="margin-top: -10px; color: #007ad9; font-size: 30px;">&#8592;</span>
+          Back</span>
                 </button>
             </mat-card-actions>
-            <h1 class = "myFont" style="margin-left: 200px;">Create your meeting</h1>
+            <h1 class = "myFont" style="margin-left: 280px;">Create your meeting</h1>
         </mat-card-header>
         <mat-card-content >
             <br />
@@ -164,31 +170,62 @@
 
                     <div style="margin-left: 30px;">
                         <mat-card-header background-color="accent">
-                            <h2  style="margin-left: 200px" >Invite friends </h2>
+                            <h2  style="margin-left: 200px; color: #6D6D6D;" >Invite friends </h2>
                             <mat-card-actions>
-                                <button mat-raised-button style="margin-left: 370px" (click)="add()"
-                                        [disabled]="!fixedUser">Invite</button>
+                                <button mat-raised-button color="primary" style="margin-left: 370px" type="button" [disabled]="!participants.length"
+                                        (click)="activeIndex=activeIndex+1"
+                                >Next</button>
+                                <!--<button mat-raised-button style="margin-left: 370px" (click)="add()"-->
+                                        <!--[disabled]="!fixedUser">Invite</button>-->
                             </mat-card-actions>
                         </mat-card-header>
 
-                        <mat-card-content style="margin-left: 150px;">
-
-                            <mat-list>
+                        <mat-card-content style="margin-left: 150px; width: 355px;">
+                            <mat-list style="height: 300px; overflow-y: auto; margin-bottom: 20px;">
                                 <mat-list-item *ngFor="let user of users">
-                                    <img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">
-                                    <h3 mat-line>
-                                        <a mat-raised-button (click)="fix(user)" style="background-color: white!important;
-                                        color: black!important;"
-                                           [style.width]="'200px'"
-                                           [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
-                                    </h3>
+                                    <div style=" width: 330px; height: 50px;" class="participantItem">
+                                        <img mat-list-avatar *ngIf="user.avatarUrl"
+                                             style="float: left;"
+                                             src="{{user.avatarUrl}}">
+                                        <img mat-list-avatar *ngIf="!user.avatarUrl"
+                                             style="float: left;"
+                                             src="{{defaultAvatar}}">
+                                        <div style="color: black; width: 230px;
+                                         margin-left: 10px; margin-top: 8px; float: left;">
+                                            {{user.name}}
+                                        </div>
+                                        <div *ngIf="!checkIfAdded(user)" style="float: right; width: 40px; margin-top: -5px;
+                                         cursor: pointer;" (click)="add(user)">
+                                            <span style="font-size: 29px; color: #9b9b9b;">&#9744;</span>
+                                         </div>
+                                        <div *ngIf="checkIfAdded(user)" style="float: right; width: 40px; margin-top: -5px;
+                                         cursor: pointer;" (click)="delete(user)">
+                                            <span style="font-size: 29px; color: steelblue;">&#9745;</span>
+                                        </div>
+
+                                    </div>
+                                    <mat-divider></mat-divider>
                                 </mat-list-item>
                             </mat-list>
+
+
+
+                            <!--<mat-list>-->
+                                <!--<mat-list-item *ngFor="let user of users">-->
+                                    <!--<img mat-list-avatar src="{{user.avatarUrl}}" onerror="this.src='./user.png';">-->
+                                    <!--<h3 mat-line>-->
+                                        <!--<a mat-raised-button (click)="fix(user)" style="background-color: white!important;-->
+                                        <!--color: black!important;"-->
+                                           <!--[style.width]="'200px'"-->
+                                           <!--[style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>-->
+                                    <!--</h3>-->
+                                <!--</mat-list-item>-->
+                            <!--</mat-list>-->
                         </mat-card-content>
 
-                        <button mat-raised-button color="primary" type="button" [disabled]="!participants.length"
-                                (click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"
-                        >Next</button>
+                        <!--<button mat-raised-button color="primary" type="button" [disabled]="!participants.length"-->
+                                <!--(click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"-->
+                        <!--&gt;Next</button>-->
                     </div>
                 </mat-card-content>
 
@@ -233,7 +270,7 @@
                     </button>
                     </mat-card-actions>
 
-                    <div flex style="margin-left: 100px; margin-top: 10px; height: fit-content;">
+                    <div flex style="margin-left: 200px; margin-top: 10px; height: fit-content;">
                         <div class="ui-g">
                             <div style="float: left; width: 300px;" class="ui-g-8">
                                 <mat-card style="  height: fit-content">

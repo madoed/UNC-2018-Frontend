@@ -299,16 +299,23 @@
 
                 <mat-card-content >
 
-                    <mat-list>
-                        <mat-list-item *ngFor="let user of users">
+                    <mat-list *ngIf="users&&users.length" style="margin-left: 20px; margin-right: 20px;">
+                        <mat-list-item *ngFor="let user of users" class="participantItem"
+                                       style="border-color: #6d6d6d;"
+                                       [style.border-style]="user.id === fixedUserId? 'solid':''">
                             <img mat-list-avatar *ngIf="user.avatarUrl" src="{{user.avatarUrl}}">
                             <img mat-list-avatar *ngIf="!user.avatarUrl" src="{{defaultAvatar}}">
                             <h3 mat-line>
-                                <a mat-raised-button style="background-color: white!important;
-                                        color: black!important;" (click)="fix(user)" [style.width]="'200px'" [style.border-style]="user.id === fixedUserId? 'solid':'ridge'">{{user.name}}</a>
+                                <div style="color: #6d6d6d; margin-top: 15px; width: 190px; height: 40px;
+                                 cursor: pointer;" (click)="fix(user)"
+                                     >{{user.name}}
+                                </div>
                             </h3>
                         </mat-list-item>
                     </mat-list>
+                    <div style="color: #6d6d6d; margin-left: 20px;">
+                        All your friends are already invited
+                    </div>
                 </mat-card-content>
             </div>
         </mat-card-content>
@@ -358,12 +365,6 @@
                                      (click)="voteForDate(date.id)">
                                     <span style="font-size: 29px;">&#9744;</span>
                                 </div>
-                                <!--<button mat-raised-button *ngIf="votedDate(date)" class="voted" (click)="voteForDate(date.id)">-->
-                                    <!--unvote-->
-                                <!--</button>-->
-                                <!--<button mat-raised-button *ngIf="!votedDate(date)" class="notvoted" (click)="voteForDate(date.id)">-->
-                                    <!--vote-->
-                                <!--</button>-->
                             </div>
 
                         </mat-list-item>
@@ -407,23 +408,29 @@
                     <br />
                     <mat-list style="margin-top: 10px; ">
                         <mat-list-item *ngFor="let place of placePoll">
+
                             <div style="width: 300px;">
                                 <button mat-raised-button style="background-color: white!important;
                                         color: black!important;" (click)="setAsMain(place.oneLocation)">
                                     {{place.oneLocation.placeName}}
                                 </button>
                             </div>
-                            <div style="width: 100px;">
-                                <button mat-raised-button *ngIf="voted(place)" class="voted" (click)="voteForPlace(place.id)">
-                                    unvote
-                                </button>
-                                <button mat-raised-button *ngIf="!voted(place)" class="notvoted" (click)="voteForPlace(place.id)">
-                                    vote
-                                </button>
-                            </div>
-                            <div style="width: 200px; margin-left: 100px;">
+
+                            <div style="width: 300px;">
                                 <p-progressBar [showValue]="true" [value]="place.percentageForPlace"></p-progressBar>
                             </div>
+
+                            <div style="width: 100px; margin-left: 50px;">
+                                <div *ngIf="voted(place)" style="color: steelblue;
+                                  cursor: pointer;" (click)="voteForPlace(place.id)">
+                                    <span style="font-size: 29px;">&#9745;</span>
+                                </div>
+                                <div *ngIf="!voted(place)" style="color: #9b9b9b;
+                                 cursor: pointer;" (click)="voteForPlace(place.id)">
+                                    <span style="font-size: 29px;">&#9744;</span>
+                                </div>
+                            </div>
+
 
                         </mat-list-item>
                     </mat-list>
@@ -760,26 +767,53 @@
             <br />
             <mat-divider></mat-divider>
             <mat-card-actions  *ngIf="bill.billTotalSum == 0">
-                <button mat-raised-button color="primary" style="
-                         float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
-                    <mat-icon>add_circle_outline</mat-icon>
-                </button>
+                <div class="participantItem" style=" cursor: pointer; width: 41px;
+                         float: right; margin-right: 10px;" (click)="showAddParticipants=true;">
+                    <span style="font-size: 29px; color: #00539b; margin-left: 10px;">&#43;</span>
+                </div>
+
                 <br />
             </mat-card-actions>
             <mat-card-content>
                 <mat-list>
                     <mat-list-item *ngFor="let participant of participants">
-                        <img mat-list-avatar *ngIf="participant.meetingParticipant.avatarUrl" src="{{participant.meetingParticipant.avatarUrl}}">
-                        <img mat-list-avatar *ngIf="!participant.meetingParticipant.avatarUrl" src="{{defaultAvatar}}">
-                        <h3 mat-line>
-                            <a mat-raised-button style="background-color: white!important; border-style: solid; border-color: #edeef0!important;
-                                        color: black!important;" [routerLink]="['/user', participant.meetingParticipant.id]"
-                               [style.width]="'200px'">{{participant.meetingParticipant.name}} -
-                            </a>
-                            <span style="color: steelblue; float: right; margin-right: 80px; margin-top: 9px;">
+                        <div style="width: 500px; height: 60px;">
+
+                            <img mat-list-avatar *ngIf="participant.meetingParticipant.avatarUrl"
+                                 style="float: left;"
+                                 src="{{participant.meetingParticipant.avatarUrl}}">
+                        <img mat-list-avatar *ngIf="!participant.meetingParticipant.avatarUrl"
+                             style="float: left;"
+                             src="{{defaultAvatar}}">
+
+                            <div *ngIf="participant.statusOfConfirmation=='confirmed'" style="margin-left: 10px;
+                            float: left; width: 440px; height: 60px;">
+                            <div class="participantItem" style="color: #000000; float: left;
+                            cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"
+                                 [routerLink]="['/user', participant.meetingParticipant.id]">
+                                <span>{{participant.meetingParticipant.name}}</span>
+                            </div>
+                                <div style="float: right; color: steelblue; width: 120px; alignment: right;">
                                     {{participant.statusOfConfirmation}}
-                                </span>
-                        </h3>
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="participant.statusOfConfirmation!=='confirmed'" style="margin-left: 10px;
+                             float: left; width: 440px; height: 60px;">
+                                <div class="participantItem" style="color: #a1a1a1; float: left;
+                            cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"
+                                     [routerLink]="['/user', participant.meetingParticipant.id]">
+                                    <span>{{participant.meetingParticipant.name}}</span>
+                                </div>
+                                <div style="float: right; color: #a1a1a1; width: 120px; alignment: right;">
+                                    {{participant.statusOfConfirmation}}
+                                </div>
+
+                            </div>
+
+
+                        </div>
                     </mat-list-item>
                 </mat-list>
 
