@@ -126,19 +126,23 @@
 
           <mat-card-content >
 
-            <mat-list style="margin-left: 20px;">
+            <mat-list *ngIf="users&&users.length" style="margin-left: 20px; margin-right: 20px;">
               <mat-list-item *ngFor="let user of users" class="participantItem"
-                             style="border-color: #6d6d6d;" >
+                             style="border-color: #6d6d6d;"
+                             [style.border-style]="user.id === fixedUserId? 'solid':''">
                 <img mat-list-avatar *ngIf="user.avatarUrl" src="{{user.avatarUrl}}">
                 <img mat-list-avatar *ngIf="!user.avatarUrl" src="{{defaultAvatar}}">
                 <h3 mat-line>
-                  <div style="color: #6d6d6d; width: 190px; height: 40px; cursor: pointer;" (click)="fix(user)"
-                       [style.border-style]="user.id === fixedUserId? 'solid':''">{{user.name}}
+                  <div style="color: #6d6d6d; margin-top: 15px; width: 190px; height: 40px;
+                                 cursor: pointer;" (click)="fix(user)"
+                  >{{user.name}}
                   </div>
                 </h3>
               </mat-list-item>
             </mat-list>
-
+            <div *ngIf="!users||!users.length" style="color: #6d6d6d; margin-left: 20px;">
+              All your friends are already invited
+            </div>
           </mat-card-content>
         </div>
       </mat-card-content>
@@ -450,11 +454,12 @@
         <mat-card-header >Participants</mat-card-header>
         <br />
         <mat-divider></mat-divider>
-        <mat-card-actions  *ngIf="bill.billTotalSum == 0" >
-          <button mat-raised-button color="primary" style="
-                         float: right; margin-right: 20px;" (click)="showAddParticipants=true;">
-            <span style="font-size: 29px; color: white;">&#43;</span>
-          </button>
+        <mat-card-actions  *ngIf="bill.billTotalSum == 0">
+          <div class="participantItem" style=" cursor: pointer; width: 41px;
+                         float: right; margin-right: 10px;" (click)="showAddParticipants=true;">
+            <span style="font-size: 29px; color: #00539b; margin-left: 10px;">&#43;</span>
+          </div>
+
           <br />
         </mat-card-actions>
         <mat-card-content>
@@ -470,22 +475,22 @@
                      src="{{defaultAvatar}}">
 
                 <div *ngIf="participant.statusOfConfirmation=='confirmed'" style="margin-left: 10px;
-                            float: left; width: 440px; height: 60px;">
+                            float: left; width: 340px; height: 60px;">
                   <div class="participantItem" style="color: #000000; float: left;
-                            cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"
+                            cursor: pointer; height: 35px; width: 200px; margin-top: 5px; margin-left: 5px;"
                        [routerLink]="['/user', participant.meetingParticipant.id]">
                     <span>{{participant.meetingParticipant.name}}</span>
                   </div>
-                  <div style="float: right; color: steelblue; width: 120px; alignment: right;">
+                  <div style="float: right; color: steelblue; width: 100px; alignment: right;">
                     {{participant.statusOfConfirmation}}
                   </div>
 
                 </div>
 
                 <div *ngIf="participant.statusOfConfirmation!=='confirmed'" style="margin-left: 10px;
-                             float: left; width: 440px; height: 60px;">
+                             float: left; width: 360px; height: 60px;">
                   <div class="participantItem" style="color: #a1a1a1; float: left;
-                            cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"
+                            cursor: pointer; height: 35px; width: 200px; margin-top: 5px; margin-left: 5px;"
                        [routerLink]="['/user', participant.meetingParticipant.id]">
                     <span>{{participant.meetingParticipant.name}}</span>
                   </div>
@@ -502,6 +507,62 @@
 
         </mat-card-content>
       </mat-card>
+
+        <!--<mat-card-header >Participants</mat-card-header>-->
+        <!--<br />-->
+        <!--<mat-divider></mat-divider>-->
+        <!--<mat-card-actions  *ngIf="bill.billTotalSum == 0" >-->
+          <!--<button mat-raised-button color="primary" style="-->
+                         <!--float: right; margin-right: 20px;" (click)="showAddParticipants=true;">-->
+            <!--<span style="font-size: 29px; color: white;">&#43;</span>-->
+          <!--</button>-->
+          <!--<br />-->
+        <!--</mat-card-actions>-->
+        <!--<mat-card-content>-->
+          <!--<mat-list>-->
+            <!--<mat-list-item *ngFor="let participant of participants">-->
+              <!--<div style="width: 400px; height: 60px;">-->
+
+                <!--<img mat-list-avatar *ngIf="participant.meetingParticipant.avatarUrl"-->
+                     <!--style="float: left;"-->
+                     <!--src="{{participant.meetingParticipant.avatarUrl}}">-->
+                <!--<img mat-list-avatar *ngIf="!participant.meetingParticipant.avatarUrl"-->
+                     <!--style="float: left;"-->
+                     <!--src="{{defaultAvatar}}">-->
+
+                <!--<div *ngIf="participant.statusOfConfirmation=='confirmed'" style="margin-left: 10px;-->
+                            <!--float: left; width: 440px; height: 60px;">-->
+                  <!--<div class="participantItem" style="color: #000000; float: left;-->
+                            <!--cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"-->
+                       <!--[routerLink]="['/user', participant.meetingParticipant.id]">-->
+                    <!--<span>{{participant.meetingParticipant.name}}</span>-->
+                  <!--</div>-->
+                  <!--<div style="float: right; color: steelblue; width: 120px; alignment: right;">-->
+                    <!--{{participant.statusOfConfirmation}}-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+                <!--<div *ngIf="participant.statusOfConfirmation!=='confirmed'" style="margin-left: 10px;-->
+                             <!--float: left; width: 440px; height: 60px;">-->
+                  <!--<div class="participantItem" style="color: #a1a1a1; float: left;-->
+                            <!--cursor: pointer; height: 35px; width: 250px; margin-top: 5px; margin-left: 5px;"-->
+                       <!--[routerLink]="['/user', participant.meetingParticipant.id]">-->
+                    <!--<span>{{participant.meetingParticipant.name}}</span>-->
+                  <!--</div>-->
+                  <!--<div style="float: right; color: #a1a1a1; width: 120px; alignment: right;">-->
+                    <!--{{participant.statusOfConfirmation}}-->
+                  <!--</div>-->
+
+                <!--</div>-->
+
+
+              <!--</div>-->
+            <!--</mat-list-item>-->
+          <!--</mat-list>-->
+
+        <!--</mat-card-content>-->
+      <!--</mat-card>-->
     </div>
 
     <div flex style="padding: 0px; margin-left: 556px; width: 604px; height: auto; margin-bottom: 30px;">

@@ -211,6 +211,23 @@ export class MeetingListComponent implements OnInit {
     decline(part: Participant) {
         this.meetingService.declineParticipation(part.id).subscribe( res => {
                 this.meetingsNew = this.meetingsNew.filter(m => m.id !== part.id);
+            if (!this.meetingsNew.length) {
+                this.meetingService.getAll(0, this.authService.user.id).subscribe(data => {
+                    if (data !== null) {
+                        this.meetings = data;
+                        this.meetings.sort((a, b): number => {
+                            if (a.id > b.id) {
+                                return -1;
+                            }
+                            if (a.id < b.id) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                    }
+                });
+                this.index = 0;
+            }
         });
     }
 

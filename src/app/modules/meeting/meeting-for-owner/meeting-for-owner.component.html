@@ -313,7 +313,7 @@
                             </h3>
                         </mat-list-item>
                     </mat-list>
-                    <div style="color: #6d6d6d; margin-left: 20px;">
+                    <div *ngIf="!users||!users.length" style="color: #6d6d6d; margin-left: 20px;">
                         All your friends are already invited
                     </div>
                 </mat-card-content>

@@ -752,6 +752,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                             cars.push(res);
                             console.log(res);
                             this.billItems.push(res);
+                            // this.billItemsForShare = this.billItemsForShare.filter(h => h.id !== res.id);
+                            // if (res.itemCurrentAmount > 0) {
+                            //     this.billItemsForShare.push(res);
+                            // }
                             let tmpItem = {} as Item;
                             tmpItem.itemAmount = res.itemCurrentAmount;
                             tmpItem.itemTitle = res.itemTitle;
@@ -801,6 +805,10 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                         console.log(res);
                         cars[this.billItems.indexOf(this.selectedCar)] = res;
                         this.billItems = cars;
+                        // if (res.itemCurrentAmount > 0) {
+                        //     this.billItemsForShare.push(res);
+                        // }
+
                         this.sourceCars = this.sourceCars.filter(item => item.id !== res.id);
                         let tmpItem = {} as Item;
                         tmpItem.itemAmount = res.itemCurrentAmount;
@@ -1120,13 +1128,71 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
             this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
                 data => {
                     const fnsReceipt: FnsReceipt = data;
-                    fnsReceipt.items.forEach(item => {
+                    // fnsReceipt.items.forEach(item => {
+                    //     this.newCar = true;
+                    //     this.car = {} as Item;
+                    //     this.car.itemTitle = item.name;
+                    //     this.car.itemAmount = item.quantity || 1;
+                    //     this.car.price = item.price / 100;
+                    //     this.save();
+                    // });
+                    let cars = [...this.billItems];
+                    let newFNS = [];
+                    let i = 0;
+                    for ( i ; i < fnsReceipt.items.length; i++) {
                         this.newCar = true;
                         this.car = {} as Item;
-                        this.car.itemTitle = item.name;
-                        this.car.itemAmount = item.quantity || 1;
-                        this.car.price = item.price / 100;
-                        this.save();
+                        this.car.itemTitle = fnsReceipt.items[i].name;
+                        this.car.itemAmount = fnsReceipt.items[i].quantity || 1;
+                        this.car.price = fnsReceipt.items[i].price / 100;
+                        newFNS.push(this.car);
+                    }
+
+                    this.meetingService.addItemFNS(newFNS, this.participant.meetingParticipant.id,
+                        this.meeting.id).subscribe(
+                        r => {
+                            r.forEach(res => {
+                                cars.push(res);
+                                this.billItems.push(res);
+                                // this.billItemsForShare = this.billItemsForShare.filter(h => h.id !== res.id);
+                                // if (res.itemCurrentAmount > 0) {
+                                //     this.billItemsForShare.push(res);
+                                // }
+                                let tmpItem = {} as Item;
+                                tmpItem.itemAmount = res.itemCurrentAmount;
+                                tmpItem.itemTitle = res.itemTitle;
+                                tmpItem.itemCurrentAmount = 0;
+                                tmpItem.id = res.id;
+                                tmpItem.price = res.price;
+                                tmpItem.itemBill = res.itemBill;
+                                this.sourceCars.push(tmpItem);
+                                this.sourceCars = this.sourceCars.sort((a, b): number => {
+                                    if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                        return -1;
+                                    }
+                                    if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                });
+                                this.car = null;
+                                this.displayDialog = false;
+                            });
+                        },
+                        (err: HttpErrorResponse) => {
+                            console.log(err.error);
+                            console.log(err.name);
+                            console.log(err.message);
+                            console.log(err.status);
+                            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+                            this.car = null;
+                            this.displayDialog = false;
+                            return;
+                        }
+                    );
+                    this.meetingService.getBill(this.meeting.id).subscribe(item => {
+                        console.log(item);
+                        this.bill = item;
                     });
                     this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
                     this.hideFnsDialog();
@@ -1140,17 +1206,82 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     getFnsCheck() {
         if (this.bill.billOwner === null) {
             this.showAddCardForFNS = true;
+            this.cardService.getAll(this.participant.meetingParticipant.id).subscribe(data => {
+                if (data) {
+                    this.cards = data;
+                } else {
+                    this.cards = [];
+                }
+            });
         } else {
             this.fnsCheckService.getCheckDetails(this.fnsCheckInfo).subscribe(
                 data => {
                     const fnsReceipt: FnsReceipt = data;
-                    fnsReceipt.items.forEach(item => {
+                    // fnsReceipt.items.forEach(item => {
+                    //     this.newCar = true;
+                    //     this.car = {} as Item;
+                    //     this.car.itemTitle = item.name;
+                    //     this.car.itemAmount = item.quantity || 1;
+                    //     this.car.price = item.price / 100;
+                    //     this.save();
+                    // });
+                    let cars = [...this.billItems];
+                    let newFNS = [];
+                    let i = 0;
+                    for ( i ; i < fnsReceipt.items.length; i++) {
                         this.newCar = true;
                         this.car = {} as Item;
-                        this.car.itemTitle = item.name;
-                        this.car.itemAmount = item.quantity || 1;
-                        this.car.price = item.price / 100;
-                        this.save();
+                        this.car.itemTitle = fnsReceipt.items[i].name;
+                        this.car.itemAmount = fnsReceipt.items[i].quantity || 1;
+                        this.car.price = fnsReceipt.items[i].price / 100;
+                        newFNS.push(this.car);
+                    }
+
+                    this.meetingService.addItemFNS(newFNS, this.participant.meetingParticipant.id,
+                        this.meeting.id).subscribe(
+                        r => {
+                            r.forEach(res => {
+                                cars.push(res);
+                                this.billItems.push(res);
+                                // this.billItemsForShare = this.billItemsForShare.filter(h => h.id !== res.id);
+                                // if (res.itemCurrentAmount > 0) {
+                                //     this.billItemsForShare.push(res);
+                                // }
+                                let tmpItem = {} as Item;
+                                tmpItem.itemAmount = res.itemCurrentAmount;
+                                tmpItem.itemTitle = res.itemTitle;
+                                tmpItem.itemCurrentAmount = 0;
+                                tmpItem.id = res.id;
+                                tmpItem.price = res.price;
+                                tmpItem.itemBill = res.itemBill;
+                                this.sourceCars.push(tmpItem);
+                                this.sourceCars = this.sourceCars.sort((a, b): number => {
+                                    if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                        return -1;
+                                    }
+                                    if (a.itemTitle.substr(0, 1) < b.itemTitle.substr(0, 1)) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                });
+                                this.car = null;
+                                this.displayDialog = false;
+                            });
+                        },
+                        (err: HttpErrorResponse) => {
+                            console.log(err.error);
+                            console.log(err.name);
+                            console.log(err.message);
+                            console.log(err.status);
+                            this.messService.add({severity: 'error', summary: 'Error Message', detail: 'invalid values'});
+                            this.car = null;
+                            this.displayDialog = false;
+                            return;
+                        }
+                    );
+                    this.meetingService.getBill(this.meeting.id).subscribe(item => {
+                        console.log(item);
+                        this.bill = item;
                     });
                     this.messService.add({severity:'info', summary:'Info', detail: 'Check details received.'});
                     this.hideFnsDialog();

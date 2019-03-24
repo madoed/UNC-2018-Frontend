@@ -93,6 +93,11 @@ export class MeetingService {
             '/' + id, item);
     }
 
+    addItemFNS(item: Item[], id: number, meetingId: number): Observable<any[]> {
+        return this.apiService.post('http://127.0.0.1:8000/item-add-fns/' + meetingId +
+            '/' + id, item);
+    }
+
     deleteItem(item: number): Observable<any>  {
         return this.http.delete('http://127.0.0.1:8000/item-delete/' +  item);
     }
