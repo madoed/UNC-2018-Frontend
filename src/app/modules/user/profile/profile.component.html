@@ -1,6 +1,6 @@
 <div class="ui-g">
-  <h1 *ngIf="currentUser.id === user.id">My Profile</h1>
-  <h1 *ngIf="currentUser.id !== user.id">{{user.firstName}}'s Profile</h1>
+  <h1 *ngIf="currentUser.id === user.id" class="myFont">My Profile</h1>
+  <h1 *ngIf="currentUser.id !== user.id" class="myFont">{{user.firstName}}'s Profile</h1>
   <div class="ui-g-12">
       <div class="ui-g-4 user-card">
           <p-card header="{{user.firstName}} {{user.lastName}}" subheader="{{status}}" styleClass="ui-card-shadow">
