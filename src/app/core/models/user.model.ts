@@ -7,4 +7,6 @@ export interface User {
     avatarUrl: string;
     aboutMe: string;
     friends: User[];
+    online: boolean;
+    lastVisit: Date;
 }

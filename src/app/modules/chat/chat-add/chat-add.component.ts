@@ -26,14 +26,16 @@ export class ChatAddComponent implements OnInit {
                 private chatService: ChatService,
                 private router: Router) { }
 
-    ngOnInit() {
-      this.fixedUserId  = this.authService.user.id;
-      this.chatService.getFriends().subscribe(data => {
-          this.users = data;
-          console.log(data);
-      });
-      this.newChat.subscribers = [];
-    }
+    async ngOnInit() {
+        const user = await this.authService.userPromise;
+        this.fixedUserId  = user.id;
+        this.users = user.friends;
+        /*this.chatService.getFriends().subscribe(data => {
+            this.users = data;
+            console.log(data);
+        });*/
+        this.newChat.subscribers = [];
+        }
 
     fix(user: User) {
     this.fixedUserId = user.id;

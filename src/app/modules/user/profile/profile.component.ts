@@ -15,6 +15,10 @@ export class ProfileComponent implements OnInit {
   currentUser: User= {} as User;
   userInfo = new Map();
   private friendId: number;
+  private status: string;
+  private months = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +49,10 @@ export class ProfileComponent implements OnInit {
           user => {
             this.user = user;
             this.setUserInfo(this.user);
+            var date = new Date(Date.parse(user.lastVisit.toString()));
+            const lastVisit: string = user.lastVisit ? this.months[date.getMonth()] + ' ' + date.getDate() + ', ' 
+              + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() : undefined;
+            this.status = user.online ? "online" : "Last seen on " + lastVisit;
           },
           error => {
             console.log(error);

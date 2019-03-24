@@ -31,8 +31,11 @@ export class AuthService {
         }
     }
 
-    async logout() {
-        await this.keycloakService.logout();
+    logout() {
+        this.userService.logout(this.user).subscribe(
+            data => {
+                this.keycloakService.logout();
+            });
     }
 
     async isLoggedIn() {
