@@ -3,16 +3,21 @@
   <h1 *ngIf="currentUser.id !== user.id">{{user.firstName}}'s Profile</h1>
   <div class="ui-g-12">
       <div class="ui-g-4 user-card">
-          <p-card header="{{user.firstName}} {{user.lastName}}" subheader="@{{user.username}}" styleClass="ui-card-shadow">
+          <p-card header="{{user.firstName}} {{user.lastName}}" subheader="{{status}}" styleClass="ui-card-shadow">
             <p-header *ngIf="user.avatarUrl">
-              <img src="{{user.avatarUrl}}" class="profile-img">
+              <div class="avatar-container">
+                <img src="{{user.avatarUrl}}" class="profile-img">
+                <button pButton *ngIf="user.online" class="online-btn ui-button-rounded ui-button-success"
+                type="button" pTooltip="online" tooltipPosition="bottom"></button>
+              </div>
             </p-header>
             <p-header *ngIf="!user.avatarUrl">
+              <div class="avatar-container">
                 <img src="{{defaultAvatar}}" class="profile-img">
-              </p-header>
-            <div>
-              {{user.status}}
-            </div>
+                <button pButton *ngIf="user.online" class="online-btn ui-button-rounded ui-button-success"
+                type="button" pTooltip="online" tooltipPosition="bottom"></button>
+              </div>
+            </p-header>
             <p-footer *ngIf="currentUser.id !== user.id">
               <button pButton *ngIf="!isFriend()" class="card-button ui-button-primary"
               type="button" label="Add Friend" icon="pi pi-user-plus" (click)="addFriend()"></button>
@@ -54,18 +59,28 @@
                       <div id="friend" *ngFor="let friend of user.friends" class="friend-card">
                         <p-card styleClass="ui-card-shadow" id="friend {{friend.id}}">
                           <p-header [routerLink]="['/user', friend.id]" style="cursor: pointer;" *ngIf="friend.avatarUrl">
-                            <img src="{{friend.avatarUrl}}" class="friend-img">
+                            <div class="avatar-container">
+                              <img src="{{friend.avatarUrl}}" class="friend-img">
+                              <button pButton *ngIf="friend.online" class="online-btn ui-button-rounded ui-button-success"
+                              type="button" pTooltip="online" tooltipPosition="bottom"></button>
+                            </div>
                           </p-header>
                           <p-header [routerLink]="['/user', friend.id]" style="cursor: pointer;" *ngIf="!friend.avatarUrl">
-                            <img src="{{defaultAvatar}}" class="friend-img">
+                            <div class="avatar-container">
+                              <img src="{{defaultAvatar}}" class="friend-img">
+                              <button pButton *ngIf="friend.online" class="online-btn ui-button-rounded ui-button-success"
+                              type="button" pTooltip="online" tooltipPosition="bottom"></button>
+                            </div>
                           </p-header>
                           <div style="text-align: center;">
-                            <p>{{friend.firstName}} {{friend.lastName}}</p>
-                            <p style="color: gray;">@{{friend.username}}</p>
+                              <p>
+                                  {{friend.firstName}} {{friend.lastName}}
+                              </p>
+                              <p style="color: gray;">@{{friend.username}}</p>
                           </div>
                           <p-footer>
                             <div class="card-button" style="text-align:center;">
-                              <button pButton *ngIf="currentUser.id !== friend.id" class="friend-btn ui-button-rounded ui-button-success"
+                              <button pButton class="friend-btn ui-button-rounded ui-button-success" [disabled]="currentUser.id == friend.id"
                                 type="button" icon="pi pi-envelope" pTooltip="Send Message" tooltipPosition="bottom" (click)="sendMess(friend.id)"></button>
                               <button pButton *ngIf="currentUser.id == user.id" class="friend-btn ui-button-rounded ui-button-danger"
                                 type="button" icon="pi pi-times" pTooltip="Unfriend" tooltipPosition="bottom"

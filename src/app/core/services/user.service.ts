@@ -39,4 +39,8 @@ export class UserService {
     update(user: User): Observable<User> {
         return this.apiService.put(this.USERS_API + '/' + user.id, user);
     }
+
+    logout(user: User): Observable<User> {
+        return this.apiService.get(this.USERS_API + '/logout/' +  user.id);
+    }
 }

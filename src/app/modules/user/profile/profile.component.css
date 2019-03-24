@@ -33,3 +33,19 @@
   max-height: 20px;
   max-width: 20px;
 }
+
+.avatar-container {
+  position: relative;
+}
+
+.avatar-container .online-btn {
+  position: absolute;
+  top: 100%;
+  left: 95%;
+  transform: translate(-95%, -100%);
+  -ms-transform: translate(-95%, -100%);
+  font-size: 14px;
+  margin: 4px;
+  max-height: 20px;
+  max-width: 20px;
+}

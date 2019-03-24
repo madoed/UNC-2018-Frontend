@@ -30,7 +30,9 @@ export class CheckListComponent implements OnInit {
       this.myId = this.authService.user.id;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+      const user = await this.authService.userPromise;
+      this.myId = user.id;
       this.checkService.getAll('notpayed').subscribe( data => {
           if (data !== null) {
               this.checksToPay = data;
