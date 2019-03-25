@@ -223,53 +223,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                     }));
                                 }
                                 this.meetingService.setMeeting(meeting);
-                                this.overlaysPoll = [];
-                                this.overlaysPollPopUp = [];
-                                if (this.meeting.pollForPlaceOpen === 1) {
-                                    this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
-                                        if (poll) {
-                                            this.placePoll = poll;
-                                            // this.placePoll = this.placePoll.sort((a, b): number => {
-                                            //     if (a.id > b.id) {
-                                            //         return 1;
-                                            //     }
-                                            //     if (a.id < b.id) {
-                                            //         return -1;
-                                            //     }
-                                            //     return 0;
-                                            // });
-                                            this.placePoll.forEach(item => {
-                                                this.overlaysPollPopUp.push(new google.maps.Marker({
-                                                    position:
-                                                        {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
-                                                    title: item.oneLocation.placeName
-                                                }));
-                                                this.overlaysPoll.push(new google.maps.Marker({
-                                                    position:
-                                                        {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
-                                                    title: item.oneLocation.placeName
-                                                }));
-                                            });
-                                        }
-                                    });
-                                }
 
-                                if (this.meeting.pollForDateOpen === 1) {
-                                    this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
-                                        if (poll) {
-                                            this.datePoll = poll;
-                                            // this.datePoll = this.datePoll.sort((a, b): number => {
-                                            //     if (a.id > b.id) {
-                                            //         return 1;
-                                            //     }
-                                            //     if (a.id < b.id) {
-                                            //         return -1;
-                                            //     }
-                                            //     return 0;
-                                            // });
-                                        }
-                                    });
-                                }
 
                                 this.meetingService.getBill(meeting.id).subscribe(item => {
                                     console.log(item);
@@ -315,6 +269,54 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                 return 0; });
                                             // this.sourceCarsInfo = items;
                                             console.log(items);
+
+                                            this.overlaysPoll = [];
+                                            this.overlaysPollPopUp = [];
+                                            if (this.meeting.pollForPlaceOpen === 1) {
+                                                this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+                                                    if (poll) {
+                                                        this.placePoll = poll;
+                                                        // this.placePoll = this.placePoll.sort((a, b): number => {
+                                                        //     if (a.id > b.id) {
+                                                        //         return 1;
+                                                        //     }
+                                                        //     if (a.id < b.id) {
+                                                        //         return -1;
+                                                        //     }
+                                                        //     return 0;
+                                                        // });
+                                                        this.placePoll.forEach(item => {
+                                                            this.overlaysPollPopUp.push(new google.maps.Marker({
+                                                                position:
+                                                                    {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                                                                title: item.oneLocation.placeName
+                                                            }));
+                                                            this.overlaysPoll.push(new google.maps.Marker({
+                                                                position:
+                                                                    {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
+                                                                title: item.oneLocation.placeName
+                                                            }));
+                                                        });
+                                                    }
+                                                });
+                                            }
+
+                                            if (this.meeting.pollForDateOpen === 1) {
+                                                this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
+                                                    if (poll) {
+                                                        this.datePoll = poll;
+                                                        // this.datePoll = this.datePoll.sort((a, b): number => {
+                                                        //     if (a.id > b.id) {
+                                                        //         return 1;
+                                                        //     }
+                                                        //     if (a.id < b.id) {
+                                                        //         return -1;
+                                                        //     }
+                                                        //     return 0;
+                                                        // });
+                                                    }
+                                                });
+                                            }
                                         });
                                     } else {
                                         console.log('empty bill');

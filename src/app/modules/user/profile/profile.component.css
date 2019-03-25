@@ -18,15 +18,18 @@
 }
 
 .friend-card {
-  max-width: 150px;
+  width: 170px;
   height: 250px;
   display: inline-block;
   padding: 10px;
   margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .friend-img {
   border-radius: 3px;
+  height: 200px;
+  object-fit: cover;
 }
 
 .profile-img {
