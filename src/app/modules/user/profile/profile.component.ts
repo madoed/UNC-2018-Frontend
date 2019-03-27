@@ -49,10 +49,12 @@ export class ProfileComponent implements OnInit {
           user => {
             this.user = user;
             this.setUserInfo(this.user);
-            var date = new Date(Date.parse(user.lastVisit.toString()));
-            const lastVisit: string = user.lastVisit ? this.months[date.getMonth()] + ' ' + date.getDate() + ', ' 
-              + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() : undefined;
-            this.status = user.online ? "online" : "Last seen on " + lastVisit;
+            var date = undefined;
+            if (user.lastVisit)
+              date = new Date(Date.parse(user.lastVisit.toString()));
+              const lastVisit: string = date ? "Last seen on " + this.months[date.getMonth()] + ' ' + date.getDate() + ', '
+                  + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() : undefined;
+              this.status = user.online ? "online" : lastVisit;
           },
           error => {
             console.log(error);

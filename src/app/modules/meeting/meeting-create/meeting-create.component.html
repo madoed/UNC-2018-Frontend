@@ -94,7 +94,7 @@
     </p-dialog>
 
 
-    <mat-card>
+    <mat-card style="margin-bottom: 30px;">
         <mat-card-header background-color="accent">
             <mat-card-actions>
                 <!--<button mat-raised-button color="primary" (click)="backToList()"-->
@@ -116,26 +116,37 @@
             <br />
             <div>
 
-                <mat-card-content *ngIf="activeIndex===0" style="margin-left: 50px;">
-                <h3 class="first">Meeting Title</h3>
+                <mat-card-content *ngIf="activeIndex===0" style="margin-left: 50px; height: 300px;">
+                    <div style="float: right; margin-right: 250px;
+                     width: 150px; margin-top: 20px;">
+                        <h3 class="first" style="float: left;">Recursive</h3>
+                        <p-inputSwitch [(ngModel)]="checked2" style="float: right; margin-top: 15px;">
+
+                        </p-inputSwitch>
+                    </div>
+
+                <h3 class="first">Meeting Title *</h3>
                 <input size="30" pInputText [(ngModel)]="meeting.meetingName" required>
+
                 <h3 class="first">Description</h3>
                 <textarea [rows]="5" [cols]="106" pInputTextarea autoResize="autoResize"
                           [(ngModel)]="meeting.meetingDescription" required></textarea>
                 <button mat-raised-button color="primary" type="button"
-                        (click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"
+                        (click)="activeIndex=activeIndex+1" style="float: right;
+                        margin-right: 230px; margin-top: 50px;"
                         [disabled]="!meeting.meetingName">Next</button>
                 </mat-card-content>
 
-                <mat-card-content *ngIf="activeIndex===1" style="margin-left: 30px;">
+                <mat-card-content *ngIf="activeIndex===1" style="margin-left: 30px; min-height: 400px;">
                     <mat-card-actions>
                         <button mat-button color="primary" type="button"
                                 (click)="activeIndex=0" >
                             <mat-icon>arrow_back</mat-icon>
                         </button>
                     </mat-card-actions>
-                    <div style="margin-left: 200px;">
-                        <h3 class="first">Date</h3>
+                    <div style="margin-left: 200px;" *ngIf="!checked2">
+                        <div style="width: 600px; height: 300px;">
+                            <h3 class="first">Date</h3>
                         <p-calendar [(ngModel)]="meeting.dateOfMeeting" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" >
 
                         </p-calendar>
@@ -153,11 +164,61 @@
                         </button>
 
                         <p-toast [style]="{marginTop: '80px'}"></p-toast>
+                        </div>
 
 
                         <button mat-raised-button color="primary" type="button"
-                            (click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"
-                            >Next</button>
+                                (click)="activeIndex=activeIndex+1" style="float: right;
+                        margin-right: 230px; margin-top: 20px;">Next</button>
+
+                    </div>
+
+                    <div style="margin-left: 200px;" *ngIf="checked2">
+                        <div style="border-style: solid; height: 300px; width: 620px; ">
+
+                        <div *ngIf="meeting.meetingType == 'every week'" style="float: right;
+                         width: 370px; height: 240px;">
+                            <p-selectButton [options]="types" [(ngModel)]="dayOfTheWeek">
+                                <ng-template let-item>
+                                    <div style="padding: .5em 1em; width: 120px;">
+                                        <div style="margin: 3px; border-style: solid; border-color: white;">
+                                            <h4>{{item.name}}</h4>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-selectButton>
+
+                        </div>
+
+                        <div *ngIf="meeting.meetingType == 'every first week of the month'" style="float: right;border-style: solid;
+                         width: 300px; height: 230px;">
+                        </div>
+
+                        <div *ngIf="meeting.meetingType == 'every last week of the month'" style="float: right;border-style: solid;
+                         width: 300px; height: 230px;">
+                         </div>
+
+                         <div *ngIf="meeting.meetingType == 'every'" style="float: right;border-style: solid;
+                         width: 300px; height: 230px;">
+                         </div>
+
+                         <div *ngIf="meeting.meetingType == 'every year'" style="float: right;border-style: solid;
+                         width: 300px; height: 230px;">
+                         </div>
+                            <div style="float: left; border-style: solid;">
+                                <h3>Repeat event</h3>
+                                <p-tieredMenu [model]="itemsTime"></p-tieredMenu>
+                            </div>
+
+                        </div>
+
+                        <button mat-raised-button color="primary" type="button"
+                                (click)="activeIndex=activeIndex+1" style="float: right;
+                        margin-right: 230px; margin-top: 20px;">Next</button>
+
+                        <!--<button mat-raised-button color="primary" type="button"-->
+                                <!--(click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"-->
+                        <!--&gt;Next</button>-->
                     </div>
                 </mat-card-content>
 
@@ -180,10 +241,10 @@
                             </mat-card-actions>
                         </mat-card-header>
 
-                        <mat-card-content style="margin-left: 150px; width: 355px;">
+                        <mat-card-content style="margin-left: 150px; width: 390px;">
                             <mat-list style="height: 300px; overflow-y: auto; margin-bottom: 20px;">
                                 <mat-list-item *ngFor="let user of users">
-                                    <div style=" width: 330px; height: 50px;" class="participantItem">
+                                    <div style=" width: 350px; height: 50px;" class="participantItem">
                                         <img mat-list-avatar *ngIf="user.avatarUrl"
                                              style="float: left;"
                                              src="{{user.avatarUrl}}">

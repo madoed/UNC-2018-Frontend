@@ -285,16 +285,16 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                         //     }
                                                         //     return 0;
                                                         // });
-                                                        this.placePoll.forEach(item => {
+                                                        this.placePoll.forEach(pl => {
                                                             this.overlaysPollPopUp.push(new google.maps.Marker({
                                                                 position:
-                                                                    {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
-                                                                title: item.oneLocation.placeName
+                                                                    {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                                title: pl.oneLocation.placeName
                                                             }));
                                                             this.overlaysPoll.push(new google.maps.Marker({
                                                                 position:
-                                                                    {lat: Number(item.oneLocation.lat), lng: Number(item.oneLocation.lng)},
-                                                                title: item.oneLocation.placeName
+                                                                    {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                                title: pl.oneLocation.placeName
                                                             }));
                                                         });
                                                     }
@@ -323,6 +323,53 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                         this.billItems = [];
                                         this.sourceCars = [];
                                         this.targetCars = [];
+                                        this.overlaysPoll = [];
+                                        this.overlaysPollPopUp = [];
+                                        if (this.meeting.pollForPlaceOpen === 1) {
+                                            this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+                                                if (poll) {
+                                                    this.placePoll = poll;
+                                                    // this.placePoll = this.placePoll.sort((a, b): number => {
+                                                    //     if (a.id > b.id) {
+                                                    //         return 1;
+                                                    //     }
+                                                    //     if (a.id < b.id) {
+                                                    //         return -1;
+                                                    //     }
+                                                    //     return 0;
+                                                    // });
+                                                    this.placePoll.forEach(pl => {
+                                                        this.overlaysPollPopUp.push(new google.maps.Marker({
+                                                            position:
+                                                                {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                            title: pl.oneLocation.placeName
+                                                        }));
+                                                        this.overlaysPoll.push(new google.maps.Marker({
+                                                            position:
+                                                                {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                            title: pl.oneLocation.placeName
+                                                        }));
+                                                    });
+                                                }
+                                            });
+                                        }
+
+                                        if (this.meeting.pollForDateOpen === 1) {
+                                            this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
+                                                if (poll) {
+                                                    this.datePoll = poll;
+                                                    // this.datePoll = this.datePoll.sort((a, b): number => {
+                                                    //     if (a.id > b.id) {
+                                                    //         return 1;
+                                                    //     }
+                                                    //     if (a.id < b.id) {
+                                                    //         return -1;
+                                                    //     }
+                                                    //     return 0;
+                                                    // });
+                                                }
+                                            });
+                                        }
                                     }
                                 });
                                 const today = new Date();

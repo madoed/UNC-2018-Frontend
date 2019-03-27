@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {MenuItem, MessageService as mes} from 'primeng/api';
+import {MenuItem, MessageService as mes, SelectItem} from 'primeng/api';
 import {AuthService, Meeting, MeetingService, Participant, User, Place, CardService, StorageService, MessageService} from '@app/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -18,6 +18,12 @@ declare var google: any;
   //encapsulation: ViewEncapsulation.None
 })
 export class MeetingCreateComponent implements OnInit {
+    types: any[];
+    dayOfTheWeek: string;
+    type: number = 0;
+    private itemsTime: MenuItem[];
+    checked2: boolean = true;
+
     defaultAvatar = environment.defaultAvatar;
 
     currentAvatarUrl: any;
@@ -37,7 +43,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 0;
+  activeIndex: number = 1;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;
@@ -80,7 +86,66 @@ export class MeetingCreateComponent implements OnInit {
         this.currentAvatarUrl = environment.defaultMeeting;
     }
 
+  setType (typeNum: number) {
+        switch (typeNum) {
+            case 1: {
+                this.meeting.meetingType = 'every week';
+                break;
+            }
+            case 2: {
+                this.meeting.meetingType = 'every first week of the month';
+                break;
+            }
+            case 3: {
+                this.meeting.meetingType = 'every last week of the month';
+                break;
+            }
+            case 4: {
+                this.meeting.meetingType = 'every';
+                break;
+            }
+            case 5: {
+                this.meeting.meetingType = 'every year';
+                break;
+            }
+        }
+  }
+
   ngOnInit() {
+      this.types = [
+          {name: 'Monday', value: 'Monday'},
+          {name: 'Tuesday', value: 'Tuesday'},
+          {name: 'Wednesday', value: 'Wednesday'},
+          {name: 'Thursday', value: 'Thursday'},
+          {name: 'Friday', value: 'Friday'},
+          {name: 'Saturday', value: 'Saturday'},
+          {name: 'Sunday', value: 'Sunday'},
+      ];
+
+
+      this.itemsTime = [
+          {
+              label: 'Weekly',  command: (event) => { this.setType(1); }
+          },
+          {
+              label: 'Monthly',
+              items: [
+                  {label: 'By day of the week',
+                      items: [
+                          {
+                              label: 'First week',  command: (event) => { this.setType(2); }
+                          },
+                          {
+                              label: 'Last week',  command: (event) => { this.setType(3); }
+                          }
+                      ]
+                  },
+                  {label: 'By date', command: (event) => { this.setType(4); }}
+              ]
+          },
+          {label: 'Annually',  command: (event) => { this.setType(5); }}
+      ];
+
       this.meeting.boss = this.authService.user;
       this.meeting.status = 'new';
       this.meeting.pollForPlaceOpen = 0;

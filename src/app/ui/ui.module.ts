@@ -47,13 +47,13 @@ import {
     ToolbarModule,
     SidebarModule,
     TooltipModule,
-    PasswordModule, ProgressBarModule, ListboxModule
+    PasswordModule, ProgressBarModule, ListboxModule, InputSwitchModule, TieredMenuModule, SelectButtonModule
 } from 'primeng/primeng';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
 import { PaginatorModule } from 'primeng/paginator';
-import { MessageService } from 'primeng/api';
+import { MessageService} from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -111,7 +111,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PaginatorModule,
     ProgressSpinnerModule,
     ProgressBarModule,
-      ListboxModule
+      ListboxModule,
+      InputSwitchModule,
+      TieredMenuModule,
+      SelectButtonModule
   ],
   declarations: [],
   exports: [
@@ -167,7 +170,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PaginatorModule,
     ProgressSpinnerModule,
     ProgressBarModule,
-      ListboxModule
+      ListboxModule,
+      InputSwitchModule,
+      TieredMenuModule,
+      SelectButtonModule
   ],
   providers: [
     MessageService,
