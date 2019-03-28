@@ -137,7 +137,7 @@
                         [disabled]="!meeting.meetingName">Next</button>
                 </mat-card-content>
 
-                <mat-card-content *ngIf="activeIndex===1" style="margin-left: 30px; min-height: 400px;">
+                <mat-card-content *ngIf="activeIndex===1" style="margin-left: 30px; min-height: 420px;">
                     <mat-card-actions>
                         <button mat-button color="primary" type="button"
                                 (click)="activeIndex=0" >
@@ -145,7 +145,7 @@
                         </button>
                     </mat-card-actions>
                     <div style="margin-left: 200px;" *ngIf="!checked2">
-                        <div style="width: 600px; height: 300px;">
+                        <div style="width: 600px; height: 320px;">
                             <h3 class="first">Date</h3>
                         <p-calendar [(ngModel)]="meeting.dateOfMeeting" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" >
 
@@ -174,11 +174,11 @@
                     </div>
 
                     <div style="margin-left: 200px;" *ngIf="checked2">
-                        <div style="border-style: solid; height: 300px; width: 620px; ">
+                        <div style="height: 300px; width: 620px; ">
 
-                        <div *ngIf="meeting.meetingType == 'every week'" style="float: right;
-                         width: 370px; height: 240px;">
-                            <p-selectButton [options]="types" [(ngModel)]="dayOfTheWeek">
+                        <div *ngIf="meeting.meetingType == 'Every week'" style="float: right;
+                         width: 370px; height: 240px; margin-right: -40px;">
+                            <p-selectButton [options]="types" [(ngModel)]="dayOfTheWeek" (onOptionClick)="isPacked=true">
                                 <ng-template let-item>
                                     <div style="padding: .5em 1em; width: 120px;">
                                         <div style="margin: 3px; border-style: solid; border-color: white;">
@@ -190,35 +190,64 @@
 
                         </div>
 
-                        <div *ngIf="meeting.meetingType == 'every first week of the month'" style="float: right;border-style: solid;
-                         width: 300px; height: 230px;">
+                        <div *ngIf="meeting.meetingType == 'Every first week of the month'||
+                        meeting.meetingType == 'Every last week of the month'" style="float: right;
+                         width: 370px; height: 240px; margin-right: -40px;">
+                            <p-selectButton [options]="types" [(ngModel)]="dayOfTheWeek" (onOptionClick)="isPacked=true">
+                                <ng-template let-item>
+                                    <div style="padding: .5em 1em; width: 120px;">
+                                        <div style="margin: 3px; border-style: solid; border-color: white;">
+                                            <h4>{{item.name}}</h4>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-selectButton>
                         </div>
 
-                        <div *ngIf="meeting.meetingType == 'every last week of the month'" style="float: right;border-style: solid;
-                         width: 300px; height: 230px;">
+                         <div *ngIf="meeting.meetingType == 'Every'" style="float: right;
+                         width: 380px; height: 230px; margin-right: -40px;">
+                             <p-selectButton [options]="days" [(ngModel)]="dayOfMonth" (onOptionClick)="isPacked=true">
+                                 <ng-template let-item>
+                                     <div style="vertical-align: middle; width: 50px; height: 50px; padding-bottom: 1px;">
+                                         <div style=" border-style: solid; border-color: white; height: 50px;">
+                                             <h5 style="margin-top: 15px;">{{item.name}}</h5>
+                                         </div>
+                                     </div>
+                                 </ng-template>
+                             </p-selectButton>
+                             <h5 style="color: #00539b;">
+                             (If current month doesn't contain chosen day the event would be moved to the last day of the month)
+                             </h5>
+
                          </div>
 
-                         <div *ngIf="meeting.meetingType == 'every'" style="float: right;border-style: solid;
-                         width: 300px; height: 230px;">
+                         <div *ngIf="meeting.meetingType == 'Every year'" style="float: right;
+                         width: 300px; height: 230px; margin-top: -70px;">
+                             <p-calendar [(ngModel)]="dateInYear" [inline]="true" (onSelect)="isPacked=true">
+
+                             </p-calendar>
+
                          </div>
 
-                         <div *ngIf="meeting.meetingType == 'every year'" style="float: right;border-style: solid;
-                         width: 300px; height: 230px;">
-                         </div>
-                            <div style="float: left; border-style: solid;">
-                                <h3>Repeat event</h3>
+                            <div style="float: left;">
+                                <h3 style="margin-left: 20px;">Repeat event</h3>
                                 <p-tieredMenu [model]="itemsTime"></p-tieredMenu>
+                                <div style="width: 250px; height: 50px; margin-left: -45px;
+                                text-align: center; margin-top: 40px;">
+                                <h3 *ngIf="meeting.meetingType!=='Every'" style="color: #00539b;">
+                                    {{meeting.meetingType}}</h3>
+                                <h3 *ngIf="meeting.meetingType==='Every'" style="color: #00539b;">
+                                    every month</h3>
+                                </div>
                             </div>
 
                         </div>
 
+
+
                         <button mat-raised-button color="primary" type="button"
                                 (click)="activeIndex=activeIndex+1" style="float: right;
-                        margin-right: 230px; margin-top: 20px;">Next</button>
-
-                        <!--<button mat-raised-button color="primary" type="button"-->
-                                <!--(click)="activeIndex=activeIndex+1" style="margin-left: 700px; margin-top: 50px;"-->
-                        <!--&gt;Next</button>-->
+                        margin-right: 230px; margin-top: 40px;" [disabled]="!isPacked">Next</button>
                     </div>
                 </mat-card-content>
 
@@ -291,39 +320,6 @@
                 </mat-card-content>
 
                 <mat-card-content *ngIf="activeIndex===3" style="margin-left: 20px;">
-                    <!--<mat-card-actions>-->
-                    <!--<button mat-button color="primary" (click)="activeIndex=2" >-->
-                        <!--<mat-icon>arrow_back</mat-icon>-->
-                    <!--</button>-->
-                    <!--</mat-card-actions>-->
-                    <!--<div flex style="margin-left: 300px; margin-top: 10px; height: fit-content;">-->
-                    <!--<div style="float: left; width: 300px;">-->
-                        <!--<mat-card style="  height: fit-content">-->
-                        <!--<h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">-->
-                            <!--{{meeting.meetingName}}</span>-->
-                        <!--</h3>-->
-                        <!--<br />-->
-                        <!--<h3 style="color: steelblue;">Meeting date: <span style="font-size: small; color: black">-->
-                            <!--{{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()): "No date"}}-->
-                        <!--</span>-->
-                        <!--</h3>-->
-                        <!--<br />-->
-                        <!--<h3 style="color: steelblue;">Meeting time: <span style="font-size: small; color: black">-->
-                            <!--{{meeting.timeOfMeeting? meeting.timeOfMeeting.getHours(): "No time"}}-->
-                            <!--{{meeting.timeOfMeeting? ":": ""}}-->
-                            <!--{{meeting.timeOfMeeting? meeting.timeOfMeeting.getMinutes(): ""}} </span>-->
-                        <!--</h3>-->
-                        <!--<br />-->
-                        <!--<h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">-->
-                            <!--{{markerTitle? markerTitle: "No location"}}</span>-->
-                        <!--</h3>-->
-                        <!--<br />-->
-                        <!--</mat-card>-->
-
-                    <!--</div>-->
-                        <!--<button mat-raised-button color="primary" type="button"-->
-                                <!--(click)="createMeeting()" style="margin-left: 200px; margin-top: 300px;"-->
-                        <!--&gt;Create</button>-->
 
                     <mat-card-actions>
                     <button mat-button color="primary" (click)="activeIndex=2" >
@@ -333,7 +329,7 @@
 
                     <div flex style="margin-left: 200px; margin-top: 10px; height: fit-content;">
                         <div class="ui-g">
-                            <div style="float: left; width: 300px;" class="ui-g-8">
+                            <div style="float: left; width: 300px;" *ngIf="!checked2" class="ui-g-8">
                                 <mat-card style="  height: fit-content">
                                     <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
                                         {{meeting.meetingName}}</span>
@@ -357,6 +353,23 @@
                                 </mat-card>
                             </div>
 
+                            <div style="float: left; width: 300px;" *ngIf="checked2" class="ui-g-8">
+                                <mat-card style="  height: fit-content">
+                                    <h3 style="color: steelblue;">Meeting title: <span style="font-size: small; color: black">
+                                        {{meeting.meetingName}}</span>
+                                    </h3>
+                                    <br />
+                                    <h3 style="color: steelblue;">Recursive meeting: <span style="font-size: small; color: black">
+                                        {{meeting.meetingType}}
+                                    </span>
+                                    </h3>
+                                    <br />
+                                    <h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">
+                                        {{markerTitle? markerTitle: "No location"}}</span>
+                                    </h3>
+                                    <br />
+                                </mat-card>
+                            </div>
                             <!--Add meeting picture-->
                             <div class="ui-g-4">
                                 <div>
