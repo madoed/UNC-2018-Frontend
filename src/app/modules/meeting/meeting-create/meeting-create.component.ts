@@ -20,10 +20,10 @@ declare var google: any;
 export class MeetingCreateComponent implements OnInit {
     isPacked: boolean = false;
     dateInYear: Date;
-    dayOfMonth: string;
+    dayOfMonth: number;
     days: any[];
     types: any[];
-    dayOfTheWeek: string;
+    dayOfTheWeek: number;
     type: number = 0;
     private itemsTime: MenuItem[];
     checked2: boolean = true;
@@ -47,7 +47,7 @@ export class MeetingCreateComponent implements OnInit {
   displayDialogBack: boolean;
   openMap: boolean;
   items: MenuItem[];
-  activeIndex: number = 1;
+  activeIndex: number = 0;
   meeting = {} as Meeting;
   private date: Date;
   private minDate: Date;
@@ -142,47 +142,47 @@ export class MeetingCreateComponent implements OnInit {
 
   ngOnInit() {
       this.types = [
-          {name: 'Monday', value: 'Monday'},
-          {name: 'Tuesday', value: 'Tuesday'},
-          {name: 'Wednesday', value: 'Wednesday'},
-          {name: 'Thursday', value: 'Thursday'},
-          {name: 'Friday', value: 'Friday'},
-          {name: 'Saturday', value: 'Saturday'},
-          {name: 'Sunday', value: 'Sunday'},
+          {name: 'Monday', value: 1},
+          {name: 'Tuesday', value: 2},
+          {name: 'Wednesday', value: 3},
+          {name: 'Thursday', value: 4},
+          {name: 'Friday', value: 5},
+          {name: 'Saturday', value: 6},
+          {name: 'Sunday', value: 7},
       ];
 
       this.days = [
-          {name: '1', value: '1'},
-          {name: '2', value: '2'},
-          {name: '3', value: '3'},
-          {name: '4', value: '4'},
-          {name: '5', value: '5'},
-          {name: '6', value: '6'},
-          {name: '7', value: '7'},
-          {name: '8', value: '8'},
-          {name: '9', value: '9'},
-          {name: '10', value: '10'},
-          {name: '11', value: '11'},
-          {name: '12', value: '12'},
-          {name: '13', value: '13'},
-          {name: '14', value: '14'},
-          {name: '15', value: '15'},
-          {name: '16', value: '16'},
-          {name: '17', value: '17'},
-          {name: '18', value: '18'},
-          {name: '19', value: '19'},
-          {name: '20', value: '20'},
-          {name: '21', value: '21'},
-          {name: '22', value: '22'},
-          {name: '23', value: '23'},
-          {name: '24', value: '24'},
-          {name: '25', value: '25'},
-          {name: '26', value: '26'},
-          {name: '27', value: '27'},
-          {name: '28', value: '28'},
-          {name: '29', value: '29'},
-          {name: '30', value: '30'},
-          {name: '31', value: '31'}
+          {name: '1', value: 1},
+          {name: '2', value: 2},
+          {name: '3', value: 3},
+          {name: '4', value: 4},
+          {name: '5', value: 5},
+          {name: '6', value: 6},
+          {name: '7', value: 7},
+          {name: '8', value: 8},
+          {name: '9', value: 9},
+          {name: '10', value: 10},
+          {name: '11', value: 11},
+          {name: '12', value: 12},
+          {name: '13', value: 13},
+          {name: '14', value: 14},
+          {name: '15', value: 15},
+          {name: '16', value: 16},
+          {name: '17', value: 17},
+          {name: '18', value: 18},
+          {name: '19', value: 19},
+          {name: '20', value: 20},
+          {name: '21', value: 21},
+          {name: '22', value: 22},
+          {name: '23', value: 23},
+          {name: '24', value: 24},
+          {name: '25', value: 25},
+          {name: '26', value: 26},
+          {name: '27', value: 27},
+          {name: '28', value: 28},
+          {name: '29', value: 29},
+          {name: '30', value: 30},
+          {name: '31', value: 31}
       ];
 
       this.itemsTime = [
@@ -400,6 +400,17 @@ export class MeetingCreateComponent implements OnInit {
         participant.statusOfConfirmation = 'confirmed';
         participant.meetingParticipant = this.authService.user;
         this.participants.push(participant);
+        if (this.checked2) {
+            if (this.meeting.meetingType === 'Every week' ||
+                this.meeting.meetingType === 'Every first week of the month' ||
+                this.meeting.meetingType === 'Every last week of the month') {
+                this.meeting.recursiveInfo = this.dayOfTheWeek;
+            } else if (this.meeting.meetingType === 'Every') {
+                this.meeting.recursiveInfo = this.dayOfMonth;
+            }
+        } else {
+            this.meeting.meetingType = 'simple';
+        }
         this.meetingService.createMeeting(this.meeting).subscribe(data => {
             this.meeting = data;
             //this.cardService.setBillCard(this.fixedCardId, this.meeting.id);

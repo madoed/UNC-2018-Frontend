@@ -120,9 +120,11 @@
                     <div style="float: right; margin-right: 250px;
                      width: 150px; margin-top: 20px;">
                         <h3 class="first" style="float: left;">Recursive</h3>
-                        <p-inputSwitch [(ngModel)]="checked2" style="float: right; margin-top: 15px;">
+                        <div style="float: right; margin-top: 15px;">
+                        <p-inputSwitch [(ngModel)]="checked2" >
 
                         </p-inputSwitch>
+                        </div>
                     </div>
 
                 <h3 class="first">Meeting Title *</h3>
@@ -223,7 +225,7 @@
 
                          <div *ngIf="meeting.meetingType == 'Every year'" style="float: right;
                          width: 300px; height: 230px; margin-top: -70px;">
-                             <p-calendar [(ngModel)]="dateInYear" [inline]="true" (onSelect)="isPacked=true">
+                             <p-calendar [(ngModel)]="meeting.dateOfMeeting" [inline]="true" (onSelect)="isPacked=true">
 
                              </p-calendar>
 
@@ -359,9 +361,13 @@
                                         {{meeting.meetingName}}</span>
                                     </h3>
                                     <br />
-                                    <h3 style="color: steelblue;">Recursive meeting: <span style="font-size: small; color: black">
+                                    <h3 style="color: steelblue;">Recursive meeting:
+                                        <span *ngIf="meeting.meetingType!=='Every'" style="font-size: small; color: black">
                                         {{meeting.meetingType}}
-                                    </span>
+                                        </span>
+                                        <span *ngIf="meeting.meetingType==='Every'" style="font-size: small; color: black">
+                                        Evety month
+                                        </span>
                                     </h3>
                                     <br />
                                     <h3 style="color: steelblue;">Meeting location: <span style="font-size: small; color: black">
