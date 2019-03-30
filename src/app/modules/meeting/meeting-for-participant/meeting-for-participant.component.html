@@ -251,13 +251,19 @@
 
               </div>
               <div style="float: right;  width: 170px; height: 130px; color: black;">
-                <div style="margin-top: 15px; margin-bottom: 7px;">
-                  <h3 style="margin-left: 10px;margin-top: 10px;" *ngIf="meeting">
+                <div *ngIf="meeting&&meeting.meetingType==='simple'" style="margin-top: 15px; margin-bottom: 7px;">
+                  <h3 style="margin-left: 10px;margin-top: 10px;" *ngIf="meeting.dateOfMeeting">
                     {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()).getDay():"No date"}}
                     {{meeting.dateOfMeeting? "/":""}}
                     {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()).getMonth():""}}
                     {{meeting.dateOfMeeting? "/":""}}
                     {{meeting.dateOfMeeting? parse(meeting.dateOfMeeting.toString()).getFullYear():""}}
+                  </h3>
+                </div>
+
+                <div *ngIf="meeting&&meeting.meetingType!=='simple'" style="margin-top: 15px; margin-bottom: 7px;">
+                  <h3 style="margin-left: 10px;margin-top: 10px;" *ngIf="meeting.dateOfMeeting">
+                    {{parseRecursive(meeting.dateOfMeeting.toString())}}
                   </h3>
                 </div>
 

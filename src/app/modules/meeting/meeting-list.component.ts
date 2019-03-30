@@ -164,6 +164,18 @@ export class MeetingListComponent implements OnInit {
         return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
     }
 
+    parseRecursive(value: any): String | null {
+        if ((typeof value === 'string')) {
+            const str = value.split('-');
+            const year = Number(str[0]);
+            const month = Number(str[1]) - 1;
+            const date = Number(str[2].charAt(0) + str[2].charAt(1));
+            return new Date(year, month, date).toString().substr(0, 15 );
+        }
+        const timestamp = typeof value === 'number' ? value : Date.parse(value);
+        return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
+    }
+
   openMeeting(meeting: Participant) {
     console.log(meeting);
     this.meetingService.getMeeting(meeting.participantOfMeeting.id).subscribe((meet: Meeting) => {

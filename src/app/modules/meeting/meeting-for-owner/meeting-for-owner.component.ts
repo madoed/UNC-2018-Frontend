@@ -28,6 +28,8 @@ import {
     FnsCheckService, CardService
 } from '@app/core';
 import {Card} from '@app/core/models/card.model';
+import {CustomPoll} from '@app/core/models/custompoll.model';
+import {CustomPollOption} from '@app/core/models/custompolloption.model';
 
 
 /** Constants used to fill up our data base. */
@@ -56,6 +58,13 @@ declare var google: any;
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
+    fixedPoll: CustomPoll = [] as CustomPoll;
+    addOption: boolean = false;
+    createPoll: boolean = false;
+    customPolls: CustomPoll[] = [];
+    newCustomPoll: CustomPoll = [] as CustomPoll;
+    newCustomPollOption: CustomPollOption = [] as CustomPollOption;
+
     defaultMeeting = environment.defaultMeeting;
     defaultAvatar = environment.defaultAvatar;
 
@@ -205,7 +214,19 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
         return null;
     }
 
-  constructor(private messService: mes,
+    parseRecursive(value: any): String | null {
+        if ((typeof value === 'string')) {
+            const str = value.split('-');
+            const year = Number(str[0]);
+            const month = Number(str[1]) - 1;
+            const date = Number(str[2].charAt(0) + str[2].charAt(1));
+            return new Date(year, month, date).toString().substr(0, 15 );
+        }
+        const timestamp = typeof value === 'number' ? value : Date.parse(value);
+        return isNaN(timestamp) ? null : new Date(timestamp).toString().substr(0, 15 );
+    }
+
+    constructor(private messService: mes,
               private meetingService: MeetingService,
               public route: ActivatedRoute,
               authService: AuthService,
@@ -304,51 +325,58 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
 
                               this.overlaysPoll = [];
                               this.overlaysPollPopUp = [];
-                              if (this.meeting.pollForPlaceOpen === 1) {
-                                  this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
-                                      if (poll) {
-                                          this.placePoll = poll;
-                                          // this.placePoll = this.placePoll.sort((a, b): number => {
-                                          //     if (a.id > b.id) {
-                                          //         return 1;
-                                          //     }
-                                          //     if (a.id < b.id) {
-                                          //         return -1;
-                                          //     }
-                                          //     return 0;
-                                          // });
-                                          this.placePoll.forEach(pl => {
-                                              this.overlaysPollPopUp.push(new google.maps.Marker({
-                                                  position:
-                                                      {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
-                                                  title: pl.oneLocation.placeName
-                                              }));
-                                              this.overlaysPoll.push(new google.maps.Marker({
-                                                  position:
-                                                      {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
-                                                  title: pl.oneLocation.placeName
-                                              }));
-                                          });
-                                      }
-                                  });
-                              }
+                              this.pollService.getCustomPolls(this.meeting.id).subscribe(polls => {
+                                  if (polls) {
+                                      this.customPolls = polls;
+                                  } else {
+                                      this.customPolls = [];
+                                  }
+                                  if (this.meeting.pollForPlaceOpen === 1) {
+                                      this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+                                          if (poll) {
+                                              this.placePoll = poll;
+                                              // this.placePoll = this.placePoll.sort((a, b): number => {
+                                              //     if (a.id > b.id) {
+                                              //         return 1;
+                                              //     }
+                                              //     if (a.id < b.id) {
+                                              //         return -1;
+                                              //     }
+                                              //     return 0;
+                                              // });
+                                              this.placePoll.forEach(pl => {
+                                                  this.overlaysPollPopUp.push(new google.maps.Marker({
+                                                      position:
+                                                          {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                      title: pl.oneLocation.placeName
+                                                  }));
+                                                  this.overlaysPoll.push(new google.maps.Marker({
+                                                      position:
+                                                          {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                      title: pl.oneLocation.placeName
+                                                  }));
+                                              });
+                                          }
+                                      });
+                                  }
 
-                              if (this.meeting.pollForDateOpen === 1) {
-                                  this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
-                                      if (poll) {
-                                          this.datePoll = poll;
-                                          // this.datePoll = this.datePoll.sort((a, b): number => {
-                                          //     if (a.id > b.id) {
-                                          //         return 1;
-                                          //     }
-                                          //     if (a.id < b.id) {
-                                          //         return -1;
-                                          //     }
-                                          //     return 0;
-                                          // });
-                                      }
-                                  });
-                              }
+                                  if (this.meeting.pollForDateOpen === 1) {
+                                      this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
+                                          if (poll) {
+                                              this.datePoll = poll;
+                                              // this.datePoll = this.datePoll.sort((a, b): number => {
+                                              //     if (a.id > b.id) {
+                                              //         return 1;
+                                              //     }
+                                              //     if (a.id < b.id) {
+                                              //         return -1;
+                                              //     }
+                                              //     return 0;
+                                              // });
+                                          }
+                                      });
+                                  }
+                              });
                           });
                       } else {
                           console.log('empty bill');
@@ -1685,6 +1713,53 @@ ngAfterViewInit() {
     backToBillFromShared() {
         this.show_bill = true;
         this.share_items = false;
+    }
+
+    createCustomPoll() {
+      this.createPoll = false;
+      this.newCustomPoll.creatorOfPoll = this.participant.meetingParticipant;
+      this.newCustomPoll.pollOfMeeting = this.meeting;
+      this.pollService.createPoll(this.newCustomPoll).subscribe(newPoll => {
+          this.customPolls.push(newPoll);
+          this.newCustomPoll = [] as CustomPoll;
+          this.messService.add({severity: 'success', summary: 'Success Message', detail: 'poll created'});
+      });
+    }
+
+    addOptionInPoll() {
+      this.addOption = false;
+        this.pollService.addOptionInPoll(this.fixedPoll.id, this.newCustomPollOption, this.participant.id).subscribe(res => {
+            this.fixedPoll = res;
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'new option added'});
+            this.newCustomPollOption = [] as CustomPollOption;
+        });
+    }
+
+    openCustomVote(poll: CustomPoll) {
+        this.pollService.openCustomPoll(poll.id).subscribe(res => {
+            poll = res;
+        });
+    }
+
+    closeCustomVote(poll: CustomPoll) {
+        this.pollService.closeCustomPoll(poll.id).subscribe(res => {
+            poll = res;
+        });
+    }
+
+    voteForOption(customPollOption: CustomPollOption) {
+        this.pollService.voteForOption(customPollOption.id, this.participant.meetingParticipant.id).subscribe(res => {
+            customPollOption = res;
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
+        });
+    }
+
+    votedForOption(customPollOption: CustomPollOption): boolean {
+        let checkOut = false;
+        customPollOption.voicesForOption.forEach(voice => {
+            if (voice.id === this.me.id) {checkOut = true; }
+        });
+        return checkOut;
     }
 }
 

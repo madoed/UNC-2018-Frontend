@@ -5,6 +5,8 @@ import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Meetinglocation} from '@app/core/models/meetinglocation';
+import {CustomPollOption} from '@app/core/models/custompolloption.model';
+import {CustomPoll} from '@app/core/models/custompoll.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +56,31 @@ export class PollService {
 
     voteForDate (dateId: number): Observable<any> {
         return this.http.post(this.MEETING_API + '/meeting-date-poll-vote/' + this.authService.user.id, dateId);
+    }
+
+    getCustomPolls (meetingId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-custom-polls/' + meetingId);
+    }
+
+    openCustomPoll (pollId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-custom-poll-open/' + pollId);
+    }
+
+    closeCustomPoll (pollId: number): Observable<any> {
+        return this.http.get(this.MEETING_API + '/meeting-custom-poll-close/' + pollId);
+    }
+
+    voteForOption (customPollOptionId: number, userId): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-custom-poll-vote/' + userId, customPollOptionId);
+    }
+
+    addOptionInPoll(pollId: number, customPollOption: CustomPollOption, participantId: number): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-poll-add-option/' + participantId +
+            '/' + pollId, customPollOption);
+    }
+
+    createPoll(customPoll: CustomPoll): Observable<any> {
+        return this.http.post(this.MEETING_API + '/meeting-poll-create', customPoll);
+
     }
 }

@@ -1,6 +1,55 @@
 
 <div class="container">
 
+    <p-dialog header="Create Poll" [(visible)]="createPoll" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+              [maximizable]="false" [baseZIndex]="10000">
+
+        <mat-card >
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="title">Title</label>
+                </div>
+                <div class="ui-g-8">
+                    <input pInputText [(ngModel)]="newCustomPoll.customPollName" required/>
+                </div>
+            </div>
+
+            <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="createCustomPoll()"
+                        [disabled]="!newCustomPoll.customPollName" >Create</button>
+
+                <a mat-button (click)="createPoll=false;" >Cancel</a>
+            </mat-card-actions>
+
+        </mat-card>
+    </p-dialog>
+
+
+    <p-dialog header="Add option" [(visible)]="addOption" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
+              [maximizable]="false" [baseZIndex]="10000">
+
+        <mat-card >
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label for="title">Option</label>
+                </div>
+                <div class="ui-g-8">
+                    <input pInputText [(ngModel)]="newCustomPollOption.option" required/>
+                </div>
+            </div>
+
+            <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="addOptionInPoll()"
+                        [disabled]="!newCustomPoll.customPollName" >Create</button>
+
+                <a mat-button (click)="addOption=false;" >Cancel</a>
+            </mat-card-actions>
+
+        </mat-card>
+    </p-dialog>
+
+
+
     <p-dialog header="Click to add the place" [(visible)]="openMap" [responsive]="true" [style]="{ minWidth: '200px'}" [minY]="70"
               [maximizable]="false" [baseZIndex]="10000">
 
@@ -54,9 +103,15 @@
 
             </div>
             <div style="float: right;  width: 280px; height: 130px; color: black;">
-                <div style="margin-top: 11px; margin-bottom: 7px;">
+                <div *ngIf="meeting&&meeting.meetingType==='simple'" style="margin-top: 11px; margin-bottom: 7px;">
                 <p-calendar [(ngModel)]="date" [showIcon]="true" [minDate]="minDate" dateFormat="dd/mm/yy" (onSelect)="changeDate()">
                 </p-calendar>
+                </div>
+
+                <div *ngIf="meeting&&meeting.meetingType!=='simple'" style="margin-top: 15px; margin-bottom: 7px;">
+                    <h3 style="margin-left: 10px;margin-top: 10px;" *ngIf="meeting.dateOfMeeting">
+                        {{parseRecursive(meeting.dateOfMeeting.toString())}}
+                    </h3>
                 </div>
 
                 <p-calendar [(ngModel)]="time" [timeOnly]="true" (onClose)="changeTime()">
@@ -328,7 +383,7 @@
     <div style="margin-top: 20px;">
         <div flex style="float: left; width: 530px; ">
 
-            <mat-card *ngIf="mark_info" style="height: fit-content;">
+            <mat-card *ngIf="meeting&&meeting.meetingType==='simple'" style="height: fit-content;">
                 <mat-card-header >Vote for Date</mat-card-header>
                 <br />
                 <mat-divider></mat-divider>
@@ -448,6 +503,78 @@
                     </button>
                 </mat-card-footer>
             </mat-card>
+
+            <mat-card style="height: fit-content; margin-top: 20px;">
+                    <button mat-raised-button color="primary" (click)="createPoll = true;"
+                            style="margin-right: 120px; float: right; margin-bottom: 10px; width: 300px!important;
+                             height: 40px!important;">
+                        Create poll
+                    </button>
+            </mat-card>
+
+            <mat-list>
+                <mat-list-item *ngFor="let poll of customPolls">
+
+                    <mat-card *ngIf="poll.isOpened" style="height: fit-content; margin-top: 20px;">
+                        <mat-card-header >{{poll.customPollName}}</mat-card-header>
+                        <br />
+                        <mat-divider></mat-divider>
+                        <mat-card-actions *ngIf="poll.creatorOfPoll.id===participant.meetingParticipant.id">
+                            <button mat-raised-button color="primary" *ngIf="poll.isOpened===0" style="float: bottom;
+                    float: right; margin-right: 20px; margin-bottom: 30px;" (click)="openCustomVote(poll)">
+                                Open vote
+                            </button>
+                            <button mat-raised-button color="primary" *ngIf="poll.isOpened===1" style="float: bottom;
+                    float: right; margin-right: 20px; margin-bottom: 30px; background-color: white!important; color: #6D6D6D!important;" (click)="closeCustomVote(poll)">
+                                Close vote
+                            </button>
+                        </mat-card-actions>
+                        <mat-card-content>
+
+                            <br />
+                            <mat-list style="margin-top: 10px; ">
+                                <mat-list-item *ngFor="let opt of poll.optionsInPoll">
+
+                                    <div style="width: 300px;">
+                                        {{opt.option}}</div>
+
+                                    <div style="width: 300px;">
+                                        <p-progressBar [showValue]="true" [value]="opt.percentageForOption"></p-progressBar>
+                                    </div>
+
+                                    <div style="width: 100px; margin-left: 50px;">
+                                        <div *ngIf="votedForOption(opt)" style="color: steelblue;
+                                  cursor: pointer;" (click)="votedForOption(opt)">
+                                            <span style="font-size: 29px;">&#9745;</span>
+                                        </div>
+                                        <div *ngIf="!votedForOption(opt)" style="color: #9b9b9b;
+                                 cursor: pointer;" (click)="votedForOption(opt)">
+                                            <span style="font-size: 29px;">&#9744;</span>
+                                        </div>
+                                    </div>
+
+
+                                </mat-list-item>
+                            </mat-list>
+                        </mat-card-content>
+                        <mat-card-content *ngIf="poll.isOpened===0">
+                            <br />
+                        </mat-card-content>
+                        <mat-card-footer *ngIf="poll.isOpened===1"style="height: 80px;">
+                            <mat-divider></mat-divider>
+                            <br />
+                            <button mat-raised-button color="primary" (click)="fixedPoll = poll;
+                            addOption=true;"
+                                    style="margin-right: 120px; float: right; margin-bottom: 10px; width: 300px!important;
+                             height: 40px!important;">
+                                Add option
+                            </button>
+                        </mat-card-footer>
+                    </mat-card>
+
+                </mat-list-item>
+
+            </mat-list>
 
         </div>
 

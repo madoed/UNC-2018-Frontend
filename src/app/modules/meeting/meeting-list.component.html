@@ -27,8 +27,12 @@
                         </div>
 
                     </div>
-                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+
+                    <div *ngIf="meeting.participantOfMeeting.meetingType==='simple'" style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
                         {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+                    <div *ngIf="meeting.participantOfMeeting.meetingType!=='simple'"  style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parseRecursive(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
                     </div>
 
                 </div>
@@ -60,8 +64,11 @@
                         </div>
 
                     </div>
-                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                    <div *ngIf="meeting.participantOfMeeting.meetingType==='simple'" style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
                         {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+                    <div *ngIf="meeting.participantOfMeeting.meetingType!=='simple'"  style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parseRecursive(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
                     </div>
 
                 </div>
@@ -93,8 +100,11 @@
                         </div>
 
                     </div>
-                    <div style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                    <div *ngIf="meeting.participantOfMeeting.meetingType==='simple'" style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
                         {{meeting.participantOfMeeting.dateOfMeeting? parse(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
+                    </div>
+                    <div *ngIf="meeting.participantOfMeeting.meetingType!=='simple'"  style="margin-left: 50px; width: 150px; height: 50px; color: #828282">
+                        {{meeting.participantOfMeeting.dateOfMeeting? parseRecursive(meeting.participantOfMeeting.dateOfMeeting.toString()): ""}}
                     </div>
 
 
