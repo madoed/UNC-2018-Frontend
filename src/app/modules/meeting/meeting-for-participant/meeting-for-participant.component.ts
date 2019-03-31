@@ -29,6 +29,7 @@ import {
 } from '@app/core';
 import {environment} from '@env';
 import {Card} from '@app/core/models/card.model';
+import { OverlayPanel } from 'primeng/primeng';
 import {CustomPoll} from '@app/core/models/custompoll.model';
 import {CustomPollOption} from '@app/core/models/custompolloption.model';
 
@@ -1370,7 +1371,32 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
         }
 
     }
+    
+    /** Emoji **/
+    addEmoji(event) {
+        this.newMessage = this.newMessage ? this.newMessage + event.emoji.native : event.emoji.native;
+        document.getElementById("inputMessage").focus();
+    }
 
+    async hideEmojiPicker(overlayPanel: OverlayPanel) {
+        await this.sleep(400);
+        if (!this.pickingEmoji)
+            overlayPanel.hide();
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+    enterEmoji () {
+        this.pickingEmoji = true;
+    }
+
+    leaveEmoji (overlayPanel: OverlayPanel) {
+        this.pickingEmoji = false;
+        this.hideEmojiPicker(overlayPanel);
+
+    /** Custom poll **/
     createCustomPoll() {
         this.createPoll = false;
         this.newCustomPoll.creatorOfPoll = this.participant.meetingParticipant;

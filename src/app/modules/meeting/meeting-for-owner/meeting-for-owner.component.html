@@ -642,13 +642,7 @@
                                                         <span>{{message.sender.firstName}}</span>
                                                     </div>
 
-
-                                                    <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
-            <textarea class="textareaMessage"
-                      rows="{{getAmountOfRows(message.content)}}" readonly="true">
-              {{message.content}}
-            </textarea>
-                                                    </div>
+                                                    <div class="divMessage">{{message.content}}</div>
                                                 </div>
 
                                                 <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
@@ -663,13 +657,7 @@
                                                         <span>{{message.sender.firstName}}</span>
                                                     </div>
 
-
-                                                    <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
-            <textarea class="textareaMessage"
-                      rows="{{getAmountOfRows(message.content)}}" readonly="true">
-              {{message.content}}
-            </textarea>
-                                                    </div>
+                                                    <div class="divMessage">{{message.content}}</div>
                                                 </div>
                                             </mat-list-item>
 
@@ -678,26 +666,31 @@
 
                                     </mat-card>
 
-                                    <div style="float: left; width: 100%;">
-                                        <div style="height: 105px; width: 100%; background-color: #f6f7f9;;
-         border-bottom-style: solid; border-color: #bebebe; border-top-style: none; ">
-          <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
+                                    <div style="display: flex; float: left; width: 100%; background-color: #f6f7f9; padding: 10px;
+                                    border-style: solid; border-color: #bebebe; border-top-style: none; ">
+                                        <textarea pInputTextarea placeholder="Enter your message..." [(ngModel)]="newMessage"
+                                        autoResize="autoResize" rows="3" style="float: left; flex: 1; font-size: 16px;" id="inputMessage">
+                                        </textarea>
+                                        
+                                        <div style="padding-top: 20px; margin-right: 10px; width: 100px; float: right;">
+                                        <div style="margin-left: 20px; float: left; height: 30px; width: 30px;">
+                                            <img #emojiToggle src="assets/images/emoji.png" style="opacity: 0.5; width: 30px; height: 30px; cursor: pointer;"
+                                            (click)="op.toggle($event)" (mouseenter)="op.show($event)" (mouseleave)="hideEmojiPicker(op)">
 
-          </textarea>
-
-                                            <div (click)="sendMessage()" *ngIf = "newMessage&&newMessage.length>0&&newMessage!==''"
-                                                 style="margin-top: 20px; margin-right: 20px; float: right;
-               height: 30px;width: 30px; cursor: pointer;">
-                                                <img style="width: 30px; height: 30px; border-radius: 30px;" src="assets/images/send.png">
-
-                                            </div>
-                                            <!--<input  type="text"  [(ngModel)]="newMessage"-->
-                                            <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
-
+                                            <p-overlayPanel #op id="op" baseZIndex="2" appendTo="body" [dismissable]="false">
+                                            <emoji-mart id="emoji" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)" isNative="true" emojiTooltip="true"
+                                                [i18n]="{ search: 'Recherche', categories: { search: 'Résultats de recherche', recent: 'Récents' } }"
+                                                showSingleCategory="true" totalFrequentLines="2" sheetSize="32" (mouseenter)="enterEmoji()" (mouseleave)="leaveEmoji(op)"></emoji-mart>
+                                            </p-overlayPanel>
+                                        </div>
+                                        <div style="margin-left: 20px; float: left; height: 30px; width: 30px;">
+                                            <img (click)="sendMessage()" *ngIf = "newMessage&&newMessage.length>0&&newMessage!==''"
+                                            style="width: 30px; height: 30px; cursor: pointer; border-radius: 25px;" src="assets/images/send.png">
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                         </mat-tab>
 

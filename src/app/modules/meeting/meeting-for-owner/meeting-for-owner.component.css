@@ -155,16 +155,22 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
-.textareaMessage {
-    resize: none;
-    width: 100%;
-    min-height: 40px;
-
+.divMessage {
+    margin-left: 5px;
+    float: left;
+    float: top;
+    width: 90%;
     border: none;
     background: none;
-    text-indent: -100px;
     color: #6D6D6D;
-    cursor: default;
+    min-height: fit-content;
+    font-size: 16px;
+    
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;      /* IE */
 }
 
 .myMes:hover{
