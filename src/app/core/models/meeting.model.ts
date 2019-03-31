@@ -19,4 +19,5 @@ export interface Meeting {
   pollForDateOpen: number;
   avatarUrl: string;
   meetingType: string;
+  recursiveInfo: number;
 }
