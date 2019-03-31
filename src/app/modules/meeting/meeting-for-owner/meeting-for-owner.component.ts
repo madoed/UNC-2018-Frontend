@@ -58,12 +58,12 @@ declare var google: any;
   providers: [mes]
 })
 export class MeetingForOwnerComponent extends MessagesComponent implements OnInit {
-    fixedPoll: CustomPoll = [] as CustomPoll;
+    fixedPoll: CustomPoll = {} as CustomPoll;
     addOption: boolean = false;
     createPoll: boolean = false;
     customPolls: CustomPoll[] = [];
-    newCustomPoll: CustomPoll = [] as CustomPoll;
-    newCustomPollOption: CustomPollOption = [] as CustomPollOption;
+    newCustomPoll: CustomPoll = {} as CustomPoll;
+    newCustomPollOption: CustomPollOption = {} as CustomPollOption;
 
     defaultMeeting = environment.defaultMeeting;
     defaultAvatar = environment.defaultAvatar;
@@ -331,8 +331,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                                   } else {
                                       this.customPolls = [];
                                   }
-                                  if (this.meeting.pollForPlaceOpen === 1) {
-                                      this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+
+                                  this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                                           if (poll) {
                                               this.placePoll = poll;
                                               // this.placePoll = this.placePoll.sort((a, b): number => {
@@ -358,10 +358,8 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                                               });
                                           }
                                       });
-                                  }
 
-                                  if (this.meeting.pollForDateOpen === 1) {
-                                      this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
+                                  this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
                                           if (poll) {
                                               this.datePoll = poll;
                                               // this.datePoll = this.datePoll.sort((a, b): number => {
@@ -374,8 +372,7 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                                               //     return 0;
                                               // });
                                           }
-                                      });
-                                  }
+                                  });
                               });
                           });
                       } else {
@@ -385,51 +382,55 @@ export class MeetingForOwnerComponent extends MessagesComponent implements OnIni
                           this.targetCars = [];
                           this.overlaysPoll = [];
                           this.overlaysPollPopUp = [];
-                          if (this.meeting.pollForPlaceOpen === 1) {
-                              this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
-                                  if (poll) {
-                                      this.placePoll = poll;
-                                      // this.placePoll = this.placePoll.sort((a, b): number => {
-                                      //     if (a.id > b.id) {
-                                      //         return 1;
-                                      //     }
-                                      //     if (a.id < b.id) {
-                                      //         return -1;
-                                      //     }
-                                      //     return 0;
-                                      // });
-                                      this.placePoll.forEach(pl => {
-                                          this.overlaysPollPopUp.push(new google.maps.Marker({
-                                              position:
-                                                  {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
-                                              title: pl.oneLocation.placeName
-                                          }));
-                                          this.overlaysPoll.push(new google.maps.Marker({
-                                              position:
-                                                  {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
-                                              title: pl.oneLocation.placeName
-                                          }));
-                                      });
-                                  }
-                              });
-                          }
+                          this.pollService.getCustomPolls(this.meeting.id).subscribe(polls => {
+                              if (polls) {
+                                  this.customPolls = polls;
+                              } else {
+                                  this.customPolls = [];
+                              }
 
-                          if (this.meeting.pollForDateOpen === 1) {
+                              this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
+                                      if (poll) {
+                                          this.placePoll = poll;
+                                          // this.placePoll = this.placePoll.sort((a, b): number => {
+                                          //     if (a.id > b.id) {
+                                          //         return 1;
+                                          //     }
+                                          //     if (a.id < b.id) {
+                                          //         return -1;
+                                          //     }
+                                          //     return 0;
+                                          // });
+                                          this.placePoll.forEach(pl => {
+                                              this.overlaysPollPopUp.push(new google.maps.Marker({
+                                                  position:
+                                                      {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                  title: pl.oneLocation.placeName
+                                              }));
+                                              this.overlaysPoll.push(new google.maps.Marker({
+                                                  position:
+                                                      {lat: Number(pl.oneLocation.lat), lng: Number(pl.oneLocation.lng)},
+                                                  title: pl.oneLocation.placeName
+                                              }));
+                                          });
+                                      }
+                                  });
+
                               this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
-                                  if (poll) {
-                                      this.datePoll = poll;
-                                      // this.datePoll = this.datePoll.sort((a, b): number => {
-                                      //     if (a.id > b.id) {
-                                      //         return 1;
-                                      //     }
-                                      //     if (a.id < b.id) {
-                                      //         return -1;
-                                      //     }
-                                      //     return 0;
-                                      // });
-                                  }
-                              });
-                          }
+                                      if (poll) {
+                                          this.datePoll = poll;
+                                          // this.datePoll = this.datePoll.sort((a, b): number => {
+                                          //     if (a.id > b.id) {
+                                          //         return 1;
+                                          //     }
+                                          //     if (a.id < b.id) {
+                                          //         return -1;
+                                          //     }
+                                          //     return 0;
+                                          // });
+                                      }
+                                  });
+                          });
                       }
                   });
                       const today = new Date();
@@ -1721,7 +1722,7 @@ ngAfterViewInit() {
       this.newCustomPoll.pollOfMeeting = this.meeting;
       this.pollService.createPoll(this.newCustomPoll).subscribe(newPoll => {
           this.customPolls.push(newPoll);
-          this.newCustomPoll = [] as CustomPoll;
+          this.newCustomPoll = {} as CustomPoll;
           this.messService.add({severity: 'success', summary: 'Success Message', detail: 'poll created'});
       });
     }
@@ -1729,27 +1730,33 @@ ngAfterViewInit() {
     addOptionInPoll() {
       this.addOption = false;
         this.pollService.addOptionInPoll(this.fixedPoll.id, this.newCustomPollOption, this.participant.id).subscribe(res => {
-            this.fixedPoll = res;
+            this.customPolls.forEach(p => {
+                if (p.id === this.fixedPoll.id) {
+                    p.optionsInPoll = res.optionsInPoll;
+                }
+            });
             this.messService.add({severity: 'success', summary: 'Success Message', detail: 'new option added'});
-            this.newCustomPollOption = [] as CustomPollOption;
+            this.newCustomPollOption = {} as CustomPollOption;
+            this.fixedPoll = {} as CustomPoll;
         });
     }
 
     openCustomVote(poll: CustomPoll) {
         this.pollService.openCustomPoll(poll.id).subscribe(res => {
-            poll = res;
+            poll.isOpened = 1;
         });
     }
 
     closeCustomVote(poll: CustomPoll) {
         this.pollService.closeCustomPoll(poll.id).subscribe(res => {
-            poll = res;
+            poll.isOpened = 0;
         });
     }
 
     voteForOption(customPollOption: CustomPollOption) {
         this.pollService.voteForOption(customPollOption.id, this.participant.meetingParticipant.id).subscribe(res => {
-            customPollOption = res;
+            customPollOption.voicesForOption = res.voicesForOption;
+            customPollOption.percentageForOption = res.percentageForOption;
             this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
         });
     }

@@ -29,6 +29,8 @@ import {
 } from '@app/core';
 import {environment} from '@env';
 import {Card} from '@app/core/models/card.model';
+import {CustomPoll} from '@app/core/models/custompoll.model';
+import {CustomPollOption} from '@app/core/models/custompolloption.model';
 
 declare var google: any;
 
@@ -39,6 +41,13 @@ declare var google: any;
     providers: [mes]
 })
 export class MeetingForParticipantComponent extends MessagesComponent implements OnInit {
+    fixedPoll: CustomPoll = {} as CustomPoll;
+    addOption: boolean = false;
+    createPoll: boolean = false;
+    customPolls: CustomPoll[] = [];
+    newCustomPoll: CustomPoll = {} as CustomPoll;
+    newCustomPollOption: CustomPollOption = {} as CustomPollOption;
+
     defaultMeeting = environment.defaultMeeting;
     defaultAvatar = environment.defaultAvatar;
 
@@ -284,7 +293,13 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
 
                                             this.overlaysPoll = [];
                                             this.overlaysPollPopUp = [];
-                                            if (this.meeting.pollForPlaceOpen === 1) {
+                                            this.pollService.getCustomPolls(this.meeting.id).subscribe(polls => {
+                                                if (polls) {
+                                                    this.customPolls = polls;
+                                                } else {
+                                                    this.customPolls = [];
+                                                }
+
                                                 this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                                                     if (poll) {
                                                         this.placePoll = poll;
@@ -311,9 +326,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                         });
                                                     }
                                                 });
-                                            }
 
-                                            if (this.meeting.pollForDateOpen === 1) {
                                                 this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
                                                     if (poll) {
                                                         this.datePoll = poll;
@@ -328,7 +341,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                         // });
                                                     }
                                                 });
-                                            }
+                                            });
                                         });
                                     } else {
                                         console.log('empty bill');
@@ -337,7 +350,13 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                         this.targetCars = [];
                                         this.overlaysPoll = [];
                                         this.overlaysPollPopUp = [];
-                                        if (this.meeting.pollForPlaceOpen === 1) {
+                                        this.pollService.getCustomPolls(this.meeting.id).subscribe(polls => {
+                                            if (polls) {
+                                                this.customPolls = polls;
+                                            } else {
+                                                this.customPolls = [];
+                                            }
+
                                             this.pollService.getPlacePoll(this.meeting.id).subscribe(poll => {
                                                 if (poll) {
                                                     this.placePoll = poll;
@@ -364,9 +383,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                     });
                                                 }
                                             });
-                                        }
 
-                                        if (this.meeting.pollForDateOpen === 1) {
                                             this.pollService.getDatePoll(this.meeting.id).subscribe(poll => {
                                                 if (poll) {
                                                     this.datePoll = poll;
@@ -381,7 +398,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                                                     // });
                                                 }
                                             });
-                                        }
+                                        });
                                     }
                                 });
                                 const today = new Date();
@@ -1352,5 +1369,58 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
                 });
         }
 
+    }
+
+    createCustomPoll() {
+        this.createPoll = false;
+        this.newCustomPoll.creatorOfPoll = this.participant.meetingParticipant;
+        this.newCustomPoll.pollOfMeeting = this.meeting;
+        this.pollService.createPoll(this.newCustomPoll).subscribe(newPoll => {
+            this.customPolls.push(newPoll);
+            this.newCustomPoll = {} as CustomPoll;
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'poll created'});
+        });
+    }
+
+    addOptionInPoll() {
+        this.addOption = false;
+        this.pollService.addOptionInPoll(this.fixedPoll.id, this.newCustomPollOption, this.participant.id).subscribe(res => {
+            this.customPolls.forEach(p => {
+                if (p.id === this.fixedPoll.id) {
+                    p.optionsInPoll = res.optionsInPoll;
+                }
+            });
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'new option added'});
+            this.newCustomPollOption = {} as CustomPollOption;
+            this.fixedPoll = {} as CustomPoll;
+        });
+    }
+
+    openCustomVote(poll: CustomPoll) {
+        this.pollService.openCustomPoll(poll.id).subscribe(res => {
+            poll.isOpened = 1;
+        });
+    }
+
+    closeCustomVote(poll: CustomPoll) {
+        this.pollService.closeCustomPoll(poll.id).subscribe(res => {
+            poll.isOpened = 0;
+        });
+    }
+
+    voteForOption(customPollOption: CustomPollOption) {
+        this.pollService.voteForOption(customPollOption.id, this.participant.meetingParticipant.id).subscribe(res => {
+            customPollOption.voicesForOption = res.voicesForOption;
+            customPollOption.percentageForOption = res.percentageForOption;
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'your vote\'s been counted'});
+        });
+    }
+
+    votedForOption(customPollOption: CustomPollOption): boolean {
+        let checkOut = false;
+        customPollOption.voicesForOption.forEach(voice => {
+            if (voice.id === this.me.id) {checkOut = true; }
+        });
+        return checkOut;
     }
 }

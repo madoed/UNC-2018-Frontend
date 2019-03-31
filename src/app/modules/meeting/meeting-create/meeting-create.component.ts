@@ -26,7 +26,7 @@ export class MeetingCreateComponent implements OnInit {
     dayOfTheWeek: number;
     type: number = 0;
     private itemsTime: MenuItem[];
-    checked2: boolean = true;
+    checked2: boolean = false;
 
     defaultAvatar = environment.defaultAvatar;
 
