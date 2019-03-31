@@ -1,104 +1,89 @@
 <div class="container">
-
-
- <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
-  <mat-card>
-    <mat-card-header background-color="accent" style="height: 30px;">
-      <button mat-button (click)="back()" style="margin-top: -15px; height: 40px;">
-        <span style="margin-top: -5px; color: #007ad9;">
-          <span style="margin-top: -10px; color: #007ad9; font-size: 30px;">&#8592;</span>
-          Back</span>
-      </button>
-      <div style="width: 700px;margin-left: -100px; text-align: center;">
-      <h3 class = "myFont" *ngIf="channel.chatType==='dialogue'"
+  <div style=" height: fit-content; float: left; width: 70%; margin-left: 0.1%;">
+    <mat-card>
+      <mat-card-header background-color="accent" style="height: 30px;">
+        <button mat-button (click)="back()" style="margin-top: -15px; height: 40px;">
+          <span style="margin-top: -5px; color: #007ad9;">
+            <span style="margin-top: -10px; color: #007ad9; font-size: 30px;">&#8592;</span>
+            Back</span>
+        </button>
+        <div style="width: 700px;margin-left: -100px; text-align: center;">
+        <h3 class = "myFont" *ngIf="channel.chatType==='dialogue'"
           style="color: #0e0e0e; margin-top: -8px;  align-content: center;">
-        {{opponent?opponent.firstName:''}} {{opponent?opponent.lastName:''}}</h3>
-      <h3 class = "myFont" *ngIf="channel.chatType!=='dialogue'"
+          {{opponent?opponent.firstName:''}} {{opponent?opponent.lastName:''}}</h3>
+        <h3 class = "myFont" *ngIf="channel.chatType!=='dialogue'"
           style="color: #0e0e0e;  margin-top: -8px;">
-        {{channel.chatName}}</h3>
+          {{channel.chatName}}</h3>
+        </div>
+      </mat-card-header>
+
+      <mat-list  id="msg-container"class="message-container" style=" border-top-style: solid; border-color: #bebebe;
+      padding-bottom: 70px">
+        <!--<mat-list-item *ngFor="let message of filteredMessages"-->
+                      <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
+                      <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
+                      <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
+          <!--&lt;!&ndash;<mat-icon mat-list-icon>chat</mat-icon>&ndash;&gt;-->
+          <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
+        <!--</mat-list-item>-->
+        <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
+          <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
+            <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
+              <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+              <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+            </div>
+            <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
+              <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
+            </div>
+            <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
+              <span>{{message.sender.firstName}}</span>
+            </div>
+
+            <div class="divMessage">{{message.content}}</div>
+          </div>
+
+          <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
+            <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
+              <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
+              <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
+            </div>
+            <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
+              <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
+            </div>
+            <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
+              <span>{{message.sender.firstName}}</span>
+            </div>
+
+            <div class="divMessage">{{message.content}}</div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+ 
+    <div style="display: flex; float: left; width: 100%; background-color: #f6f7f9; padding: 10px;
+      border-style: solid; border-color: #bebebe; border-top-style: none; ">
+        <textarea pInputTextarea placeholder="Enter your message..." [(ngModel)]="newMessage"
+          autoResize="autoResize" rows="3" style="float: left; flex: 1; font-size: 16px;" id="inputMessage">
+        </textarea>
+          
+        <div style="padding-top: 20px; margin-right: 10px; width: 100px; float: right;">
+          <div style="margin-left: 20px; float: left; height: 30px; width: 30px;">
+            <img #emojiToggle src="assets/images/emoji.png" style="opacity: 0.5; width: 30px; height: 30px; cursor: pointer;"
+            (click)="op.toggle($event)" (mouseenter)="op.show($event)" (mouseleave)="hideEmojiPicker(op)">
+
+            <p-overlayPanel #op id="op" baseZIndex="2" appendTo="body" [dismissable]="false">
+              <emoji-mart id="emoji" title="Pick your emoji…" emoji="point_up" (emojiClick)="addEmoji($event)" isNative="true" emojiTooltip="true"
+                [i18n]="{ search: 'Recherche', categories: { search: 'Résultats de recherche', recent: 'Récents' } }"
+                showSingleCategory="true" totalFrequentLines="2" sheetSize="32" (mouseenter)="enterEmoji()" (mouseleave)="leaveEmoji(op)"></emoji-mart>
+            </p-overlayPanel>
+          </div>
+          <div style="margin-left: 20px; float: left; height: 30px; width: 30px;">
+            <img (click)="sendMessage()" *ngIf = "newMessage&&newMessage.length>0&&newMessage!==''"
+              style="width: 30px; height: 30px; cursor: pointer; border-radius: 25px;" src="assets/images/send.png">
+          </div>
       </div>
-    </mat-card-header>
-
-    <mat-list  id="msg-container"class="message-container" style=" border-top-style: solid; border-color: #bebebe;
-     padding-bottom: 70px">
-      <!--<mat-list-item *ngFor="let message of filteredMessages"-->
-                     <!--class="message-item" [style.margin-right]="message.sender.id === user.id ? '5px':'auto'"-->
-                     <!--[style.margin-left]="message.sender.id === user.id ? 'auto':'5px'"-->
-                     <!--[style.background]="message.sender.id === user.id ? 'white':'rgba(150,150,150, 0.3)'">-->
-        <!--&lt;!&ndash;<mat-icon mat-list-icon>chat</mat-icon>&ndash;&gt;-->
-        <!--<h4 mat-line><b>{{message.sender.id === user.id ? 'You': message.sender.firstName}}</b>: {{message.content}}</h4>-->
-      <!--</mat-list-item>-->
-      <mat-list-item *ngFor="let message of filteredMessages" style="margin-top: 10px; height: fit-content;">
-        <div *ngIf="checkIfNew(message)" style="background-color:#f4f5f7; width: 100%; float: left; height: auto;" class="myMes">
-          <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
-            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
-          </div>
-          <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
-            <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
-          </div>
-          <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
-            <span>{{message.sender.firstName}}</span>
-          </div>
-
-
-          <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
-            <textarea class="textareaMessage"
-                      rows="{{getAmountOfRows(message.content)}}" readonly="true">
-              {{message.content}}
-            </textarea>
-          </div>
-        </div>
-
-        <div *ngIf="!checkIfNew(message)" style=" width: 100%; float: left; height: auto;" class="myMes">
-          <div style="margin-top:5px; float: left;   height: 50px; width: 50px; border-radius: 50px;">
-            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="!message.sender.avatarUrl" src="{{defaultAvatar}}" >
-            <img style="width: 45px; height: 45px; border-radius: 45px;" *ngIf="message.sender.avatarUrl" src="{{message.sender.avatarUrl}}" >
-          </div>
-          <div *ngIf="message.sender.id === user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left;float: top;  width: 90%; height: 20px;">
-            <span>You </span> <span style="color: #828282; font-size: smaller!important;">{{parser(message.timestamp.toString())}}</span>
-          </div>
-          <div *ngIf="message.sender.id !== user.id " style="margin-top:5px; margin-left: 5px; color: #007ad9; float: left; float: top;width: 90%; height: 20px;">
-            <span>{{message.sender.firstName}}</span>
-          </div>
-
-
-          <div style="margin-left:5px; float: left; float: top; width: 90%; min-height: fit-content;">
-            <textarea class="textareaMessage"
-                     rows="{{getAmountOfRows(message.content)}}" readonly="true">
-              {{message.content}}
-            </textarea>
-          </div>
-        </div>
-      </mat-list-item>
-
-        </mat-list>
-
-
-      </mat-card>
-
-      <div style="float: left; width: 100%;">
-        <div style="height: 105px; width: 100%; background-color: #f6f7f9;
-         border-style: solid; border-color: #bebebe; border-top-style: none; ">
-          <textarea style="margin-left: 10px; margin-top: 10px; width: 87%;height:80px; resize: none;" [(ngModel)]="newMessage">
-
-          </textarea>
-
-          <div (click)="sendMessage()" *ngIf = "newMessage&&newMessage.length>0&&newMessage!==''"
-               style="margin-top: 20px; margin-right: 20px; float: right;
-               height: 50px;width: 50px; cursor: pointer;">
-            <img style="width: 50px; height: 50px; border-radius: 50px;" src="assets/images/send.png">
-
-          </div>
-          <!--<input  type="text"  [(ngModel)]="newMessage"-->
-                  <!--(keyup)="$event.keyCode == 13 ? sendMessage() : null" #input>-->
-
-        </div>
-
-        <!--<div><button mat-raised-button color="primary" (click)="sendMessage()"><mat-icon >send</mat-icon></button></div>-->
-
-      </div>
-       </div>
+    </div>
+  </div>
 
   <div style="margin-left: 72.5%;">
     <p-card [style]="{width: '310px'}" styleClass="ui-card-shadow">
@@ -112,7 +97,7 @@
         <mat-list style="width: 310px;">
           <mat-list-item *ngFor="let sub of channel.subscribers">
             <button mat-button [routerLink]="['/user', sub.id]" style="margin-right: 0px;
-     height: 40px; width: 300px!important;">
+      height: 40px; width: 300px!important;">
               <span style="color: #007ad9;">{{sub.firstName}} {{sub.lastName}}</span>
             </button>
           </mat-list-item>
@@ -121,10 +106,10 @@
       </p-header>
 
       <button mat-button *ngIf="channel.chatType==='dialogue'" [routerLink]="['/user', opponent.id]" style="margin-right: 20px;
-     height: 40px; width: 284px!important;">
+      height: 40px; width: 284px!important;">
         <span style="color: #007ad9;">{{opponent.firstName}} {{opponent.lastName}}</span>
       </button>
     </p-card>
   </div>
+</div>
 
-    </div>

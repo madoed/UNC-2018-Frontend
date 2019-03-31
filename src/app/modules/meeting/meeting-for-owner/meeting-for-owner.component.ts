@@ -28,6 +28,7 @@ import {
     FnsCheckService, CardService
 } from '@app/core';
 import {Card} from '@app/core/models/card.model';
+import { OverlayPanel } from 'primeng/primeng';
 
 
 /** Constants used to fill up our data base. */
@@ -1685,6 +1686,32 @@ ngAfterViewInit() {
     backToBillFromShared() {
         this.show_bill = true;
         this.share_items = false;
+    }
+
+
+    /** Emoji **/
+    addEmoji(event) {
+        this.newMessage = this.newMessage ? this.newMessage + event.emoji.native : event.emoji.native;
+        document.getElementById("inputMessage").focus();
+    }
+
+    async hideEmojiPicker(overlayPanel: OverlayPanel) {
+        await this.sleep(400);
+        if (!this.pickingEmoji)
+            overlayPanel.hide();
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+    enterEmoji () {
+        this.pickingEmoji = true;
+    }
+
+    leaveEmoji (overlayPanel: OverlayPanel) {
+        this.pickingEmoji = false;
+        this.hideEmojiPicker(overlayPanel);
     }
 }
 

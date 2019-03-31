@@ -56,6 +56,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { MessageService} from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PickerModule } from '@ctrl/ngx-emoji-mart'
 
 @NgModule({
   imports: [
@@ -111,10 +112,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PaginatorModule,
     ProgressSpinnerModule,
     ProgressBarModule,
-      ListboxModule,
-      InputSwitchModule,
-      TieredMenuModule,
-      SelectButtonModule
+    ListboxModule,
+    InputSwitchModule,
+    TieredMenuModule,
+    SelectButtonModule,
+    PickerModule
   ],
   declarations: [],
   exports: [
@@ -170,10 +172,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PaginatorModule,
     ProgressSpinnerModule,
     ProgressBarModule,
-      ListboxModule,
-      InputSwitchModule,
-      TieredMenuModule,
-      SelectButtonModule
+    ListboxModule,
+    InputSwitchModule,
+    TieredMenuModule,
+    SelectButtonModule,
+    PickerModule
   ],
   providers: [
     MessageService,

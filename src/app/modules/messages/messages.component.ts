@@ -12,6 +12,7 @@ import {Message} from '@app/core/models/message.model';
 import {Chat} from '@app/core/models/chat.model';
 import {delay} from 'rxjs/operators';
 import {environment} from '@env';
+import { OverlayPanel } from 'primeng/primeng';
 //import {Message} from 'stompjs';
 //import { StompService } from 'ng2-stomp-service';
 
@@ -27,11 +28,12 @@ export class MessagesComponent implements OnInit, OnDestroy{
     private serverUrl = 'http://127.0.0.1:8000/wechat';
     public filteredMessages: Array<Message> = [];
     public newMessages: Array<Message> = [];
-    private newMessage: string;
+    protected newMessage: string;
     private channel = {}as Chat;
     private user: User;
     private stompClient;
     timer: number = 120000;
+    protected pickingEmoji: boolean = false;
 
     sub: Subscription;
 
@@ -311,4 +313,29 @@ export class MessagesComponent implements OnInit, OnDestroy{
         const msgContainer = document.getElementById('msg-container');
         msgContainer.scrollTop = msgContainer.scrollHeight;
     }*/
+
+    /** Emoji **/
+    addEmoji(event) {
+        this.newMessage = this.newMessage ? this.newMessage + event.emoji.native : event.emoji.native;
+        document.getElementById("inputMessage").focus();
+    }
+
+    async hideEmojiPicker(overlayPanel: OverlayPanel) {
+        await this.sleep(400);
+        if (!this.pickingEmoji)
+            overlayPanel.hide();
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+    enterEmoji () {
+        this.pickingEmoji = true;
+    }
+
+    leaveEmoji (overlayPanel: OverlayPanel) {
+        this.pickingEmoji = false;
+        this.hideEmojiPicker(overlayPanel);
+    }
 }
