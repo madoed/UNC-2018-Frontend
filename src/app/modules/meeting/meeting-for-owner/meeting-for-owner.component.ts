@@ -1740,6 +1740,7 @@ ngAfterViewInit() {
     leaveEmoji (overlayPanel: OverlayPanel) {
         this.pickingEmoji = false;
         this.hideEmojiPicker(overlayPanel);
+    }
 
     /** Custom poll **/
     createCustomPoll() {

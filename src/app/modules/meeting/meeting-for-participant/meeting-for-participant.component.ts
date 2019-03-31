@@ -1395,6 +1395,7 @@ export class MeetingForParticipantComponent extends MessagesComponent implements
     leaveEmoji (overlayPanel: OverlayPanel) {
         this.pickingEmoji = false;
         this.hideEmojiPicker(overlayPanel);
+    }
 
     /** Custom poll **/
     createCustomPoll() {
