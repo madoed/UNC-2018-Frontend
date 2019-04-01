@@ -1795,6 +1795,15 @@ ngAfterViewInit() {
         });
         return checkOut;
     }
+
+    changeMeetingType() {
+        this.meetingService.changeMeetingType(this.meeting.id).subscribe(res => {
+            this.meeting.dateOfMeeting = res.dateOfMeeting;
+            this.meeting.meetingType = res.meetingType;
+            this.date = this.parse(this.meeting.dateOfMeeting.toString());
+            this.messService.add({severity: 'success', summary: 'Success Message', detail: 'this meeting isn\'t recursive anymore'});
+        });
+    }
 }
 
 

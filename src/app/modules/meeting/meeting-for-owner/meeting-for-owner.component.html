@@ -89,7 +89,11 @@
     <div style="width: 1160px; height: 300px; ">
     <div style="float: left; width: 810px; height: 300px;">
     <mat-card style="height: 300px;">
-        <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.name}}</h1>
+        <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.meetingName}}</h1>
+
+        <button mat-button *ngIf="meeting.meetingType!=='simple'"type="button"
+                style="float: right; border-style: dotted;" (click)="changeMeetingType();">
+            Don't repeat anymore</button>
 
         <div style="width: 810px; margin-top: 60px; color: #6D6D6D;">
         <div style="float: left;  width: 480px; color: #6D6D6D;">
@@ -159,7 +163,6 @@
             <br />
             <h4 style=" color: #6D6D6D;text-align: center; margin-top:5px;" >
                 You are the owner </h4>
-
             <!--<h4 style="color: #6D6D6D;text-align: center; margin-top:5px;" >Meeting owner </h4>-->
             <!--<button mat-button [routerLink]="['/user', meeting.boss.id]" style="margin-top: -20px;-->
             <!--width: 250px!important; margin-left: 10px;">-->
@@ -540,7 +543,7 @@
 
                         </div>
                         <!--<mat-divider style="color: #00539b; width: 500px;"></mat-divider>-->
-                        <mat-card-actions *ngIf="poll.creatorOfPoll.id===participant.meetingParticipant.id">
+                        <mat-card-actions>
                             <button mat-raised-button color="primary" *ngIf="poll.isOpened===0" style="float: bottom;
                     float: right; margin-right: 20px; margin-bottom: 30px;"
                                     (click)="openCustomVote(poll)">

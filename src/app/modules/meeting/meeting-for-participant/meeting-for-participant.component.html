@@ -285,7 +285,7 @@
     <div style="width: 1160px; height: 300px; margin-bottom: 10px;">
       <div style="float: left; width: 810px; height: 300px;">
         <mat-card style="height: 300px;">
-          <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.name}}</h1>
+          <h1 class = "myFont" style="margin-left: 20px; float: left;" >{{meeting.meetingName}}</h1>
 
           <div style="width: 610px; margin-top: 60px; color: #6D6D6D;">
             <div style="float: left;  width: 380px; color: #6D6D6D;">
@@ -473,10 +473,10 @@
           <mat-list style="margin-top: 10px; ">
             <mat-list-item *ngFor="let place of placePoll">
               <div style="width: 300px;">
-                <button mat-raised-button style="background-color: white!important;
-                                        color: black!important;" (click)="setAsMain(place.oneLocation)">
+                <!--<button mat-raised-button style="background-color: white!important;-->
+                                        <!--color: black!important;" (click)="setAsMain(place.oneLocation)">-->
                   {{place.oneLocation.placeName}}
-                </button>
+                <!--</button>-->
               </div>
 
               <div style="width: 300px;">
